@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+    <style>
+        #canvas{background-color: #eee;}
+    </style>
+    <script>
+        window.onload=function  () {
+            var canvas = document.getElementById("canvas");
+            var cobj = canvas.getContext("2d");
+            var originX = 200,
+                originY  = 200,
+                radius  = 100;
+            setInterval(function(){
+                var colobj =  drawInit();
+                drawCircle(colobj);
+                drawMark();
+                var date = new Date();
+                var ma = date.getMinutes()*3  - 90;
+                var ha=date.getHours()*30 - 90 + date.getMinutes()/2;
+                var sa  =  date.getSeconds()*3 - 90;
+                //时针
+                drawPoint(55,ha*Math.PI/180,4,"#000");
+                //分针
+                drawPoint(65,ma*Math.PI/180,3,"#888");
+                //秒针
+                drawPoint(75,sa*Math.PI/180,2,"#ff0000");
+
+            },1000);
+            function drawPoint(radius,angle,width,color) {
+                cobj.lineWidth = width;
+                cobj.strokeStyle  = color;
+                cobj.beginPath();
+                cobj.moveTo(originX,originY);
+                cobj.lineTo(originX+radius*Math.cos(angle),originY+radius*Math.sin(angle));
+                cobj.stroke();
+            }
+
+            function drawMark() {
+                for(var i=0;i<60;i++) {
+                    var lw  = 1,
+                        radius1 = 95,
+                        angle=i*6*Math.PI/180;
+                    if(i%5==0) {
+                        lw = 3;
+                        radius1  = 92;
+                    }
+                    cobj.strokeStyle  ="red";
+                    cobj.lineWidth  = lw;
+                    cobj.beginPath();
+                    cobj.moveTo(originX+Math.cos(angle)*radius,originY+Math.sin(angle)*radius);
+                    cobj.lineTo(originX+radius1*Math.cos(angle),originY+radius1*Math.sin(angle));
+                    cobj.stroke();
+                }
+            }
+            function drawCircle( colorobj) {
+                cobj.beginPath();
+                cobj.strokeStyle  = colorobj;
+                cobj.arc(originX,originY,radius,0,Math.PI*2);
+                cobj.stroke();
+                cobj.fill();
+            }
+            function drawInit(){
+                cobj.shadowColor = "#888";
+                cobj.shadowOffsetX = 1;
+                cobj.shadowOffsetY  = 1;
+                cobj.shadowBlur  = 3;
+                var colorobj =  cobj.createRadialGradient(originX,originY,1,originX,originY,radius);
+                colorobj.addColorStop(0,"#efefef");
+                colorobj.addColorStop(1,"#cecece");
+                cobj.fillStyle = colorobj;
+                cobj.lineWidth  = 8;
+                return colorobj;
+            }
+        }
+    </script>
+</head>
+<body>
+<canvas width="500" height="500" id="canvas"></canvas>
+</body>
+</html>
