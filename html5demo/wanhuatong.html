@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>xuanzhuan</title>
+    <style>
+        #canvas{background-color: #eee;}
+    </style>
+    <script>
+        window.onload=function  () {
+            var canvas=document.getElementById("canvas");
+            var cobj=canvas.getContext("2d");
+            var arr = [];
+
+            setInterval(function(){
+                cobj.clearRect(0,0,600,600);
+                var len = arr.length;
+                for(var i=0;i<len;i++)  {
+                    cobj.save();
+                    cobj.translate(300,300);
+                    cobj.scale(arr[i].scales,arr[i].scales);
+                    cobj.rotate(arr[i].angle*Math.PI/180);
+                    cobj.fillStyle = arr[i].color;
+                    cobj.fillRect(arr[i].num,arr[i].num,30,30);
+                    cobj.restore();
+                }
+            },60);
+            setInterval(function(){
+                var len  = arr.length;
+                for(var i=0;i<len;i++) {
+                    if(arr[i].num<=0) {
+                        arr.split(i,1);
+                        continue;
+                    }
+                    arr[i].angle+=2;
+                    arr[i].num-=0.2;
+                    arr[i].scales  -=0.002;
+                    if(arr[i].scales<=0.2) {
+                        arr[i].scales  =  0.2;
+                    }
+                }
+            },60)
+            setInterval(function(){
+                var rect  = {
+                    angle: 0,
+                    num : 150,
+                    scales:1,
+                    color: "rgb(" + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + ")"
+                }
+                arr.push(rect);
+            },1000);
+
+        }
+    </script>
+</head>
+<body>
+<canvas id="canvas" width="600" height="600"></canvas>
+</body>
+</html>
