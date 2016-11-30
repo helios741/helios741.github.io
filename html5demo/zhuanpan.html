@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>text</title>
+    <style>
+        canvas{background-color: #eee;}
+    </style>
+    <script>
+        window.onload = function() {
+            var canvas = document.getElementById("canvas");
+            var cobj = canvas.getContext("2d");
+            var btn = document.getElementById("btn");
+            var colorArr=["#24a274","#2a70a6","#6d56c3","#b23880","#7a9a36","#b48548","#397839","#89489c"];
+            var textArr=["js","html","css","php","mysql","html5","css3","hdphp"];
+            cobj.translate(250,250);
+            drawPoint(); rotateCir(0);
+            drawArc();addText();
+            var  t,angle;
+            btn.onclick  =  function () {
+                angle = 0;
+                step =  10+10*Math.random();
+                t = setInterval(function () {
+                    if(step<0.3)  {
+                        show();
+                        return ;
+                    }
+                    if(angle>=360)   angle = 0;
+                    step*=0.95;
+                    angle+=step;
+                    cobj.clearRect(-250,-250,500,500);
+                    drawPoint();
+                    cobj.save();
+                    rotateCir(angle);
+                    drawArc();  addText();
+                    cobj.restore();
+                },60);
+
+            };
+
+
+            function drawPoint() {
+                cobj.lineWidth = 5;
+                cobj.save();
+                cobj.fillStyle = "#000";
+                cobj.moveTo(150,0);
+                cobj.lineTo(175,0);
+                cobj.stroke();
+                cobj.restore();
+                cobj.lineWidth  = 2;
+            }
+
+            function show() {
+                clearInterval(t);
+                var num  = Math.ceil(angle/45);
+                cobj.font  = "24px Î¢ÈíÑÅºÚ";
+                cobj.textAligh  = "center";
+                cobj.fillStyle  = "red";
+                cobj.fillText(textArr[textArr.length - num],-10,0);
+            }
+
+            function addText()  {
+                for(var i=0;i<8;i++)  {
+                    cobj.save();
+                    cobj.beginPath();
+                    cobj.rotate((i*45+20)*Math.PI/180);
+                    cobj.font=  "15px Î¢ÈíÑÅºÚ";
+                    cobj.fillText(textArr[i],75,0);
+                    cobj.restore();
+                }
+            }
+
+            function rotateCir() {
+                cobj.rotate(angle*Math.PI/180);
+            }
+            
+            function drawArc() {
+                for(var i=0;i<8;i++) {
+                    cobj.beginPath();
+                    cobj.fillStyle = colorArr[i];
+                    cobj.moveTo(0,0);
+                    cobj.arc(0,0,130,i*45*Math.PI/180,(i+1)*45*Math.PI/180);
+                    cobj.fill();
+                }
+                cobj.beginPath();
+                cobj.fillStyle  = "white";
+                cobj.arc(0,0,35,0,2*Math.PI);
+                cobj.fill();
+            }
+        }
+    </script>
+</head>
+<body>
+<canvas width="500" height="500" id="canvas"></canvas>
+<input type="button" id="btn" value="µã»÷¿ªÊ¼">
+</body>
+</html>
