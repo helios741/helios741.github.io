@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>弹性照片墙</title>
+    <style>
+        body,html{
+            padding:0;margin:0;width:100%;height:100%;
+            overflow:hidden;background-color: #eee;;
+        }
+    </style>
+    <script>
+        window.onload  = function() {
+            var canvas = document.getElementById("canvas"),
+                imgs = document.getElementsByTagName("img"),
+                video = document.getElementById("video");
+            canvas.width = document.documentElement.clientWidth;
+            canvas.height = document.documentElement.clientHeight;
+            canvas.style.background = "#eee";
+            var cobj = canvas.getContext("2d");
+            var spring = 0.8,friction = 0.6,t;
+            drawBtn("点击开始",35);
+            canvas.onclick  =  function(e) {
+                var mx =  e.layerX,
+                    my  = e.layerY;
+                if(cobj.isPointInPath(mx,my)) {
+                    clearInterval(t);
+                    var arr = create();
+                    t = setInterval(function(){
+                        cobj.clearRect(0,0,canvas.width,canvas.height);
+                        var len = arr.length;
+                        for(var i=0;i<len;i++)  moves(arr[i]);
+                        drawBtn("点击播放",35);
+                    },60);
+                    //video.play();
+                }
+                if(cobj.isPointInPath(mx,my)) {
+                    video.play();
+                }
+            };
+            function moves(obj) {
+                obj.vx+= (obj.targetx-obj.changex)*spring;
+                obj.vy+= (obj.targety-obj.changey)*spring;
+                obj.changex+= (obj.vx *= friction);//friction为摩擦力
+                obj.changey += (obj.vy *=friction);
+                cobj.beginPath();
+                cobj.lineWidth  = 5;
+                cobj.strokeStyle = "#fff";
+                cobj.moveTo(obj.startx,obj.starty);
+                cobj.lineTo(obj.changex,obj.changey);
+                cobj.stroke();
+                cobj.drawImage(obj.src,obj.changex-obj.width/2,obj.changey,obj.width,obj.height);
+            }
+
+            function create()  {
+                var imgArr=[];
+                var len = imgs.length;
+                for(var i=0;i<=len;i++) {
+                    var srcObj;
+                    if(i<len) {
+                        srcObj  = imgs[i];
+                    } else srcObj  = video;
+                    var imgObj= {src:srcObj,vx:0,vy:0,width:220,height:220,startx:220*(i+1)+150,starty:-100,
+                        targetx:220*(i+1)+150,targety:180+200*Math.random(),changex:220*(i+1)+150,changey:-100};
+                    imgArr.push(imgObj);
+                }
+                return imgArr;
+            }
+
+            function drawBtn(str,y) {
+                cobj.save();
+                cobj.beginPath();
+                cobj.fillStyle = "red";
+                cobj.font = "28px 微软雅黑";
+                cobj.textAlign  =  "center";
+                cobj.rect(0,0,100,40);
+                cobj.fill();
+                cobj.fillStyle = "blue";
+                cobj.fillText(str,50,y,100,40);
+                cobj.stroke();
+                cobj.restore();
+            }
+        }
+    </script>
+</head>
+<body>
+<canvas id="canvas">
+</canvas>
+<img src="1.jpg" hidden>
+<img src="2.jpg" hidden>
+<img src="3.jpg" hidden>
+<img src="4.jpg" hidden>
+<video src="iceage4.mp4" hidden id="video">
+</video>
+</body>
+</html>
