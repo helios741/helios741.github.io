@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简单连连看</title>
+    <script src="event.js"></script>
+    <script>
+        window.onload  = function() {
+            var canvas = document.getElementById("canvas");
+            var cobj = canvas.getContext("2d");
+            var step = 2;
+            //创建文件
+            var arr = [];
+            for (var i=0; i<8; i++) {
+                var rectObj={
+                    width:50,height:50,color:"rgba("+parseInt(255*Math.random())+","+parseInt(255*Math.random())+","+parseInt(255*Math.random())+",255)"
+                };
+                arr.push(rectObj);
+            }
+
+            //初始右多少个色块
+            var newArr  = [];
+            function sumBlock(step) {
+                var len = arr.length;
+                for(var i=0;i<step;i++) {
+                    for(var j=0;j<len;j++) {
+                        var obj = {};
+                        for(var k in arr[j]) obj[k] = arr[j][k];
+                        newArr.push(obj);
+                    }
+                }
+            }
+            sumBlock(step);
+            //绘画到指定的画布
+            function drawSum() {
+                var rows = 0,
+                    cols = 0,
+                    len  = newArr.length;
+                for(var i=0;i<len;i++) {
+                    if(i%4==0) {
+                        rows++;
+                        cols=0;
+                    }
+                    cobj.beginPath();
+                    cobj.fillStyle = newArr[i].color;
+                    cobj.rect(cols*(newArr[i].width+5),rows*(newArr[i].height+5),newArr[i].width,newArr[i].height);
+                    cobj.fill();
+                    newArr[i].x = cols*(newArr[i].width+5);
+                    newArr[i].y = rows*(newArr[i].height+5);
+                    cols++;
+                }
+            }
+            drawSum();
+            //点击销毁
+            var arrs  = [],
+                numarr = [],
+                num = 0;
+            canvas.onclick = function(e) {
+                var mx = e.layerX,
+                    my = e.layerY;
+                function newDraw() {
+                    cobj.clearRect(0,0,500,500);
+                    var len = newArr.length;
+                    for(var i=0;i<len;i++) {
+                        cobj.fillStyle = newArr[i].color;
+                        var event = new addEvent(cobj,"rect",[newArr[i].x,newArr[i].y,newArr[i].width,newArr[i].height],function(){
+                            if(i==numarr[0] || i==numarr[0]) {
+                                return ;
+                            }
+                            arrs.push(newArr[i]);
+                            numarr.push(i);
+                            if(arrs.length == 2){
+                                if(arrs[0].color==arrs[1].color && numarr[0]!=numarr[1]){
+                                    arrs[0].color="rgba(0,0,0,0)";
+                                    arrs[1].color="rgba(0,0,0,0)";
+                                    newDraw();
+                                    num++;
+                                    if(num==len/2){
+                                        step*=2;
+                                        newArr = [];
+                                        sumBlock(step);
+                                        drawSum();
+                                        num = 0;
+                                    }
+                                }
+                                arrs  = [];
+                                numarr = [];
+                            }
+                        });
+                        event.add(mx,my);
+                    }
+                };
+                newDraw();
+            };
+        }
+    </script>
+</head>
+<body>
+<canvas id="canvas"  width="500" height="500"></canvas>
+</body>
+</html>
