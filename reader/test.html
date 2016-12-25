@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <script>
+        window.onload = function() {
+            function main()  {
+                test(function () {
+                    alert("sss");
+                })
+            }
+            function test(callback) {
+                alert("ooo");
+                callback && callback();
+            };
+            main();
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>
