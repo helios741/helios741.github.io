@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>h5ComponentPoint</title>
+    <link rel="stylesheet" href="../css/h5.css">
+    <link rel="stylesheet" href="../css/H5ComponentBase.css">
+    <link rel="stylesheet" href="../css/h5ComponentPoint.css">
+    <style>
+        body{padding: 0;margin: 0;}
+    </style>
+    <script src="../js/lib/jquery.js"></script>
+    <script src="../js/lib/jquery-ui.min.js"></script>
+    <script src="../js/lib/jquery.fullPage.js"></script>
+    <script src="../js/H5.js"></script>
+    <script src="../js/H5ComponentBase.js"></script>
+    <script src="../js/h5ComponentPoint.js"></script>
+</head>
+<body>
+<div class="iphone"></div>
+
+<script>
+    $(function(){
+        var cfg = {
+            type:"point",
+            text:"text",
+            width:300,
+            height:306,
+            data:[
+                ["A项",.4,"green"],
+                ["B项",.2,"yellow",0,"-120%"],
+                ["C项",.2,"red",0,"120%"]
+            ],
+            css :{
+                top:"280px",
+                opacity:1
+            },
+            animateIn:{bottom:"40%",opacity:1},
+            animateOut:{bottom:0,opacity:0},
+            center:true
+        }
+        var h5 = new H5ComponentPoint('helios',cfg);
+        $(".iphone").append(h5);
+        var leave = true;
+        $('body').click(function(){alert("dd");
+            leave = !leave;
+            $('.h5_component').trigger(leave ? 'onLeave':'onLoad');
+        });
+    })
+</script>
+</body>
+</html>

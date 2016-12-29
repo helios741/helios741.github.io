@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>H5ComponentBase test</title>
+    <link rel="stylesheet" href="../css/H5ComponentBase.css">
+    <script src="../js/lib/jquery.js"></script>
+    <script src="../js/lib/jquery-ui.min.js"></script>
+    <script src="../js/H5ComponentBase.js"></script>
+    <style>
+        body{padding:0;margin: 0;background-color: #000;font-size: 12px;}
+        .iphone{width: 340px;height: 540px;background-color: #fff;
+             position: absolute;left: 50%;top: 50%;margin: -270px 0 0 -170px;}
+    </style>
+</head>
+<body>
+<div class="iphone">
+
+</div>
+<script>
+    var cfg = {
+        type:"base",
+        text:"text",
+        width:504,
+        height:306,
+        bg:"../img/p1_people.png",
+        css :{
+            left:"50%",
+            opacity:0
+        },
+        animateIn:{top:50,opacity:1},
+        animateOut:{top:150,opacity:0},
+        center:true
+    }
+    var h5 = new H5ComponentBase('helios',cfg);
+    $(".iphone").append(h5);
+    var leave = true;
+    $("body").click(function(){
+        leave = !leave;
+        $('.h5_component').trigger(leave ? 'onLeave':'onLoad');
+    });
+</script>
+</body>
+</html>

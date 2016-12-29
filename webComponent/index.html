@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <!--  各个组件的样式 -->
+    <link rel="stylesheet" href="./css/h5.css">
+    <link rel="stylesheet" href="./css/H5ComponentPoint.css">
+    <link rel="stylesheet" href="./css/H5ComponentBase.css">
+    <link rel="stylesheet" href="./css/H5ComponentBar.css">
+    <link rel="stylesheet" href="./css/H5ComponentPie.css">
+    <link rel="stylesheet" href="./css/H5ComponentPolyLine.css">
+    <link rel="stylesheet" href="./css/H5ComponentRadar.css">
+    <!-- 自定义本页的样式 -->
+    <style>
+        body{padding: 0;margin: 0;}
+        .h5_component_name_slogan{
+            animation: rock 2s infinite 2s;
+        }
+        .h5_page{
+            height: 560px; ;
+            background-image: url(./img/page_bg.png);
+        }
+        .h5_page_face{
+            background-image: url("./img/face_bg.png");
+        }
+        .h5_component_name_caption{
+            background-image: url(./img/page_caption_bg.png);
+            width: 283px;
+            height:160px;
+            text-align: center;
+            line-height: 140px;
+            font-size:20px;
+            color: #fff;
+        }
+        @keyframes rock {
+            0%{transform: rotate(0deg)}
+            5%{transform: rotate(3deg)}
+            10%{transform: rotate(4deg)}
+            15%{transform: rotate(-3deg)}
+            20%{transform: rotate(-4deg)}
+            25%{transform: rotate(3deg)}
+            30%{transform: rotate(4deg)}
+            35%{transform: rotate(-3deg)}
+            40%{transform: rotate(-4deg)}
+            45%{transform: rotate(3deg)}
+            50%{transform: rotate(4deg)}
+            65%{transform: rotate(0deg)}
+            70%{transform: rotate(0deg)}
+        }
+        .h5_component_name_back{
+            top:30px;
+            animation: back 1s infinite 2s;
+        }
+        @keyframes back {
+            50%{top:20px;}
+        }
+    </style>
+    <script src="./js/lib/jquery.js"></script>
+    <script src="./js/lib/jquery-ui.min.js"></script>
+    <script src="./js/lib/jquery.fullPage.js"></script>
+    <!-- 各个组件的脚本文件 -->
+    <script src="./js/H5.js"></script>
+    <script src="./js/H5ComponentBase.js"></script>
+    <script src="./js/H5ComponentPoint.js"></script>
+    <script src="./js/H5ComponentBar.js"></script>
+    <script src="./js/H5ComponentPie.js"></script>
+    <script src="./js/H5ComponentPolyLine.js"></script>
+    <script src="./js/H5ComponentRadar.js"></script>
+</head>
+<body>
+<script>
+    $(function(){
+        var h5 = new H5();
+        h5.whenAddPage = function(){
+            this.addComponent("slide_up",{
+                bg:"img/footer.png",
+                css:{
+                    opacity:0,
+                    left:0,bottom:-20,
+                    width:"100%",height:40
+                },
+                animateIn:{opacity:1,bottom:"-3px"},
+                animateOut:{opacity:0,bottom:"-20px"},
+                delay:500
+            })
+        };
+        h5
+            .addPage("face")
+                .addComponent("logo",{
+                    center:true,
+                    width:395,
+                    height:130,
+                    bg:"./img/face_logo.png",
+                    css:{opacity:0},
+                    animateIn:{top:100,opacity:1},
+                    animateOut:{top:0,opacity:0}
+                })
+                .addComponent("slogan",{
+                center:true,
+                width:365,
+                height:99,
+                bg:"./img/face_slogan.png",
+                css:{opacity:0,top:200},
+                animateIn:{left:"50%",opacity:1},
+                animateOut:{left:"0%",opacity:0}
+            })
+                .addComponent("face_img_left",{
+                width:370,
+                height:493,
+                bg:"./img/face_img_left.png",
+                css:{opacity:0,left:-50,bottom:-50},
+                animateIn:{left:0,bottom:0,opacity:1},
+                animateOut:{left:-50,bottom:-50,opacity:0}
+            })
+                .addComponent("face_img_right",{
+                width:276,
+                height:449,
+                bg:"./img/face_img_right.png",
+                css:{opacity:0,right:-50,bottom:-50},
+                animateIn:{right:0,bottom:0,opacity:1},
+                animateOut:{right:-50,bottom:-50,opacity:0}
+            })
+            .addPage()
+                .addComponent("caption",{text:"课程分布方向"})  //polyline
+                .addComponent("polyline",{
+                    type:"polyline",
+                    width:300,
+                    height:306,
+                    data:[
+                        ["Java",.4,"green"],
+                        ["CSS",.2],
+                        ["H5",.3],
+                        ["CSS3",.7]
+                    ],
+                    css :{
+                        top:"280px",
+                        opacity:0
+                    },
+                    animateIn:{bottom:"40%",opacity:1},
+                    animateOut:{bottom:0,opacity:0},
+                    center:true
+                })
+                .addComponent("msg",{
+                    text:"前端课程前端课程",
+                    center:true,
+                    css:{
+                        opacity:0,top:140,
+                        textAlign:"centet",width:"100%",
+                        color:"#ff7676",
+                        marginLeft:"-11%"
+                    },
+                    animateIn:{opacity:1},
+                    animateOut:{opacity:0}
+                })
+            .addPage()
+                .addComponent("caption",{text:"移动课程开发资源"}) // pie
+                .addComponent("pie",{
+                    type:"pie",
+                    width:400,
+                    height:400,
+                    data:[
+                        ["Java",.2,"green"],
+                        ["CSS",.2],
+                        ["H5",.2],
+                        ["AJ",.2],
+                        ["CSS3",.2]
+                    ],
+                    css :{
+                        top:"280px",
+                         opacity:0
+                    },
+                     animateIn:{bottom:"40%",opacity:1},
+                     animateOut:{bottom:0,opacity:0},
+                    center:true
+                })
+                .addComponent("title",{
+                    text:"移动课程厉害一些",
+                    center:true,
+                    css:{
+                        opacity:0,bottom:80,
+                        textAlign:"centet",width:"100%",
+                        color:"#ff7676",
+                        marginLeft:"-11%"
+                    },
+                    animateIn:{opacity:1},
+                    animateOut:{opacity:0}
+                })
+            .addPage()
+                .addComponent("caption",{text:"前端课程开发"})  // bar
+                .addComponent("bar",{
+                    type:"bar",
+                    width:350,
+                    height:600,
+                    data:[
+                        ["Javascript",.4,"green"],
+                        ["CSS/HTML",.2],
+                        ["HTML5",.2],
+                        ["Bootstrap",.2],
+                        ["AngularJs",.2],
+                        ["CSS3",1]
+                    ],
+                    css :{
+                        top:100,
+                        opacity:0
+                    },
+                    animateIn:{top:200,opacity:1},
+                    animateOut:{top:100,opacity:0},
+                    center:true
+                })
+                .addComponent("msg",{
+                    text:"这次是谁呢",
+                    center:true,
+                    css:{
+                        opacity:0,bottom:80,
+                        textAlign:"centet",width:"100%",
+                        color:"#ff7676",
+                        marginLeft:"-11%"
+                    },
+                    animateIn:{opacity:1},
+                    animateOut:{opacity:0}
+                })
+            .addPage()
+                .addComponent("caption",{text:"后端课程开发"})  //radar
+                .addComponent("radar",{
+                    type:"radar",
+                    width:400,
+                    height:400,
+                    data:[
+                        ["Java",.4,"green"],
+                        ["CSS",.8],
+                        ["H5",.9],
+                        ["AJ",.6],
+                        ["CSS3",.5]
+                    ],
+                    css :{
+                        top:"280px",
+                        opacity:0
+                    },
+                    animateIn:{bottom:"40%",opacity:1},
+                    animateOut:{bottom:0,opacity:0},
+                    center:true
+                })
+                .addComponent("msg",{
+                    text:"666666",
+                    center:true,
+                    css:{
+                        opacity:0,bottom:80,
+                        textAlign:"centet",width:"100%",
+                        color:"#ff7676",
+                        marginLeft:"-11%"
+                    },
+                    animateIn:{opacity:1},
+                    animateOut:{opacity:0}
+                })
+            .addPage()
+                .addComponent("caption",{text:"课程难度分布"})  //point
+                .addComponent("point",{
+                    type:"point",
+                    text:"text",
+                    width:300,
+                    height:306,
+                    data:[
+                        ["初级",.4,"#ff7676"],
+                        ["中级",.2,"#ffa3a4",0,"-120%"],
+                        ["高级",.2,"#99c1ff",0,"120%"]
+                    ],
+                    css :{
+                        top:"280px",
+                        opacity:1
+                    },
+                    animateIn:{bottom:"40%",opacity:1},
+                    animateOut:{bottom:0,opacity:0},
+                    center:true
+                })
+            .addPage("ss")
+                .addComponent("caption",{text:"核心理念"})
+                .addComponent("text",{
+                    width:500,
+                    height:30,
+                    center:true,
+                    text:"我们都要学有用的",
+                    css:{
+                        opacity:0,
+                        textAlign:"center",
+                        color:"red",
+                        fontSize:"26px"
+                    },
+                    animateIn:{opacity:1,top:120},
+                    animateOut:{opacity:0,top:320}
+                })
+                .addComponent("text",{
+                    width:481,
+                    height:295,
+                    bg:'./img/description_bg.gif',
+                    center:true,
+                    text:"我们都要学有用的我们都要学有用的我们都要学有用的我们都要学有用的",
+                    css:{
+                        opacity:0,
+                        textAlign:"justify",
+                        color:"#fff",
+                        fontSize:"15px",
+                        padding:"15px 10px 10px 10px",
+                        lineHeight:"18px",
+                        top:240
+                    },
+                    animateIn:{opacity:1,top:190},
+                    animateOut:{opacity:0,top:240},
+                    delay:500
+                })
+                .addComponent("people",{
+                    width:515,
+                    height:305,
+                    bg:'./img/p1_people.png',
+                    center:true,
+                    css:{
+                        opacity:0,
+                        bottom:0
+                    },
+                    animateIn:{opacity:1,bottom:40},
+                    animateOut:{opacity:0,bottom:0}
+                })
+            .addPage("tail")
+                .addComponent("logo",{
+                    width:359,
+                    height:129,
+                    bg:'./img/tail_logo.png',
+                    center:true,
+                    css:{
+                        opacity:0,
+                        top:240
+                    },
+                    animateIn:{opacity:1,top:210},
+                    animateOut:{opacity:0,top:240}
+                })
+                .addComponent("slogan",{
+                    width:314,
+                    height:46,
+                    bg:'./img/tail_slogan.png',
+                    center:true,
+                    css:{
+                        opacity:0,
+                        top:280
+                    },
+                    animateIn:{opacity:1,left:"50%"},
+                    animateOut:{opacity:0,left:"0%"},
+                    delay:500
+                })
+                .addComponent("share",{
+                    width:128,
+                    height:120,
+                    bg:'./img/tail_share.png',
+                    css:{
+                        opacity:0,
+                        top:110,
+                        right:110
+                    },
+                    animateIn:{opacity:1,top:10,right:10},
+                    animateOut:{opacity:0,top:110,right:110},
+                    delay:1000
+                })
+                .addComponent("back",{
+                    width:52,
+                    height:50,
+                    bg:'./img/tail_back.png',
+                    center:true,
+                    delay:1000,
+                    onclick:function(){
+                         $.fn.fullpage.moveTo(1);
+                    }
+                })
+            .loader();
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test-\(^o^)/~</title>
+    <link rel="stylesheet" href="../css/h5.css">
+    <link rel="stylesheet" href="../css/H5ComponentBase.css">
+    <style>
+        body{padding: 0;margin: 0;}
+    </style>
+    <script src="../js/lib/jquery.js"></script>
+    <script src="../js/lib/jquery-ui.min.js"></script>
+    <script src="../js/lib/jquery.fullPage.js"></script>
+    <script src="../js/H5.js"></script>
+    <script src="../js/H5ComponentBase.js"></script>
+</head>
+<body>
+<script>
+    $(function(){
+        var h5 = new H5();
+        h5
+        .addPage('face',"fffff")
+            .addComponent('logo',{
+                text:"logo",
+                width:400,
+                height:100,
+                css:{background:"red"},
+                center:true
+            })
+            .addComponent('slogan',{
+                text:"logo",
+                width:400,
+                height:100,
+                css:{background:"red",marginTop:"250px",opacity:0},
+                center:true,
+                animateIn:{opacity:1},
+                animateOut:{opacity:0}
+            })
+        .addPage("desc","123")
+            .addComponent('caption',{
+                text:"logo",
+                width:400,
+                height:100,
+                css:{background:"green"},
+                center:true
+            })
+        .addPage('page-3',"ddd")
+            .addComponent("bar",{
+                text:"logo",
+                width:400,
+                height:100,
+                css:{background:"orange"},
+                center:true
+            })
+        .loader();
+
+    })
+</script>
+</body>
+</html>

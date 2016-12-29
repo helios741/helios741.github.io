@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="../js/lib/jquery.js"></script>
+<script src="../js/lib/jquery-ui.min.js"></script>
+<script src="../js/lib/jquery.fullPage.js"></script>
+<body>
+    <div id="h5">
+        <div class="page section" id="pge-1">
+            <div class="component log">logo</div>
+            <div class="component slogan">alogan</div>
+        </div>
+        <div class="page section" id="pge-2">
+            <div class="component desc">desc</div>
+        </div>
+        <div class="page section" id="pge-3">
+            <div class="component bar">bar</div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+            $("#h5").fullpage({
+                'sectionsColor':['red','green','#eee'],
+                onLeave:function(index,nextIndex,direction){
+                    $("#h5").find(".page").eq(index-1).trigger("onLeave");
+                },
+                afterLoad:function(anchorLink,index){
+                    $("#h5").find(".page").eq(index-1).trigger("onLoad");
+                }
+            });
+            $(".page").on("onLeave",function(){
+                $(this).find(".component").trigger("onLeave");
+            });
+            $(".page").on("onLoad",function(){
+                $(this).find(".component").trigger("onLoad");
+            });
+            $(".component").on("onLeave",function(){
+                $(this).fadeOut();
+                return false;
+            });
+            $(".component").on("onLoad",function(){
+                $(this).fadeIn();
+                return false;
+            });
+        })
+    </script>
+</body>
+</html>
