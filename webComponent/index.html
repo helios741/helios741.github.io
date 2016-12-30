@@ -5,6 +5,7 @@
     <title>index</title>
     <!--  各个组件的样式 -->
     <link rel="stylesheet" href="./css/h5.css">
+    <link rel="stylesheet" href="./css/H5_loading.css">
     <link rel="stylesheet" href="./css/H5ComponentPoint.css">
     <link rel="stylesheet" href="./css/H5ComponentBase.css">
     <link rel="stylesheet" href="./css/H5ComponentBar.css">
@@ -61,6 +62,7 @@
     <script src="./js/lib/jquery.fullPage.js"></script>
     <!-- 各个组件的脚本文件 -->
     <script src="./js/H5.js"></script>
+    <script src="./js/H5_loading.js"></script>
     <script src="./js/H5ComponentBase.js"></script>
     <script src="./js/H5ComponentPoint.js"></script>
     <script src="./js/H5ComponentBar.js"></script>
@@ -69,6 +71,12 @@
     <script src="./js/H5ComponentRadar.js"></script>
 </head>
 <body>
+
+<div class="loading">
+    <div id="rate">0%</div>
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+</div>
 <script>
     $(function(){
         var h5 = new H5();
@@ -85,7 +93,18 @@
                 delay:500
             })
         };
-        h5
+        $.getJSON('data.json',function(json){
+            $.each(json,function(i,item){
+                //debugger
+                if(item.isPage) {
+                    h5.addPage(item.name,item.text);
+                }else {
+                    h5.addComponent(item.name,item.cfg);
+                }
+            })
+            h5.loader(["./img/face_logo.png"]);
+        });
+        /*h5
             .addPage("face")
                 .addComponent("logo",{
                     center:true,
@@ -369,7 +388,10 @@
                          $.fn.fullpage.moveTo(1);
                     }
                 })
-            .loader();
+            .loader(['./img/tail_logo.png',
+                './img/tail_back.png',
+                './img/tail_share.png',
+                './img/tail_slogan.png']);*/
     })
 </script>
 </body>
