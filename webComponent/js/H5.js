@@ -1,5 +1,5 @@
 /*H5内容管理对象*/
-
+var jData = [];
 var H5 = function() {
     this.id = ("h5_"+Math.random()).replace(".","_");
     this.el = $('<div class="h5" id="'+this.id+'">').hide();
@@ -12,6 +12,7 @@ var H5 = function() {
      * @return  h5 object
      */
     this.addPage = function(name ,text){
+        jData.push({name:name,text:text,isPage:true});
         var page = $('<div class="h5_page section">');
         if(name != undefined) page.addClass(" h5_page_"+name);
         if(text != undefined) page.text(text);
@@ -24,6 +25,7 @@ var H5 = function() {
 
     };
     this.addComponent = function(name,cfg){
+        jData.push({name:name,cfg:cfg,isPage:false});
         var cfg  =cfg || {};
         cfg = $.extend({
             type:"base"
@@ -62,4 +64,6 @@ var H5 = function() {
         this.el.show();
         if(firstPage) $.fn.fullpage.moveTo(firstPage);
     }
+    this.loader = typeof  H5_loading=="function" ? H5_loading :this.loader;
+    return this;
 }
