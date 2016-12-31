@@ -33,7 +33,11 @@ var H5ComponentPolyLine = function(name,cfg) {
         if (cfg.data[i]) {
             var text = $("<div class='text'>");
             text.text(cfg.data[i][0]);
-            text.width(textW / 2).css("left", x / 2 + textW / 4);
+            text.width(textW / 2).css({
+                "left":x / 2 + textW / 4,
+                "fontSize":"22px",
+                "color":"#ff5656"
+            });
             component.append(text)
         }
 
@@ -66,6 +70,8 @@ var H5ComponentPolyLine = function(name,cfg) {
             ctx.moveTo(x, y);
             ctx.arc(x, y, 5, 0, 2 * Math.PI);
             ctx.fillStyle = item[2] ? item[2] : "#595959";
+            ctx.font = "24px Calibri";
+            //ctx.fontSize = "40px";
             ctx.fillText(( (item[1] * 100) >> 0 ) + "px", x - 10, y - 10);
         }
         ctx.stroke();

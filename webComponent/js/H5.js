@@ -22,7 +22,6 @@ var H5 = function() {
             this.whenAddPage();
         }
         return this;
-
     };
     this.addComponent = function(name,cfg){
         jData.push({name:name,cfg:cfg,isPage:false});
