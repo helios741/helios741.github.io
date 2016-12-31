@@ -70,6 +70,9 @@ var H5ComponentPie = function(name,cfg) {
             ctx.arc(r,r,r,0,Math.PI*2);
         }
         else{
+            component.find(".text").css("transition","all 0s 0s");
+            H5ComponentPie.reSort(component.find(".text"));
+            component.find(".text").css("transition","all 1s .5s");
             component.find(".text").css("opacity","1");
             ctx.arc(r,r,r,startAngle,startAngle+Math.PI*2*per,true);
         }
@@ -99,4 +102,45 @@ var H5ComponentPie = function(name,cfg) {
     });
 
     return component;
-}
+};
+H5ComponentPie.reSort  = function( list ){
+    //检测相交
+    var cmp = function(domA,domB){
+        var offSetA = $(domA).offset(),
+            offSetB = $(domB).offset();
+        var shadowA_x = [offSetA.left,offSetA.left+$(domA).width()],
+            shadowA_y = [offSetA.top,offSetA.top+$(domA).height()];
+        var shadowB_x = [offSetB.left,offSetB.left+$(domB).width()],
+            shadowB_y = [offSetB.top,offSetB.top+$(domB).height()];
+        //检测x和y是否相交
+        var intersectX = (shadowA_x[0]>shadowB_x[0] && shadowA_x[0] < shadowB_x[1]) ||
+            (shadowA_x[1]>shadowB_x[0] && shadowA_x[1] < shadowB_x[1]);
+        var intersectY = (shadowA_y[0]>shadowB_y[0] && shadowA_y[0] < shadowB_y [1]) ||
+            (shadowA_y[1]>shadowB_y[0] && shadowA_y[1] < shadowB_y[1]);
+        return intersectX && intersectY;
+    };
+    // 错开重排
+    var reset = function(domA,domB){
+        if($(domA).css("bottom")!="auto") {
+            $(domA).css("bottom",parseInt($(domA).css("bottom"))+$(domB).height());
+        }
+        if($(domA).css("top")!="auto") {
+            $(domA).css("top",parseInt($(domA).css("top"))+$(domB).height());
+        }
+    }
+
+    //将以前相互覆盖的元素进行重新排列
+    var willReset = [list[0]];
+    $.each(list,function(i,domTarget){
+       // console.log(cmp(willReset[willReset.length-1],domTarget));
+        /*if(cmp(willReset[willReset.length-1],domTarget)){
+            willReset.push(domTarget);
+        }*/
+    });
+    if(willReset.length >1 ){
+        $.each(willReset,function(i,domA){
+            if(willReset[i+1]) reset(domA,willReset[i+1]);
+        });
+        H5ComponentPie.reSort(willReset);
+    }
+};

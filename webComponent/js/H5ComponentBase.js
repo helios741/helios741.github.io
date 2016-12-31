@@ -29,7 +29,14 @@ var H5ComponentBase =function (name,cfg) {
     if( typeof cfg.onclick == "function") {
         component.on("click",cfg.onclick);
     }
-
+   // console.log(name);
+    if(name=="back") {
+       // debugger
+        component.on("click",function(){
+            console.log("ssss");
+            $.fn.fullpage.moveTo(1);
+        });
+    }
     component.on("onLoad",function(){
         setTimeout(function(){
             component.addClass(className+'_load').removeClass(className+'_leave');
