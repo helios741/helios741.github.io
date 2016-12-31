@@ -23,34 +23,34 @@
 > @return 返回这个组件对象\<br>  
 
 ## H5ComponentBase.js
-> @desc 创建最基本的图文组件 \
-> @param 基本组件的名字\
-> @param 基本组件所需要的参数\
-> @return 返回基本组件对象\
+> @desc 创建最基本的图文组件 \<br>
+> @param 基本组件的名字\<br>
+> @param 基本组件所需要的参数\<br>
+> @return 返回基本组件对象\<br>
 
 ## H5ComponentRadar.js
 
-> @desc 制作一个雷达图\
-> @param name 雷达图的名字\
-> @param 雷达图所需要的参数\
-> @return 返回这个组件对象\
+> @desc 制作一个雷达图\<br>
+> @param name 雷达图的名字\<br>
+> @param 雷达图所需要的参数\<br>
+> @return 返回这个组件对象\<br>
 ## H5ComponentPie.js
 
-> @desc 制作一个饼图\
-> @param name 饼图的名字\
-> @param 饼图所需要的参数\
-> @return 返回这个组件对象\
+> @desc 制作一个饼图\<br>
+> @param name 饼图的名字\<br>
+> @param 饼图所需要的参数\<br>
+> @return 返回这个组件对象\<br>
 
 ## H5ComponentPoint.js
 
-> @desc 制作一个散点图\
-> @param name 散点图的名字\
-> @param 散点图所需要的参数\
-> @return 返回这个组件对象\
+> @desc 制作一个散点图\<br>
+> @param name 散点图的名字\<br>
+> @param 散点图所需要的参数\<br>
+> @return 返回这个组件对象\<br>
 
 ## H5ComponentPolyLine.js
 
-> @desc 制作一个折线图\
-> @param name 折线图的名字\
-> @param 折线图所需要的参数\
-> @return 返回这个组件对象\
+> @desc 制作一个折线图 </br>
+> @param name 折线图的名字 </br>
+> @param 折线图所需要的参数 </br>
+> @return 返回这个组件对象 </br>
