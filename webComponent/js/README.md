@@ -4,23 +4,23 @@
 
 ## H5.js
 
-> @desc 总的管理整个页面，能增加一个页面或者增加一个组件 
-> @fuunction addPage增加一个页面
-> @function 在页面中增加一个组件
-> @return 创建好的H5对象
+> @desc 总的管理整个页面，能增加一个页面或者增加一个组件 \<br>  
+> @fuunction addPage增加一个页面\<br>  
+> @function 在页面中增加一个组件\<br>  
+> @return 创建好的H5对象\<br>  
 
 ##  H5_loading.js
-> @desc 页面进行加载的时候使用，显示进度‘
-> @param images 需要加载的资源的地址数组
-> @param firstPage 加载完成之后跳到那个页面
-> @return 没有返回值
+> @desc 页面进行加载的时候使用，显示进度\<br>  
+> @param images 需要加载的资源的地址数组\<br>  
+> @param firstPage 加载完成之后跳到那个页面\<br>  
+> @return 没有返回值\<br>  
 
 ## H5ComponentBar.js
 
-> @desc 制作一个柱状图
-> @param name 柱状图的名字
-> @param 柱状图所需要的参数
-> @return 返回这个组件对象
+> @desc 制作一个柱状图\<br>  
+> @param name 柱状图的名字\<br>  
+> @param 柱状图所需要的参数\<br>  
+> @return 返回这个组件对象\<br>  
 
 ## H5ComponentBase.js
 > @desc 创建最基本的图文组件
