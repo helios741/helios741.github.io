@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/base.css">
+    <script src="./js/base.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>我的TODO</h1>
+    <form class="add-task">
+        <input type="text" placeholder="e.g. 下午记得买东西">
+        <button type="submit">submit</button>
+    </form>
+    <div class="task-list">
+        <div class="task-item">
+            <span><input class="complete" type="checkbox"></span>
+            <span class="task-content">item content </span>
+            <span class="pull-right">
+                <span class="action del">删除</span>
+                <span class="action detail">细节</span>
+            </span>
+        </div>
+        <div class="task-item">
+            <span><input class="complete" type="checkbox"></span>
+            <span class="task-content">item content </span>
+            <span class="pull-right">
+                <span class="action del">删除</span>
+                <span class="action detail">细节</span>
+            </span>
+        </div>
+        <div class="task-item">
+            <span><input class="complete" type="checkbox"></span>
+            <span class="task-content">item content </span>
+            <span class="pull-right">
+                <span class="action del">删除</span>
+                <span class="action detail">细节</span>
+            </span>
+        </div>
+        <div class="task-item">
+            <span><input class="complete" type="checkbox"></span>
+            <span class="task-content">item content </span>
+            <span class="pull-right">
+                <span class="action del">删除</span>
+                <span class="action detail">细节</span>
+            </span>
+        </div>
+    </div>
+    <div class="task-detail-mask"></div>
+    <div class="task-detail">
+        <form>
+            <div class="content">大家伙</div>
+            <div class="input-item"><input type="text" name="content" value="中文"></div>
+            <div>
+                <div class="desc input-item">
+                    <textarea name="desc"></textarea>
+                </div>
+            </div>
+            <div class="remind input-item">
+                <label>提醒时间</label>
+                <input type="date" class="datetime" name="remind_date">
+            </div>
+            <div class="input-item">
+                <button type="submit">提醒</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
