@@ -1,9 +1,5 @@
 # helios741.github.io
 ## 内容
-<<<<<<< HEAD
-包含了本人学习的一些显示demo  
- fdgdsfgdf
-=======
 本人写的一些前端项目，因为希望能够展示使用，所以都放在一个仓库当中。
 ### ResponsiveWeb
 [理财网响应式首页](https://github.com/helios741/helios741.github.io/tree/master/ResponsiveWeb) </br>
@@ -36,6 +32,10 @@ CSS3负责项目的样式调整，主要用到了CSS3中的动画类的标签</b
 jQuery负责对DOM元素的控制</br>
 这里用到了jQuery中的fullpage组件进行分页方式浏览</br>
 介绍：展示网站的一些信息</br>
+## moviecat
+[展示搜索热播电影](https://github.com/helios741/helios741.github.io/tree/master/moviecat)</br>
+用到的技术：angularJs、bootstrap、gulp自动换管理 </br>
+介绍：通过豆瓣的API得到正在热播电影的数据，然后展示出来</br>
 ## webToDoApp
 想强化一下自己的jQuery做一个WEB APP最近都是在搞怎么搭建自己的博客。没时间搞。留坑待补</br>
 ## tmp
@@ -46,4 +46,3 @@ jQuery负责对DOM元素的控制</br>
 
 
 
->>>>>>> 862df1c0995a821f4394096c0e7dd538474887dd
