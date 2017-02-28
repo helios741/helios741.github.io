@@ -66,4 +66,27 @@ var arr1  = [1,2,3];
 var arr2 = [4,5];
 arr1.push(...arr2)
 ```
+## jQuery中on，bind，live，delegate的区别
+`on` 的第二个参数可以组织冒泡
+`bind`有可能会产生冒泡
+`live` live能够给新添加的元素添加事件，而`bind`在绑定事件的时候就检查元素对象是否存在
+## 盒子模型
+标准盒子模型 ：border和padding不计算入width之内
+IE盒子模型   ：border和padding计算入width之内 
+`css3`中的`box-sizing`能进行自由的切换
+## 前后端路由
+前端路由是单个页面的路由
+后端路由是整个页面的路由，主要是写的数据请求接口
+## promise的实现
+
+
+
+
+
+
+
+
+
+
+
 
