@@ -70,6 +70,12 @@ arr1.push(...arr2)
 `on` 的第二个参数可以组织冒泡
 `bind`有可能会产生冒泡
 `live` live能够给新添加的元素添加事件，而`bind`在绑定事件的时候就检查元素对象是否存在
+`delegate`将事件绑定在元素的根元素上
+```javascript
+$('#root').delegate('a', 'click', function(){
+    console.log('clicked');
+});
+```
 ## 盒子模型
 标准盒子模型 ：border和padding不计算入width之内
 IE盒子模型   ：border和padding计算入width之内 
@@ -78,8 +84,54 @@ IE盒子模型   ：border和padding计算入width之内
 前端路由是单个页面的路由
 后端路由是整个页面的路由，主要是写的数据请求接口
 ## promise的实现
+见博文
+## 能够代替ajax
+`fetch` 在新版本的浏览器下才支持，下面是例子：
+如果要使用的话，要先申请自己的API KEY
+```javascript
+var URL = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=your_api_key&format=json&nojsoncallback=1&tags=penguins';
 
+function fetchDemo() {
+    fetch(URL).then(function(response) {
+        return response.json();
+    }).then(function(json) {
+        insertPhotos(json);
+    });
+}
 
+fetchDemo();
+```
+或者`websocket`
+## 低版本浏览器不支持HTML5标签怎么解决
+使用`html5.js`
+或者条件注释
+## new一个对象的过程都发生了什么
+当我们进行`new A(“some”)`的时候，发生下面的过程
+1. var o = new Object();
+2. o.__proto__ = A.prototype;
+3. A.call(o)
+## IE的事件与w3c事件的区别？
+*W3C事件流*:从根文档(html)开始遍历所有子节点，如果目标事件的父节点设置为捕获时触发，则执行该事件，直到目标被执行，然后再事件冒泡(设置为捕获时触发的事件不再被执行)。
+*IE事件流*:从目标事件被执行，然后再冒泡父节点的事件，直到根文档。
+## jQuery自定义事件
+```javascript
+$('#foo').bind('fucked', function(){
+    console.log("I'm fucked.");
+});
+$('#foo').trigger('fucked');
+```
+## HTML5的新特性
+1. 新的文档类型
+2. 样式和脚本文件不用使用type
+3. 标签的语义化
+4. 必须属性，required，Autofocus 自动聚焦
+5. audio，video，
+6. canvas
+7. websockets和webworkers，拖动，地理位置(Geolocation),SVG storage
+## CSS3的新特性
+1. @Font-face 能从客户端加载字体
+2. @keyframes 表示加载到百分之多少做什么事情
+3. 
 
 
 
