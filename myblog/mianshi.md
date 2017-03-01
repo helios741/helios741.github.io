@@ -66,6 +66,8 @@ var arr1  = [1,2,3];
 var arr2 = [4,5];
 arr1.push(...arr2)
 ```
+## call 和bind的区别
+同样第二个参数接受的是不定参数，但是`bind`之后不会立即执行
 ## jQuery中on，bind，live，delegate的区别
 `on` 的第二个参数可以组织冒泡
 `bind`有可能会产生冒泡
@@ -152,7 +154,22 @@ $('#foo').trigger('fucked');
 3. 使用报头压缩，HTTP/2降低了开销 ( 一个页面中有很多的资源，每个资源的头部有很多字节(1000+,如cookie)
 4. HTTP/2让服务器可以将响应主动“推送”到客户端缓存中 (服务器推送服务通过“推送”那些它认为客户端将会需要的内容到客户端的缓存中，以此来避免往返的延迟
 
-
-
-
-
+## 判断变量是不是字符串
+1. `Object.prototype.toString.call('str') `能判断任何类型
+2. `typeof 'str'`
+## DOM操作的优化
+1. 优化css样式
+`如果需要动态更改css样式，尽量少的出发重绘`
+如下
+```javascript
+element.style.fontWeight = 'bold' ;
+element.style.marginLeft= '30px' ;
+element.style.marginRight = '30px' ;
+```
+这样会出发多次重绘，如果直接给元素添加一个`class`就知识一次重绘
+2. 不要反复使用 DOM 查询操作，应该用变量缓存
+3. 避免大量使用会造成重绘的 DOM 操作
+4. 优化节点添加，在外部组装好了之后在添加到DOM树中
+[DOM操作的优化](https://cnodejs.org/topic/55e31bd6898f6bdc7e5551ac)
+## new 操作符做了什么
+创建一个空对象，同时还继承了该函数的原型。
