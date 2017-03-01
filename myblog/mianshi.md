@@ -131,12 +131,26 @@ $('#foo').trigger('fucked');
 ## CSS3的新特性
 1. @Font-face 能从客户端加载字体
 2. @keyframes 表示加载到百分之多少做什么事情
-3. 
+3. `column-width`和`column-count`实现多列布局 `columns`两个参数第一个count第二个width;column-gap设置间隙
+4. 渐变：
+    + 一维渐变：`linear-gradient(to bottom right, blue, white);`
+    + 色标 : `background: radial-gradient(red, yellow, rgb(30, 144, 255));`
+5. `box-sizeing` : 改变盒子模型
+6. `transition` : 过渡 `transition:width 2s, height 2s, background-color 2s, transform 2s;`
+    + 四个参数 property过度的性质(background) duration (过渡的持续时间) delay(延时时间) -timing-function(过渡的类型ease)
+7. `transform` : 可以让元素进行移动（translate）、旋转（rotate）、缩放（scale）、倾斜（skew） 
+## http1.0和1.1的区别
+1.
+- http 1.0 每次请求一个文档都需要花费两倍的RTT时间(一次RTT用于TCP连接，另一次用于请求和接受文档)，还有点就是每次建立TCP连接服务器都要分配缓存和变量。这种非持续性的连接会对服务器造成很大的压力
+- http1.1使用了持续性的连接，就是服务器在发送完相应之后仍然在一段时间内保持这条连接，是同一个用户(浏览器)和该服务器可以继续在这条连接上传送后续的http请求报文和相应报文
+2.
 
 
-
-
-
+## http1.1和2.0的区别
+1. HTTP/2采用二进制格式而非文本格式   (二进制的协议解析起来，更加有效
+2. HTTP/2是完全多路复用的，而非有序并阻塞的——只需一个连接即可实现并行 ( http1.1流水线的方式每次处理一个请求，减少TCP的空闲时间，但是在数据量较大，网速较慢的情况下就很阻碍后面的请求了。http2.0采用的是并行一次能处理多个请求
+3. 使用报头压缩，HTTP/2降低了开销 ( 一个页面中有很多的资源，每个资源的头部有很多字节(1000+,如cookie)
+4. HTTP/2让服务器可以将响应主动“推送”到客户端缓存中 (服务器推送服务通过“推送”那些它认为客户端将会需要的内容到客户端的缓存中，以此来避免往返的延迟
 
 
 
