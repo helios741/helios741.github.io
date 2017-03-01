@@ -173,3 +173,64 @@ element.style.marginRight = '30px' ;
 [DOM操作的优化](https://cnodejs.org/topic/55e31bd6898f6bdc7e5551ac)
 ## new 操作符做了什么
 创建一个空对象，同时还继承了该函数的原型。
+
+## css的选择器
+1. \* 通用元素选择器，匹配任何元素
+2. 标签选择器，匹配所有使用E标签的元素 (直接写标签名
+3. class选择器 
+4. id选择器
+5. E>F 子元素选择器，匹配所有E元素的子元素F
+6. E F 后代元素选择器，匹配所有属于E元素后代的F元素，E和F之间用空格分隔
+7. E,F 多元素选择器，同时匹配所有E元素或F元素，E和F之间用逗号分隔
+8. E + F 毗邻元素选择器，匹配所有紧随E元素之后的同级元素F
+9. E[att] 匹配所有具有att属性的E元素，不考虑它的值
+10. 伪类
+11. E ~ F 匹配任何在E元素之后的同级F元素
+12. [阮一峰](http://www.ruanyifeng.com/blog/2009/03/css_selectors.html)
+## 实现垂直水平居中
+1. 使用绝对定位，`margin-top`设置为整个容易高度的负的一半
+```html
+<div class="content"> Content goes here</div> 
+.content {
+	width: 300px;
+	border:1px solid red; 
+    position: absolute;
+    top: 50%;
+    height: 240px;
+    margin-top: -120px;
+}
+```
+2. 使用`position`绝对定位
+```html
+<div id="content"> Content here</div>  
+#content {
+	border :1px solid red;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 240px;
+    width: 70%;
+}
+```
+3. 上面使用一个空的div
+```html
+<div id="floater"></div>
+<div id="content"></div> 
+html,body{
+	height: 100%;
+}
+#floater {
+    height: 50%;
+    margin-bottom: -150px;
+}
+#content {
+    height: 300px;
+    margin: 0 auto;
+    background-color: #FFCC66;
+    width: 70%;
+}
+```
+## 让一个元素消失
