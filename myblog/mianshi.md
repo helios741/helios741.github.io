@@ -253,9 +253,53 @@ html,body{
 
 ## 怎么使一个服务器稳定
 ## express中间件得原理
+通过客户端传过来的`http`请求将一系列的中间件连接起来，然后按照注册的前后顺序处理`http`请求，在每个中间件处理请求的过程中，得出的数据都可以传递到下一个中间件，我们也可以选择性的性质后面的中间件，也可以直接返回给客户端。
+
+[express中间件实现的原理](http://liucc.me/2014/04/14/express-%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/)
+[中间件的解释](http://www.cnblogs.com/lovesueee/p/4731635.html)
 ## CDN加速原理以及怎么找到全球最近的节点
-## 后台是单分布还是多现成分布
+CDN加速的原理：全球中有许多节点服务器，在现有的互联网基础之上新建一层只能虚拟网络，能够根据`网络流量和各节点之间的联系`，`负载状况`，`到用户的距离`,`响应时间`等综合因素将用户的请求导向离用户最近的那个节点上。
+解决了`用户带宽小`,`用户访问量大`，`网点分布不均`
+[不错的文章](http://blog.csdn.net/luoweifu/article/details/51031099)
+## 后台是单线程还是多线程分布
+
 ## 实现响应式布局的方法
-## es6中怎么避免this的使用
-## 什么情况下使用websocket
+
+
+## 在什么情况使用websoket代替ajax
+`web socket`相对于`http`来说就是能够长时间的联系，但是这也让服务器必须能够坚持的住N个服务器的压力
 ## 跨域除了jsonp
+### CORS (跨资源共享)
+只需要服务器设置 `Access-Control-Allow-Origin: *`
+### HTML5的postMessage
+假设在`a.htm`l里嵌套个`<iframe src="http://www.b.com/b.html" frameborder="0"></iframe>`,在这两个页面里互相通信
+```javascript
+// a.html
+window.onload = function() {
+    window.addEventListener("message", function(e) {
+        alert(e.data);
+    });
+
+    window.frames[0].postMessage("b data", "http://www.b.com/b.html");
+}
+```
+```javascript
+// b.html
+ window.onload = function() {
+    window.addEventListener("message", function(e) {
+        alert(e.data);
+    });
+    window.parent.postMessage("a data", "http://www.a.com/a.html");
+}
+```
+
+
+
+
+
+
+
+
+
+
+
