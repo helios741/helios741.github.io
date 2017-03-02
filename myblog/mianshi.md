@@ -335,7 +335,7 @@ app.get('/beXhr',(req,res) => {
 ```
 
 ## 后台是单线程还是多线程分布
-
+[看看这篇文章就行了](https://github.com/DoubleSpout/threadAndPackage/blob/master/chapter.7.thread_and_process.md)
 ## 实现响应式布局的方法
 ## 怎么使一个服务器稳定
 
