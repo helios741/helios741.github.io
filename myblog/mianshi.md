@@ -250,3 +250,12 @@ html,body{
 ```
 5. 设置元素的position与z-index，将z-index设置成尽量小的负数
 6. 设置元素的position与left，top，bottom，right等，将元素移出至屏幕外
+
+## 怎么使一个服务器稳定
+## express中间件得原理
+## CDN加速原理以及怎么找到全球最近的节点
+## 后台是单分布还是多现成分布
+## 实现响应式布局的方法
+## es6中怎么避免this的使用
+## 什么情况下使用websocket
+## 跨域除了jsonp
