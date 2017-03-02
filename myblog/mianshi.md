@@ -234,3 +234,19 @@ html,body{
 }
 ```
 ## 让一个元素消失
+1. `display:none;`
+2. `visibility:hidden` 这样只会导致页面的重绘不会导致页面的重排
+3. `opacity:0`
+4. 下面是一种不常用的：(设置高度为0
+```javascript
+.hiddenBox {
+    margin:0;
+    border:0;
+    padding:0;
+    height:0;
+    width:0;
+    overflow:hidden;
+}
+```
+5. 设置元素的position与z-index，将z-index设置成尽量小的负数
+6. 设置元素的position与left，top，bottom，right等，将元素移出至屏幕外
