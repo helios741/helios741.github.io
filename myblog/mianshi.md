@@ -272,6 +272,7 @@ CDN加速的原理：全球中有许多节点服务器，在现有的互联网�
 ### CORS (跨资源共享)
 只需要服务器设置 `Access-Control-Allow-Origin: *`
 ### HTML5的postMessage
+动态的插入`iframe`,在从`iframe`中拿回数据
 假设在`a.htm`l里嵌套个`<iframe src="http://www.b.com/b.html" frameborder="0"></iframe>`,在这两个页面里互相通信
 ```javascript
 // a.html
@@ -292,9 +293,49 @@ window.onload = function() {
     window.parent.postMessage("a data", "http://www.a.com/a.html");
 }
 ```
+### 服务器跨域
+1. 前端先想本地服务器发送请求
+2. 本地服务器代替前端在向目的服务器发送请求进行服务器见的通信
+3. 本地服务器作为一个中转站的角色，再将相应的数据传送给前端
+例子：
+```javscript
+//http://127.0.0.1:8888/server
+var xhr = new XMLHttpRequest();
+xhr.onload = function(data){
+  var _data = JSON.parse(data.target.responseText)
+  for(key in _data){
+    console.log('key: ' + key +' value: ' + _data[key]);
+  }
+};
+xhr.open('POST','http://127.0.0.1:8888/feXhr',true);  //向本地服务器发送请求   
+xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+xhr.send("url=http://127.0.0.1:2333/beXhr");    //以参数形式告知需要请求的后端接口
+```
+```javacript
+//node js后台
+//http://127.0.0.1:8888/feXhr
+app.post('/feXhr',(req,res) => {
+  let url  = req.body.url;
+  superagent.get(url)           //使用superagent想api接口发送请求
+      .end(function (err,docs) {
+          if(err){
+              console.log(err);
+              return
+          }
+          res.end(docs.res.text); //返回到前端
+      })
+})
 
-
-
+//http://127.0.0.1:2333/beXhr
+app.get('/beXhr',(req,res) => {
+  let obj = {
+    type : 'superagent',
+    name : 'weapon-x'
+  };
+  res.writeHead(200, {"Content-Type": "text/javascript"});
+  res.end(JSON.stringify(obj));     //响应
+})
+```
 
 
 
