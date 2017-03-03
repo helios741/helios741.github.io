@@ -336,9 +336,45 @@ app.get('/beXhr',(req,res) => {
 
 ## 后台是单线程还是多线程分布
 [看看这篇文章就行了](https://github.com/DoubleSpout/threadAndPackage/blob/master/chapter.7.thread_and_process.md)
+## 怎样避免XSS攻击
+`CSRF` : `跨站请求伪造`
+`XSS` : `跨站脚本`
+[避免XSS攻击](https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/09.3.md)
+## 怎么避免CSRF
+`CSRF` : 借助受害者的`cookie`骗取服务器的信任，
+1. 验证 HTTP Referer 字段
+    在http协议中，可以添加一个字段叫做`refered`，记录了http请求的来源地址.如歌黑客想要攻击的话必须要在自己的网站上，在服务器上的验证就不会通过，但是这个在IE6等其他浏览器是可以被修改的
+2. 在请求地址中添加 token 并验证
+    在http请求中以参数的形式加入一个随机的token，服务器烟瘴token。一些可以发表内容的网站，黑客可以在上面发表自己的个人网站，然后这个网站上也是带有了token
+3. 在http头中自定义属性并验证
+    把token的值放到http头的自定义属性之中，通过ajax加到http的头部。
+## 协议的三要素
+1. 语法 ： 数据与控制信息的结构和格式
+2. 语义 ： 需要发出何种控制信息，完成何种动作以及做出何种相应
+3. 同步 ： 时间实现的顺序
+## TCP/IP 对应于OSI七层模型的哪些层
+(应用层 + 表示层 + 会话层 ) -> 应用层
+(传输层) -> 传输层
+(网络层) -> 网络差
+(数据链路层 + 物理层) ->网络接口层
+## WEB缓存
+缓存能够提高页面的反应速度
+1. 方法 ： 添加Expires头和“配置ETag”
+    当我们秀改了原来的文件的时候，就必须修改缓存文件的内容才能进行生效，可以使用`script`引入文件的时候加一个没有必要的参数，如：`<script src="a.js?v=0.0.1"></script>`。这时候我们更新了`index.html`和`a.js`,`index.html`里面引用了`a.js`，那么当我们访问的时候会出现怎样的变化呢？
+    1. 如果先覆盖index.html，后覆盖a.js，用户在这个时间间隙访问，会得到新的index.html配合旧的a.js的情况，从而出现错误的页面。
+    2. 如果先覆盖a.js，后覆盖index.html，用户在这个间隙访问，会得到旧的index.html配合新的a.js的情况，从而也出现了错误的页面。
+- 解决方法 ： 把文件的内容进行`hash`,引入的文件变为下面的格式：`<script src="a_sdfgfsgd.js"></script>`其中`_sdfgfsgd`表示的是对`a.js`里面文件内容的`hash`。这样做的还出有下面几个：
+    1. 线上的a.js不是同名文件覆盖，而是文件名+hash的冗余，所以可以先上线静态资源，再上线html页面，不存在间隙问题；
+    2. 遇到问题回滚版本的时候，无需回滚a.js，只须回滚页面即可；
+    3. 由于静态资源版本号是文件内容的hash，因此所有静态资源可以开启永久强缓存，只有更新了内容的文件才会缓存失效，缓存利用率大增；
+    4. 修改静态资源后会在线上产生新的文件，一个文件对应一个版本，因此不会受到构造CDN缓存形式的攻击。
+[一些缓存的介绍](http://www.alloyteam.com/2016/03/discussion-on-web-caching/)
+[使用缓存中遇到的问题](http://www.infoq.com/cn/articles/front-end-engineering-and-performance-optimization-part1)
+## 后端渲染和前端渲染有什么不同，优缺点
+## 从出入网址到页面出来的整个流程
+##　Node环境与浏览器的环境的不同
 ## 实现响应式布局的方法
 ## 怎么使一个服务器稳定
-
 
 
 
