@@ -645,9 +645,30 @@ div:before {
 ##  Css实现两个自适应等宽元素中间空10个像素
 ## Animation还有哪些其他属性
 ## 304是什么意思？有没有方法不请求不经过服务器直接使用缓存
+- 304(未修改) 自从上次请求后，请求的网页未修改过。服务器返回相应的时候,不会放回网页的内容
+- 设置`Cache-Control`和`Expires`等缓存
+
+
 ## http请求头有哪些字段
+|协议头字段名|说明|实例|
+|:--:|:---:|:---:|
+|Accept|	能够接受的回应内容类型（Content-Types）|Accept: text/plain|
+|Accept-Charset|	能够接受的字符集|Accept-Charset: utf-8|
+|Accept-Encoding|	能够接受的编码方式列表|	Accept-Encoding: gzip, deflate|
+|Accept-Language|能够接受的回应内容的自然语言列表|Accept-Language: en-US|
+|Accept-Datetime|能够接受的按照时间来表示的版本|Accept-Datetime: Thu, 31 May 2007 20:35:00 GMT|
+|Cache-Control|	用来指定在这次的请求/响应链中的所有缓存机制 都必须 遵守的指令|Cache-Control: no-cache|
+|Connection|该浏览器想要优先使用的连接类型|Connection: keep-alive|
+|Cookie|之前由服务器通过 Set- Cookie）发送的一个 超文本传输协议Cookie|	Cookie: $Version=1; Skin=new|
+|Content-Type|请求的类型|text/plain|
+
 ## splice,slice
+- slice(start,end)从0开始，返回截取的数组  ( 不改变原数组
+- splice(start,lenght)从0开始 返回删除的数组。改变原来数组
+- split() 字符串变为数组
+
 ##  Cookie跨域请求能不能带上
+
 ## 对组件的理解
 ## 静态属性怎么继承
 ## angular的双向绑定原理
