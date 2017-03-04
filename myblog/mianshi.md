@@ -401,10 +401,265 @@ app.get('/beXhr',(req,res) => {
 4. I/O读写
 5. 模块加载
 
+## 创建BFC的因素
+float（除了none）、overflow（除了visible）、display（table-cell/table-caption/inline-block）、position（除了static/relative）
 
+## css 布局，左边定宽右边自适应
+1. 左边定宽度，左浮动，右边margin-left
+2. 把上面的左浮动改为绝对定位
+3. 使用浮动+负边距实现
+```html
+<div id="left">左边内容</div>
+<div id="content">
+  <div id="contentInner">主要内容</div>
+</div>
+```
+```css
+html, body { margin: 0; padding: 0; }
+#left { float: left; width: 200px; margin-right: -100%; background-color: #ccc; }
+#content { float: left; width: 100%; }
+#contentInner { margin-left: 200px; background-color: #999; }
+```
+
+## 三列布局，两边定宽度中间自适应
+```html
+<div class="left">left</div>
+<div class="mid">
+	<div class="content">middle</div>
+</div>
+<div class="right">right</div>
+```
+```css
+.left{
+	width: 300px;
+	float: left;
+	background-color: #ccc;
+	margin-right: -300px;
+}
+.mid{
+	float: left;
+	width: 100%;
+}
+.mid .content{
+	margin-left: 300px;
+	margin-right: 300px;
+	background-color: blue;
+}
+.right{
+	width: 300px;
+	float: right;
+	margin-left: -300px;
+	background-color: red;
+}
+```
+2. 使用绝对定位，左右分别：`left:0`和`right:0`
+```html
+<div class="left">left</div>
+<div class="mid">middle</div>
+<div class="right">right</div>
+```
+```css
+.left,.right{
+	width: 300px;
+	position: absolute;
+	top: 0;
+	background-color: #ccc;
+}
+.left{
+	left: 0;
+}
+.right{
+	right:0;
+}
+.mid{
+	margin: 0 300px;
+	background-color: red;
+}
+```
+
+## 实现两栏等高布局
+1. 左边定宽度右边使用margin-bottom
+```css
+.box{
+    overflow: hidden;
+}
+.left,
+.right{
+    margin-bottom: -600px;
+    padding-bottom: 600px;
+}
+.left{
+    float: left;
+    background-color: red;
+}
+.right{
+    float: left;
+    background-color: blue;
+}
+```
+```html
+<div class="box">
+    <div class="left">
+        <p>asdgf</p><p>asdgf</p><p>asdgf</p>
+    </div>  
+    <div class="right">tombot</div>
+</div>
+```
+2. flex布局 ( 下面会有介绍
+
+## 浅拷贝和深拷贝
+1. 浅拷贝
+```javascript
+function extend(p){
+	var c = {};
+	for( var i in p) c[i] = p[i];
+	return c; 
+}
+var tmp = extend(pfa);
+console.log( tmp.a );
+tmp.from = "china"; 
+console.log( tmp.from );
+```
+这样会导致修改了子元素同样写修改了父元素
+```javascript
+pfa = {
+	a:5,
+	place:["tianjin","beijing"]
+}
+function extend(p){
+	var c = {};
+	for( var i in p) c[i] = p[i];
+	return c; 
+}
+var tmp = extend(pfa);
+tmp.place.push("china") ; 
+console.log( tmp.place );
+console.log( pfa.place );
+```
+2. 深拷贝
+```javascript
+pfa = {
+	a:5,
+	place:["tianjin","beijing"]
+}
+function deepExtend(p,c){
+	var c = c || {};
+	for( var i in p) {
+		if(typeof p[i] === 'object'){
+			c[i] = (p[i].constructor === Array) ? [] : {};
+			deepExtend(p[i],c[i]);
+		} else c[i]  =p[i];
+	}
+	return c; 
+}
+var tmp = deepExtend(pfa);
+tmp.place.push("china") ; 
+console.log( tmp.place );
+console.log( pfa.place );
+```
+
+## js当中原型链继承和类继承
+[原型继承和类继承](https://75team.com/post/inherits.html)
+
+## ES5和ES6继承的实质
+* es5中首先创造子类的实例对象this,然后将父类的方法添加到this上(parent.call(this))
+* 首先创造父类的实例对象this(必须先调用super)，然后调用子类的构造函数修改this
+
+## 原生事件代理
+```javascript
+var event = {
+	addEvent : function(elem,handler,type){
+		if(elem.addEventListener) elem.addEventListener(type,handler,false);
+		else if(elem.attachEvent) {
+			elem.attachEvent("on"+type,function(){
+				handler.call(elem);
+			});
+		} else elem["on"+type] = handler
+	},
+	removeEvent : function(elem,type,handler){
+		if(elem.removeEventListener) elem.removeEventListener(type,handler,false);
+		else if(elem.datachEvent) elem.datachEvent("on"+type,handler);
+		else elem.["on"+type] = null;
+	},
+	//主要是停止冒泡事件，IE下面没有捕获
+	stopPropagation : function(ev){
+		if(ev.stopPropagation) ev.stopPropagation();
+		else ev.cancelBubble = true;
+	},
+	//取消事件的默认行为
+	preventDefault : function(ev){
+		if(ev.preventDefault) ev.preventDefault();
+		else ev.returnValue = true;
+	},
+	getTarget : function(ev){
+		return ev.target || ev.srcElement;
+	}
+}
+```
+## Cookie 是否会被覆盖，localStorage是否会被覆盖。
+`cookie`是可以被覆盖的，如果写入同名的`cookie`那么将会被覆盖
+`localstorage`存储在对相同，键值对的形式
+
+## 如何实现浏览器内多个标签页之间的通信
+调用localstorge、cookies等本地存储方式
+
+##  Css实现保持长宽比1:1
+1. `width:20%;padding-top:20%;`
+```html
+<div class = "father">
+	<div class = "daughter"></div>  
+</div>
+```
+```css
+.father {
+    width: 100%;
+}
+.daughter {
+    width: 20%; height: 0;
+    padding-top: 20%;
+    background: black;
+}
+```
+2. 使用`:before`
+```html
+<div></div>
+```
+```css
+body {
+  text-align: center;
+}
+
+div {
+  display: inline-block;
+  width: 20%;
+  background: green;
+}
+div:before {
+  content: "";
+  display: inline-block;
+  padding-bottom: 100%;
+  vertical-align: middle;
+}
+```
+
+##  Css实现两个自适应等宽元素中间空10个像素
+## Animation还有哪些其他属性
+## 304是什么意思？有没有方法不请求不经过服务器直接使用缓存
+## http请求头有哪些字段
+## splice,slice
+##  Cookie跨域请求能不能带上
+## 对组件的理解
+## 静态属性怎么继承
+## angular的双向绑定原理
+##　MVVM是什么
+## 正则表达式判断url，判断手机号
+## flex布局
+## .怎么去除字符串前后的空格
+（正则匹配^\s和\s$并且替代，Jquery的$.trim，string.trim()）
 ## jQuery优化的方法
 ## 实现响应式布局的方法
 ## 怎么使一个服务器稳定
+[前端面试-网络篇](http://www.cnblogs.com/haoyijing/p/5898420.html)
 
 
 
