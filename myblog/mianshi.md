@@ -757,6 +757,14 @@ $scope.$watch(function(){
 * Gecko : Firefox
 * webkit: safari,chrome.,android
 
+## Label的作用是什么？是怎么用的？
+用来定义表单之间的控制关系，当用户选择标签的时候，浏览器会自动将焦点转到相关标签的表单控件之上
+```css
+<label for="username">Click me</label>
+<input type="text" id="username">
+```
+
+
 ## 正则表达式判断url，判断手机号
 [正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
 ## flex布局
