@@ -668,11 +668,30 @@ div:before {
 - split() 字符串变为数组
 
 ##  Cookie跨域请求能不能带上
-不能
+不能，因为在`CORS(跨资源共享)`，默认情况下浏览器发送跨域请求的时候不等发送任何的验证信息(`credentials`)。除非设置`xhr.withCredentials`为`true`,服务器也必须能够允许请求的时候携带认证信息。
+
 ## 对组件的理解
+组件有`html,css,js,图片`等资源组成，是页面展示的一个独立部分，多个组件构成页面
+
 ## 静态属性怎么继承
+1. 什么静态属性
+```javascript
+//类属性就是静态属性
+function A(){
+	this.some = "dd";
+}
+A.run = function(){
+	console.log(444);
+}
+```
+通过`for in`去遍历就可以了
+
 ## angular的双向绑定原理
+
+
 ##　MVVM是什么
+![](http://image.beekka.com/blog/2015/bg2015020110.png)
+
 ## 正则表达式判断url，判断手机号
 ## flex布局
 ## .怎么去除字符串前后的空格
