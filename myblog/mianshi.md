@@ -687,7 +687,10 @@ A.run = function(){
 通过`for in`去遍历就可以了
 
 ## angular的双向绑定原理
-
+- 使用脏检查的机制
+- AngularJS使用`$scope.$watch`（视图到模型）以及`$scope.$apply`（模型到视图）来实现这个功能
+`mg-model`会把事件处理指令`例如click`绑定到我们运用的输入元素上面，这就是`$scope.$apply`被调用的地方！而`$scope.$watch`是在指令的控制器中被调用的。
+[好文章](http://www.html-js.com/article/2145)
 
 ##　MVVM是什么
 ![](http://image.beekka.com/blog/2015/bg2015020110.png)
