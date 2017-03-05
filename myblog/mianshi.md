@@ -690,12 +690,75 @@ A.run = function(){
 - 使用脏检查的机制
 - AngularJS使用`$scope.$watch`（视图到模型）以及`$scope.$apply`（模型到视图）来实现这个功能
 `mg-model`会把事件处理指令`例如click`绑定到我们运用的输入元素上面，这就是`$scope.$apply`被调用的地方！而`$scope.$watch`是在指令的控制器中被调用的。
+* 下面是手动实现一个简单的双向数据绑定
+```javascript
+var Scope = function( ) {
+    this.$$watchers = [];   
+};
+
+Scope.prototype.$watch = function( watchExp, listener ) {
+    this.$$watchers.push( {
+        watchExp: watchExp,
+        listener: listener || function() {}
+    } );
+};
+
+Scope.prototype.$digest = function( ) {
+    var dirty;
+
+    do {
+        dirty = false;
+
+        for( var i = 0; i < this.$$watchers.length; i++ ) {
+            var newValue = this.$$watchers[i].watchExp(),
+                oldValue = this.$$watchers[i].last;
+
+            if( oldValue !== newValue ) {
+                this.$$watchers[i].listener(newValue, oldValue);
+
+                dirty = true;
+
+                this.$$watchers[i].last = newValue;
+            }
+        }
+    } while(dirty);
+};
+
+
+var $scope = new Scope();
+
+$scope.name = 'Ryan';
+
+var element = document.querySelectorAll('input');
+
+element[0].value = $scope.name;
+
+element[0].onkeyup = function() {
+    $scope.name = element[0].value;
+
+    $scope.$digest();
+};
+
+$scope.$watch(function(){
+    return $scope.name;
+}, function( newValue, oldValue ) {
+    console.log('Input value updated - it is now ' + newValue);
+
+    element[0].value = $scope.name;
+} );
+```
 [好文章](http://www.html-js.com/article/2145)
 
 ##　MVVM是什么
 ![](http://image.beekka.com/blog/2015/bg2015020110.png)
 
+## 浏览器内核的种类
+* Trident : IE类的浏览器
+* Gecko : Firefox
+* webkit: safari,chrome.,android
+
 ## 正则表达式判断url，判断手机号
+[正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
 ## flex布局
 ## .怎么去除字符串前后的空格
 （正则匹配^\s和\s$并且替代，Jquery的$.trim，string.trim()）
