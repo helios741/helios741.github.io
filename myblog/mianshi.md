@@ -796,6 +796,40 @@ $scope.$watch(function(){
 <input type="text" id="username">
 ```
 
+## 介绍一下对浏览器内核的理解
+主要分为两部分：`渲染引擎`和`js引擎`
+* `渲染引擎`:负责对取得页面的内容(HTML,图像)加入样式信息，以及计算的显示方式，然后输出
+* `JS引擎` : 执行个解析js来实现页面的动态效果
+
+## HTML5的离线存储
+### 介绍
+在没有联网的状态下依然能够正常访问互联网，联网的时候更新用户的缓存文件
+### 原理
+基于`.appcache`文件的缓存机制，通过这个文件上的解析清单离线存储资源，这些资源就会想`cookie`一样被存储下来
+### 使用
+```javascript
+<!DOCTYPE HTML>
+<html manifest = "cache.manifest">
+...
+</html>
+```
+``` appcache
+CACHE MANIFEST
+
+CACHE:
+
+js/app.js
+css/style.css
+
+NETWORK:
+resourse/logo.png
+
+FALLBACK:
+/ /offline.html
+```
+1. `CACHE` : 表示需要离线存储的资源列表
+2. `NETWORK` : 只有在线的情况下会被访问，不会被缓存
+3. `FALLBACK` : (示例里面'/ /'不是注释)表示如果访问第一个资源失败，那么就使用第二个资源来替换他，比如上面这个文件表示的就是如果访问根目录下任何一个资源失败了，那么就去访问`offline.html`
 
 ## 正则表达式判断url，判断手机号
 [正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
