@@ -645,10 +645,41 @@ div:before {
 
 ##  Css实现两个自适应等宽元素中间空10个像素
 ## Animation还有哪些其他属性
+- `animation-fill-mode` : 让动画的结束保持在哪个状态
+    1.  none：默认值，回到动画没开始时的状态。
+    2.  backwards：让动画回到第一帧的状态。
+    3.  both: 根据a`nimation-direction`轮流应用`forwards`和`backwards`规则。
+- `animation-direction` ： 动画循环播放时，每次都从结束状态跳转到起始状态
+    * `animation-direction`指定了动画播放的方向，最常用的值是`normal`和`reverse` ( 浏览器的支持不佳
+- 简写形式`animation: 1s 1s rainbow linear 3 forwards normal;`
+
+动画名字，动画时间，动画效果(渐变)，动画延时，结束保持的状态，动画播放的方向，动画播放的次数
+```javascript
+animation-name: rainbow;
+animation-duration: 1s;
+animation-timing-function: linear;
+animation-delay: 1s;
+animation-fill-mode:forwards;
+animation-direction: normal;
+animation-iteration-count: 3;
+```
+
+## CSS hack是什么意思
+IE浏览器的`hack`分为三种
+1. 条件hack  `<!--[if IE]>`
+2. 属性hack `_color:red适用于IE6`,`*color:red适用于IE7以下`
+3. 选择符hack `IE6能识别*html .class{}，IE7能识别*+html .class{}`
+- IE都能识别*;标准浏览器(如FF)不能识别*； 　　
+- IE6能识别 !important 能识别*； 　　
+- IE7能识别*，不能识别!important; 　　
+- FF不能识别*，但能识别!important; 
+
 ## 304是什么意思？有没有方法不请求不经过服务器直接使用缓存
 - 304(未修改) 自从上次请求后，请求的网页未修改过。服务器返回相应的时候,不会放回网页的内容
 - 设置`Cache-Control`和`Expires`等缓存
 
+## 为什么要将js脚本放在底部
+在请求`src`资源时会将其指向的资源下载并应用到文档中，当浏览器进行解析的时候，会暂停其他资源的下载和处理，直到该资源加载,编译,执行完毕，图片和框架等元素也是如此。
 
 ## http请求头有哪些字段
 |协议头字段名|说明|实例|
