@@ -831,6 +831,16 @@ FALLBACK:
 2. `NETWORK` : 只有在线的情况下会被访问，不会被缓存
 3. `FALLBACK` : (示例里面'/ /'不是注释)表示如果访问第一个资源失败，那么就使用第二个资源来替换他，比如上面这个文件表示的就是如果访问根目录下任何一个资源失败了，那么就去访问`offline.html`
 
+## generator和async的对比
+||generator|async|
+|:--:|:--:|:--:|
+|内置执行器|靠执行器(co模块|自带执行器(和普通函数一模一样|
+|执行|调用next方法执行|自动执行|
+|语义|不语义化|语义化|
+|适用性|yield||
+
+
+
 ## 正则表达式判断url，判断手机号
 [正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
 ## flex布局
