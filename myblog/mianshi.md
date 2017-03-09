@@ -839,7 +839,8 @@ FALLBACK:
 |语义|不语义化|语义化|
 |适用性|yield||
 
-
+## HTTP协议是无状态的，为了保证通话使用了什么技术方法弥补，如果禁用cookie怎么搞
+常用的保持会话状态的方式有`session`,`cookie`,`URL GET`
 
 ## 正则表达式判断url，判断手机号
 [正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
