@@ -842,6 +842,15 @@ FALLBACK:
 ## HTTP协议是无状态的，为了保证通话使用了什么技术方法弥补，如果禁用cookie怎么搞
 常用的保持会话状态的方式有`session`,`cookie`,`URL GET`
 
+## HTML的输出元素
+```html
+<form onsubmit="return false" oninput="o.value = parseInt(a.value) + parseInt(b.value)">
+	<input type="number" name="a"> + 
+	<input type="number" name="b"> =
+	<output name="o"></output> 
+</form>
+```
+
 ## 正则表达式判断url，判断手机号
 [正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
 ## flex布局
