@@ -861,7 +861,8 @@ FALLBACK:
 ## 怎么使一个服务器稳定
 [前端面试-网络篇](http://www.cnblogs.com/haoyijing/p/5898420.html)
 
-
+## 面试计算机网络基础
+[点击进入](https://www.nowcoder.com/discuss/1937?type=0&order=0&pos=25&page=3)
 
 
 
