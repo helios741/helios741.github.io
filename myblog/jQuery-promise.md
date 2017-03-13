@@ -2,7 +2,9 @@
 ## 什么是异步对象
 如果对`es6`或者一些框架比较的了解的对这个概念是比较熟悉的，所谓的异步就是在执行一个逻辑的同时并不会应该其他的逻辑，但是在`javascript`中没有多线程的概念，那么只能手动的去实现，在`NodeJs`得异步操作就是通过回调函数来实现的。
 在前面也说过对`promise`的实现，如果想深入了解请异步[es6中promise的原理和实现](http://www.shangyilong.cn/#!/detail/97400)
+
 ## jQuery中的callbacks
+
 在源码中的$2880$行开始是对`Callbacks`这个对象的封装，下面先说一下这几个方法的用法，
 1. add，里面添加的是一个函数或者是个函数列表，表示添加进的函数
 ```javascript
@@ -80,7 +82,8 @@
 	cb.fire();
 	//输出 1
 ```
-##　jQuery中的Deferr
+
+## jQuery中的Deferr
 上面的部分大多数的都属于铺垫的部分，下面才是说的真正的在`jQuery`中`DOM`加载的步骤。
 也就是`jQuery.ready.promise().done( fn );`
 我们现在$3044行$找到`Deferred`这个对象，下面我们来仔细研究这段话
@@ -111,10 +114,71 @@ $.ajax("").done(function(){}).fail(function(){});
 	    console.log("fail");
 	});
 ```
-我们在第$3055到3090行$是对`Promise`这个对象的定义，从$30094行$就是开始对`deferred`的定义，并且为他扩展了`resolve`,`reject`,`notify`这三个状态以及相应，然后在$3123行$中又调用了``
-TODO 从上面开始
+我们在第$3055到3090行$是对`Promise`这个对象的定义，从$30094行$就是开始对`deferred`的定义，并且为他扩展了`resolve`,`reject`,`notify`这三个状态以及相应，然后在$3123行$中又调用了`promise.promise( deferred)` 这个方法是在$3087行$进行定义的，也就是把`promise`这个对象上面得所有方法和属性添加到`deferred`，那么现在我们就能知道`deferred`和`promise`的区别了。***deferred比promise多三个状态方法***
+```javascript
+	function test(){
+		var dfd = $.Deferred();
+		return dfd;
+	}
+	var tmp = test();
+	tmp.resolve();
 
+	tmp.done(function(){
+		console.log("success");
+	}).fail(function(){
+		console.log("fail");
+	});
+	//输出 success
+```
+上面的代码就是能够执行了，这样就对外暴露了太多的方法，我们就可以使用下面的代码进行改造一下：
+报错代码
+```javascript
+function test(){
+	var dfd = $.Deferred();
+	return dfd.promise();
+}
+var tmp = test();
+tmp.resolve();
+```
+下面的就是可以执行的：
+```javascript
+function test(){
+	var dfd = $.Deferred();
+	dfd.resolve();
+	return dfd.promise();
+}
+var tmp = test();
+tmp.done(function(){
+	console.log("success");
+}).fail(function(){
+	console.log("fail");
+});
+```
+## 再看DOM加载
+在这个时候我们在来看`jQuery`中的`DOM`加载的`jQuery.ready.promise().done( fn );`也就是当`promse`对象出发`resolve`的时候就表示(监听的事件)完成加载了。
 
+## 补充 $.when
+这个方法在平时也是很重要的，使用方法如下
+```javascript
+function aaa() {
+	var dfd = $.Deferred();
+	dfd.resolve();
+	return dfd.promise();
+}
+function bbb() {
+	var dfd = $.Deferred();
+	dfd.resolve();
+	return dfd.promise();
+}
+$.when(aaa,bbb)
+	.done(function(){
+		console.log("success");
+	})
+	.fail(function(){
+		console.log("fail");
+	});
+```
+很容易能看出什么意思，当两个方法都是成功的时候才进行的是`done`方法。
 
 
 
