@@ -851,6 +851,10 @@ FALLBACK:
 </form>
 ```
 
+## angualr中的MVVM
+
+## jQuery和原生js中操作DOM的方法
+
 ## 正则表达式判断url，判断手机号
 [正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
 ## flex布局
