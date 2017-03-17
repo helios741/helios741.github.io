@@ -801,6 +801,9 @@ $scope.$watch(function(){
 * `渲染引擎`:负责对取得页面的内容(HTML,图像)加入样式信息，以及计算的显示方式，然后输出
 * `JS引擎` : 执行个解析js来实现页面的动态效果
 
+## dpr是什么
+
+
 ## HTML5的离线存储
 ### 介绍
 在没有联网的状态下依然能够正常访问互联网，联网的时候更新用户的缓存文件
@@ -852,6 +855,12 @@ FALLBACK:
 ```
 
 ## angualr中的MVVM
+1. `view` 主要是用来渲染和展示页面，`angualr`在页面中定义一些指令
+2. `viewModel` 负责给`view`提供显示的数据，以及提供`view`中的相应到`model`，在angualr中是听过`$scope`实现的
+3. `model` 主要负责业务的封装，大多数通过`model`来向后台获取数据
+在`angualr`通过`ng-model`(双向数据绑定)来实现`view`和`viewmodel`的交互，
+`view`和`model`是不能进行交互的，而是通过`$scope`这个`viewmodel`来实现与`model`的交互的，对应页面上的表单选项，可以通过`ng-model`指令来实现`view`和`viewmodel`的同步，`ngModelController`包含`$parsers`和`$formatters`两个管道选项，他们分别为实现`view`和`model`的数据转化和反转化。对于页面上的不是输入事件`如ngClick、ngChange等`会转发到`viewmodel`对象上，通过`viewmodel`实现对`model`的改变。对于`model`的改变也会反应在`viewmodel`上面，并且通过`脏检查`来跟新`view`。这样也就实现了`view`和`model`的分离。
+[angular中的mvvm](http://www.cnblogs.com/whitewolf/p/4581254.html)
 
 ## jQuery和原生js中操作DOM的方法
 
