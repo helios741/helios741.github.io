@@ -1,4 +1,12 @@
 ## 原生AJAX
+
+readyState的几个状态
+1. 0代表未初始化。 还没有调用 open 方法
+2. 1 代表正在加载。 open 方法已被调用，但 send 方法还没有被调用
+3. 2 代表已加载完毕。send 已被调用。请求已经开始
+4. 3 代表交互中。服务器正在发送响应
+5. 4 代表完成。响应发送完毕
+
 ```javascript
 /*创建XMLHttpRequest对象*/
 var request;
@@ -171,6 +179,8 @@ element.style.marginRight = '30px' ;
 3. 避免大量使用会造成重绘的 DOM 操作
 4. 优化节点添加，在外部组装好了之后在添加到DOM树中
 [DOM操作的优化](https://cnodejs.org/topic/55e31bd6898f6bdc7e5551ac)
+5. 多使用id选择器，在jQuery中因为它使用的是底层的`getElemntsById`
+
 ## new 操作符做了什么
 创建一个空对象，同时还继承了该函数的原型。
 
@@ -251,7 +261,8 @@ html,body{
 5. 设置元素的position与z-index，将z-index设置成尽量小的负数
 6. 设置元素的position与left，top，bottom，right等，将元素移出至屏幕外
 
-
+## css的优先级
+important > 内联 > ID > 类 > 标签 | 伪类 | 属性选择 > 伪对象 > 通配符 > 继承
 
 ## express中间件得原理
 通过客户端传过来的`http`请求将一系列的中间件连接起来，然后按照注册的前后顺序处理`http`请求，在每个中间件处理请求的过程中，得出的数据都可以传递到下一个中间件，我们也可以选择性的性质后面的中间件，也可以直接返回给客户端。
@@ -336,11 +347,707 @@ app.get('/beXhr',(req,res) => {
 
 ## 后台是单线程还是多线程分布
 [看看这篇文章就行了](https://github.com/DoubleSpout/threadAndPackage/blob/master/chapter.7.thread_and_process.md)
+## 怎样避免XSS攻击
+`CSRF` : `跨站请求伪造`
+`XSS` : `跨站脚本`
+[避免XSS攻击](https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/09.3.md)
+## 怎么避免CSRF
+`CSRF` : 借助受害者的`cookie`骗取服务器的信任，
+1. 验证 HTTP Referer 字段
+    在http协议中，可以添加一个字段叫做`refered`，记录了http请求的来源地址.如歌黑客想要攻击的话必须要在自己的网站上，在服务器上的验证就不会通过，但是这个在IE6等其他浏览器是可以被修改的
+2. 在请求地址中添加 token 并验证
+    在http请求中以参数的形式加入一个随机的token，服务器烟瘴token。一些可以发表内容的网站，黑客可以在上面发表自己的个人网站，然后这个网站上也是带有了token
+3. 在http头中自定义属性并验证
+    把token的值放到http头的自定义属性之中，通过ajax加到http的头部。
+## 协议的三要素
+1. 语法 ： 数据与控制信息的结构和格式
+2. 语义 ： 需要发出何种控制信息，完成何种动作以及做出何种相应
+3. 同步 ： 时间实现的顺序
+## TCP/IP 对应于OSI七层模型的哪些层
+(应用层 + 表示层 + 会话层 ) -> 应用层
+(传输层) -> 传输层
+(网络层) -> 网络差
+(数据链路层 + 物理层) ->网络接口层
+## WEB缓存
+缓存能够提高页面的反应速度
+1. 方法 ： 添加Expires头和“配置ETag”
+    当我们秀改了原来的文件的时候，就必须修改缓存文件的内容才能进行生效，可以使用`script`引入文件的时候加一个没有必要的参数，如：`<script src="a.js?v=0.0.1"></script>`。这时候我们更新了`index.html`和`a.js`,`index.html`里面引用了`a.js`，那么当我们访问的时候会出现怎样的变化呢？
+    1. 如果先覆盖index.html，后覆盖a.js，用户在这个时间间隙访问，会得到新的index.html配合旧的a.js的情况，从而出现错误的页面。
+    2. 如果先覆盖a.js，后覆盖index.html，用户在这个间隙访问，会得到旧的index.html配合新的a.js的情况，从而也出现了错误的页面。
+- 解决方法 ： 把文件的内容进行`hash`,引入的文件变为下面的格式：`<script src="a_sdfgfsgd.js"></script>`其中`_sdfgfsgd`表示的是对`a.js`里面文件内容的`hash`。这样做的还出有下面几个：
+    1. 线上的a.js不是同名文件覆盖，而是文件名+hash的冗余，所以可以先上线静态资源，再上线html页面，不存在间隙问题；
+    2. 遇到问题回滚版本的时候，无需回滚a.js，只须回滚页面即可；
+    3. 由于静态资源版本号是文件内容的hash，因此所有静态资源可以开启永久强缓存，只有更新了内容的文件才会缓存失效，缓存利用率大增；
+    4. 修改静态资源后会在线上产生新的文件，一个文件对应一个版本，因此不会受到构造CDN缓存形式的攻击。
+[一些缓存的介绍](http://www.alloyteam.com/2016/03/discussion-on-web-caching/)
+[使用缓存中遇到的问题](http://www.infoq.com/cn/articles/front-end-engineering-and-performance-optimization-part1)
+## 后端渲染和前端渲染有什么不同，优缺点
+* 前端渲染：预先定义好`HTML`,然后向后台去请求数据得到数据后通过JS去加载数据
+* 后台渲染：在后台渲染后`HTML`直接发给客户端
+- 前端渲染优点：节省网络流量，利于`SEO`,节省部分服务器资源
+- 前端渲染缺点：前端处理数据时可能会造成假死，不利于SEO，可能会增加http请求
+- 后台渲染优点：前台页面加载迅速，没有数据的处理过程
+- 后台渲染缺点：占用服务器资源，网路耗费大
+1. 服务器为了让前端进行渲染，生成`json`返回给客户端浪费了大量的时间
+2. 后台渲染之后，需要的网络传输的体积变大，带来了网络损耗和网络传输时间的损耗。一般在移动端我们通常不会吧渲染交给后台，一方面是后台渲染需要时间，还有就是庞大的数据传输也有延时，所以会出现白屏的问题
+3. 可以让后端去渲染一部分，比如首页，然后其他的交给前端异步的处理
+
+## attribute和property的区别是什么
+- attribute是dom元素在文档中作为html拥有的元素
+- property是DOM元素在js中拥有的属性
+
+## 从输入网址到页面出来的整个流程
+1. 浏览器根据用户输的URL提交给DNS解析出真实的ip地址
+2. 客户端与服务器连理tcp连接
+3. 客户端进行请求数据
+4. 服务器进行相应，客户端对返回的资源进行(html,css,js,img)进行语法解析，简历相应的数据结构
+5. 载入解析的资源文件，进对页面进行渲染
+
+## Node环境与浏览器的环境的不同
+1. this的不同
+2. js引擎：前端的js引擎是浏览器，后台的js引擎是V8引擎
+3. node不能操作dom
+4. I/O读写
+5. 模块加载
+
+## 创建BFC的因素
+float（除了none）、overflow（除了visible）、display（table-cell/table-caption/inline-block）、position（除了static/relative）
+
+## css 布局，左边定宽右边自适应
+1. 左边定宽度，左浮动，右边margin-left
+2. 把上面的左浮动改为绝对定位
+3. 使用浮动+负边距实现
+```html
+<div id="left">左边内容</div>
+<div id="content">
+  <div id="contentInner">主要内容</div>
+</div>
+```
+```css
+html, body { margin: 0; padding: 0; }
+#left { float: left; width: 200px; margin-right: -100%; background-color: #ccc; }
+#content { float: left; width: 100%; }
+#contentInner { margin-left: 200px; background-color: #999; }
+```
+
+## 三列布局，两边定宽度中间自适应
+```html
+<div class="left">left</div>
+<div class="mid">
+	<div class="content">middle</div>
+</div>
+<div class="right">right</div>
+```
+```css
+.left{
+	width: 300px;
+	float: left;
+	background-color: #ccc;
+	margin-right: -300px;
+}
+.mid{
+	float: left;
+	width: 100%;
+}
+.mid .content{
+	margin-left: 300px;
+	margin-right: 300px;
+	background-color: blue;
+}
+.right{
+	width: 300px;
+	float: right;
+	margin-left: -300px;
+	background-color: red;
+}
+```
+2. 使用绝对定位，左右分别：`left:0`和`right:0`
+```html
+<div class="left">left</div>
+<div class="mid">middle</div>
+<div class="right">right</div>
+```
+```css
+.left,.right{
+	width: 300px;
+	position: absolute;
+	top: 0;
+	background-color: #ccc;
+}
+.left{
+	left: 0;
+}
+.right{
+	right:0;
+}
+.mid{
+	margin: 0 300px;
+	background-color: red;
+}
+```
+
+## 实现两栏等高布局
+1. 左边定宽度右边使用margin-bottom
+```css
+.box{
+    overflow: hidden;
+}
+.left,
+.right{
+    margin-bottom: -600px;
+    padding-bottom: 600px;
+}
+.left{
+    float: left;
+    background-color: red;
+}
+.right{
+    float: left;
+    background-color: blue;
+}
+```
+```html
+<div class="box">
+    <div class="left">
+        <p>asdgf</p><p>asdgf</p><p>asdgf</p>
+    </div>  
+    <div class="right">tombot</div>
+</div>
+```
+2. flex布局 ( 下面会有介绍
+
+## 浅拷贝和深拷贝
+1. 浅拷贝
+```javascript
+function extend(p){
+	var c = {};
+	for( var i in p) c[i] = p[i];
+	return c; 
+}
+var tmp = extend(pfa);
+console.log( tmp.a );
+tmp.from = "china"; 
+console.log( tmp.from );
+```
+这样会导致修改了子元素同样写修改了父元素
+```javascript
+pfa = {
+	a:5,
+	place:["tianjin","beijing"]
+}
+function extend(p){
+	var c = {};
+	for( var i in p) c[i] = p[i];
+	return c; 
+}
+var tmp = extend(pfa);
+tmp.place.push("china") ; 
+console.log( tmp.place );
+console.log( pfa.place );
+```
+2. 深拷贝
+```javascript
+pfa = {
+	a:5,
+	place:["tianjin","beijing"]
+}
+function deepExtend(p,c){
+	var c = c || {};
+	for( var i in p) {
+		if(typeof p[i] === 'object'){
+			c[i] = (p[i].constructor === Array) ? [] : {};
+			deepExtend(p[i],c[i]);
+		} else c[i]  =p[i];
+	}
+	return c; 
+}
+var tmp = deepExtend(pfa);
+tmp.place.push("china") ; 
+console.log( tmp.place );
+console.log( pfa.place );
+```
+
+## js当中原型链继承和类继承
+[原型继承和类继承](https://75team.com/post/inherits.html)
+
+## ES5和ES6继承的实质
+* es5中首先创造子类的实例对象this,然后将父类的方法添加到this上(parent.call(this))
+* 首先创造父类的实例对象this(必须先调用super)，然后调用子类的构造函数修改this
+
+## 原生事件代理
+```javascript
+var event = {
+	addEvent : function(elem,handler,type){
+		if(elem.addEventListener) elem.addEventListener(type,handler,false);
+		else if(elem.attachEvent) {
+			elem.attachEvent("on"+type,function(){
+				handler.call(elem);
+			});
+		} else elem["on"+type] = handler
+	},
+	removeEvent : function(elem,type,handler){
+		if(elem.removeEventListener) elem.removeEventListener(type,handler,false);
+		else if(elem.datachEvent) elem.datachEvent("on"+type,handler);
+		else elem.["on"+type] = null;
+	},
+	//主要是停止冒泡事件，IE下面没有捕获
+	stopPropagation : function(ev){
+		if(ev.stopPropagation) ev.stopPropagation();
+		else ev.cancelBubble = true;
+	},
+	//取消事件的默认行为
+	preventDefault : function(ev){
+		if(ev.preventDefault) ev.preventDefault();
+		else ev.returnValue = true;
+	},
+	getTarget : function(ev){
+		return ev.target || ev.srcElement;
+	}
+}
+```
+## Cookie 是否会被覆盖，localStorage是否会被覆盖。
+`cookie`是可以被覆盖的，如果写入同名的`cookie`那么将会被覆盖
+`localstorage`存储在对相同，键值对的形式
+
+## 如何实现浏览器内多个标签页之间的通信
+调用localstorge、cookies等本地存储方式
+
+##  Css实现保持长宽比1:1
+1. `width:20%;padding-top:20%;`
+```html
+<div class = "father">
+	<div class = "daughter"></div>  
+</div>
+```
+```css
+.father {
+    width: 100%;
+}
+.daughter {
+    width: 20%; height: 0;
+    padding-top: 20%;
+    background: black;
+}
+```
+2. 使用`:before`
+```html
+<div></div>
+```
+```css
+body {
+  text-align: center;
+}
+
+div {
+  display: inline-block;
+  width: 20%;
+  background: green;
+}
+div:before {
+  content: "";
+  display: inline-block;
+  padding-bottom: 100%;
+  vertical-align: middle;
+}
+```
+
+##  Css实现两个自适应等宽元素中间空10个像素
+## Animation还有哪些其他属性
+- `animation-fill-mode` : 让动画的结束保持在哪个状态
+    1.  none：默认值，回到动画没开始时的状态。
+    2.  backwards：让动画回到第一帧的状态。
+    3.  both: 根据a`nimation-direction`轮流应用`forwards`和`backwards`规则。
+- `animation-direction` ： 动画循环播放时，每次都从结束状态跳转到起始状态
+    * `animation-direction`指定了动画播放的方向，最常用的值是`normal`和`reverse` ( 浏览器的支持不佳
+- 简写形式`animation: 1s 1s rainbow linear 3 forwards normal;`
+
+动画名字，动画时间，动画效果(渐变)，动画延时，结束保持的状态，动画播放的方向，动画播放的次数
+```javascript
+animation-name: rainbow;
+animation-duration: 1s;
+animation-timing-function: linear;
+animation-delay: 1s;
+animation-fill-mode:forwards;
+animation-direction: normal;
+animation-iteration-count: 3;
+```
+
+## CSS hack是什么意思
+IE浏览器的`hack`分为三种
+1. 条件hack  `<!--[if IE]>`
+2. 属性hack `_color:red适用于IE6`,`*color:red适用于IE7以下`
+3. 选择符hack `IE6能识别*html .class{}，IE7能识别*+html .class{}`
+- IE都能识别*;标准浏览器(如FF)不能识别*； 　　
+- IE6能识别 !important 能识别*； 　　
+- IE7能识别*，不能识别!important; 　　
+- FF不能识别*，但能识别!important; 
+
+## 304是什么意思？有没有方法不请求不经过服务器直接使用缓存
+- 304(未修改) 自从上次请求后，请求的网页未修改过。服务器返回相应的时候,不会放回网页的内容
+- 设置`Cache-Control`和`Expires`等缓存
+
+## 为什么要将js脚本放在底部
+在请求`src`资源时会将其指向的资源下载并应用到文档中，当浏览器进行解析的时候，会暂停其他资源的下载和处理，直到该资源加载,编译,执行完毕，图片和框架等元素也是如此。
+
+## http请求头有哪些字段
+|协议头字段名|说明|实例|
+|:--:|:---:|:---:|
+|Accept|	能够接受的回应内容类型（Content-Types）|Accept: text/plain|
+|Accept-Charset|	能够接受的字符集|Accept-Charset: utf-8|
+|Accept-Encoding|	能够接受的编码方式列表|	Accept-Encoding: gzip, deflate|
+|Accept-Language|能够接受的回应内容的自然语言列表|Accept-Language: en-US|
+|Accept-Datetime|能够接受的按照时间来表示的版本|Accept-Datetime: Thu, 31 May 2007 20:35:00 GMT|
+|Cache-Control|	用来指定在这次的请求/响应链中的所有缓存机制 都必须 遵守的指令|Cache-Control: no-cache|
+|Connection|该浏览器想要优先使用的连接类型|Connection: keep-alive|
+|Cookie|之前由服务器通过 Set- Cookie）发送的一个 超文本传输协议Cookie|	Cookie: $Version=1; Skin=new|
+|Content-Type|请求的类型|text/plain|
+
+## splice,slice
+- slice(start,end)从0开始，返回截取的数组  ( 不改变原数组
+- splice(start,lenght)从0开始 返回删除的数组。改变原来数组
+- split() 字符串变为数组
+
+##  Cookie跨域请求能不能带上
+不能，因为在`CORS(跨资源共享)`，默认情况下浏览器发送跨域请求的时候不等发送任何的验证信息(`credentials`)。除非设置`xhr.withCredentials`为`true`,服务器也必须能够允许请求的时候携带认证信息。
+
+## 对组件的理解
+组件有`html,css,js,图片`等资源组成，是页面展示的一个独立部分，多个组件构成页面
+
+## 静态属性怎么继承
+1. 什么静态属性
+```javascript
+//类属性就是静态属性
+function A(){
+	this.some = "dd";
+}
+A.run = function(){
+	console.log(444);
+}
+```
+通过`for in`去遍历就可以了
+
+## angular的双向绑定原理
+- 使用脏检查的机制
+- AngularJS使用`$scope.$watch`（视图到模型）以及`$scope.$apply`（模型到视图）来实现这个功能
+`mg-model`会把事件处理指令`例如click`绑定到我们运用的输入元素上面，这就是`$scope.$apply`被调用的地方！而`$scope.$watch`是在指令的控制器中被调用的。
+* 下面是手动实现一个简单的双向数据绑定
+```javascript
+var Scope = function( ) {
+    this.$$watchers = [];   
+};
+
+Scope.prototype.$watch = function( watchExp, listener ) {
+    this.$$watchers.push( {
+        watchExp: watchExp,
+        listener: listener || function() {}
+    } );
+};
+
+Scope.prototype.$digest = function( ) {
+    var dirty;
+
+    do {
+        dirty = false;
+
+        for( var i = 0; i < this.$$watchers.length; i++ ) {
+            var newValue = this.$$watchers[i].watchExp(),
+                oldValue = this.$$watchers[i].last;
+
+            if( oldValue !== newValue ) {
+                this.$$watchers[i].listener(newValue, oldValue);
+
+                dirty = true;
+
+                this.$$watchers[i].last = newValue;
+            }
+        }
+    } while(dirty);
+};
+
+
+var $scope = new Scope();
+
+$scope.name = 'Ryan';
+
+var element = document.querySelectorAll('input');
+
+element[0].value = $scope.name;
+
+element[0].onkeyup = function() {
+    $scope.name = element[0].value;
+
+    $scope.$digest();
+};
+
+$scope.$watch(function(){
+    return $scope.name;
+}, function( newValue, oldValue ) {
+    console.log('Input value updated - it is now ' + newValue);
+
+    element[0].value = $scope.name;
+} );
+```
+[好文章](http://www.html-js.com/article/2145)
+
+##　MVVM是什么
+![](http://image.beekka.com/blog/2015/bg2015020110.png)
+
+## 浏览器内核的种类
+* Trident : IE类的浏览器
+* Gecko : Firefox
+* webkit: safari,chrome.,android
+
+## Label的作用是什么？是怎么用的？
+用来定义表单之间的控制关系，当用户选择标签的时候，浏览器会自动将焦点转到相关标签的表单控件之上
+```css
+<label for="username">Click me</label>
+<input type="text" id="username">
+```
+
+## 介绍一下对浏览器内核的理解
+主要分为两部分：`渲染引擎`和`js引擎`
+* `渲染引擎`:负责对取得页面的内容(HTML,图像)加入样式信息，以及计算的显示方式，然后输出
+* `JS引擎` : 执行个解析js来实现页面的动态效果
+
+## dpr是什么
+
+
+## HTML5的离线存储
+### 介绍
+在没有联网的状态下依然能够正常访问互联网，联网的时候更新用户的缓存文件
+### 原理
+基于`.appcache`文件的缓存机制，通过这个文件上的解析清单离线存储资源，这些资源就会想`cookie`一样被存储下来
+### 使用
+```javascript
+<!DOCTYPE HTML>
+<html manifest = "cache.manifest">
+...
+</html>
+```
+``` appcache
+CACHE MANIFEST
+
+CACHE:
+
+js/app.js
+css/style.css
+
+NETWORK:
+resourse/logo.png
+
+FALLBACK:
+/ /offline.html
+```
+1. `CACHE` : 表示需要离线存储的资源列表
+2. `NETWORK` : 只有在线的情况下会被访问，不会被缓存
+3. `FALLBACK` : (示例里面'/ /'不是注释)表示如果访问第一个资源失败，那么就使用第二个资源来替换他，比如上面这个文件表示的就是如果访问根目录下任何一个资源失败了，那么就去访问`offline.html`
+
+## generator和async的对比
+||generator|async|
+|:--:|:--:|:--:|
+|内置执行器|靠执行器(co模块|自带执行器(和普通函数一模一样|
+|执行|调用next方法执行|自动执行|
+|语义|不语义化|语义化|
+|适用性|yield||
+
+## HTTP协议是无状态的，为了保证通话使用了什么技术方法弥补，如果禁用cookie怎么搞
+常用的保持会话状态的方式有`session`,`cookie`,`URL GET`
+
+## HTML的输出元素
+```html
+<form onsubmit="return false" oninput="o.value = parseInt(a.value) + parseInt(b.value)">
+	<input type="number" name="a"> + 
+	<input type="number" name="b"> =
+	<output name="o"></output> 
+</form>
+```
+
+## angualr中的MVVM
+1. `view` 主要是用来渲染和展示页面，`angualr`在页面中定义一些指令
+2. `viewModel` 负责给`view`提供显示的数据，以及提供`view`中的相应到`model`，在angualr中是听过`$scope`实现的
+3. `model` 主要负责业务的封装，大多数通过`model`来向后台获取数据
+在`angualr`通过`ng-model`(双向数据绑定)来实现`view`和`viewmodel`的交互，
+`view`和`model`是不能进行交互的，而是通过`$scope`这个`viewmodel`来实现与`model`的交互的，对应页面上的表单选项，可以通过`ng-model`指令来实现`view`和`viewmodel`的同步，`ngModelController`包含`$parsers`和`$formatters`两个管道选项，他们分别为实现`view`和`model`的数据转化和反转化。对于页面上的不是输入事件`如ngClick、ngChange等`会转发到`viewmodel`对象上，通过`viewmodel`实现对`model`的改变。对于`model`的改变也会反应在`viewmodel`上面，并且通过`脏检查`来跟新`view`。这样也就实现了`view`和`model`的分离。
+[angular中的mvvm](http://www.cnblogs.com/whitewolf/p/4581254.html)
+
+## jQuery和原生js中操作DOM的方法
+1. `append()`,向选中的元素中添加内容`$(selector),append(content)`
+2. `appendTo()` 把元素添加到选中的元素中`$(html).appendTo(selector)`
+3. `after`和`before` `$(selector).after(content)`向选中的元素后面添加元素，不是内部
+4. `clone` `$('body').append($('div').clone());`
+5. `replaceWith`，`replaceAll`选中的元素被替换`$(selector).replaceWith(content)`,用content的内容去替换选中的,后者则是相反的`$(content).replaceAll(selector)`
+6.  `prepend``$(selector),prepend(content)`
+原生的操作DOM的方法
+1. document.createElement('div');
+2. 后面添加`document.getElementById('1').insertAdjacentHTML('afterend', '<div id="1.1"></div>');`
+3. 移动元素`document.getElementById('1').insertAdjacentHTML('afterend', '<div id="1.1"></div>');`
+4. `insertBefore` 相当于jQuery中的`$('#parent').prepend($('#orphan'));`
+5. 移除元素：`document.getElementById('foobar').parentNode.removeChild(document.getElementById('foobar'));`
+6. 增加样式`document.getElementById('foo').className += 'bold';`
+7. 删除样式 `document.getElementById('foo').className = document.getElementById('foo').className.replace(/^bold$/, '');`
+8. 改变属性 `document.getElementById('foo').setAttribute('role', 'button');`
+9. 删除属性`document.getElementById('foo').removeAttribute('role');`
+这篇文章是不错的：[点击进入](http://www.css88.com/archives/5422)
+
+## jQuery怎么实现性能优化
+1. 使用最新版本的jQuery ( 现在最新的版本是3.2
+2. 使用`jQuery`中调用原生的选择器，如：`$("#div"),$("div"),`,`$(".foo")`这样class选择器在`IE8`一下会很慢因为没有原生方法`getElementByClassName()`,最慢是选择器就是伪类选择器($(':hidden')``)和属性选择器`$('[attribute=value]')`
+3. 尽量适应原生的方法
+4. 多做一些缓存`jQuery('#top').find('p.classA')`;`jQuery('#top').find('p.classB');`减少这样的重复使用
+5. 使用链式的写法，因为`jQuery`会自动缓存每一步之后的结果
+6. 多用事件委托，不用所有的时间都要绑定事件，下面的做法是最好的了
+```javascript
+　　$(document).on("click", "td", function(){
+　　　　$(this).toggleClass("click");
+　　});
+```
+7. 将css的样式合并为一个class插入，合并DOM之后在插入
+8. 尽量使用工具方法，例如`$.data(elem[0],key,value);`不要使用`elem.data(key,value);`，这是因为`elem.data`是定义在jQuery对象的prototype上面的，而`$.data`是定义在`jQuery`对象上面的，减少了原型链的查找
+9. 尽少量的新增`jQuery`对象
+10. 可以考虑使用延时对象
+
+## 借用构造函数和原型链继承有哪些缺陷？
+1. 创建子类型的实例的时候，不能向父类的构造函数中传递参数
+2. 来自包含引用类型值的原型，会被所有实例共享。
+
+## angualr中的性能优化
+[angualr性能优化]()
+[点击进入](http://shikelong.github.io/2015/10/08/AngularJs%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/)
+[haowen](http://greengerong.com/blog/2015/11/11/angular-remove-unnecessary-watch-to-improve-performance/)
+[+1](http://ourjs.com/detail/54a0b5cd71caa3b40a000001)
+[这个也有用](https://blog.xiaoba.me/2015/02/27/build-high-performance-angularjs-app.html)
+
+
+## 文字的垂直居中
+父元素使用`display:table`子元素使用`display:table-cell,vertival:middle`子元素中的文字就能垂直居中了
+
+
+## IE与W3C怎么阻止事件的冒泡
+```javascript
+/*---------------------------
+    功能:停止事件冒泡
+    ---------------------------*/
+    function stopBubble(e) {
+        //如果提供了事件对象，则这是一个非IE浏览器
+        if ( e && e.stopPropagation )
+            //因此它支持W3C的stopPropagation()方法
+            e.stopPropagation();
+        else
+            //否则，我们需要使用IE的方式来取消事件冒泡
+            window.event.cancelBubble = true;
+    }
+    //阻止浏览器的默认行为
+    function stopDefault( e ) {
+        //阻止默认浏览器动作(W3C)
+        if ( e && e.preventDefault )
+            e.preventDefault();
+        //IE中阻止函数器默认动作的方式
+        else
+            window.event.returnValue = false;
+        return false;
+    }
+```
+
+## 等宽等高黑魔法
+使用`padding-top:100%`
+```html
+<div class="box">
+	<div class="con"></div>
+</div>
+```
+```css
+.box {
+	height: 80px;
+	width: 80px;
+	background-color: #ccc;
+}
+.con {
+	width:100%;
+	padding-top: 100%;
+	border:1px solid red;
+}
+```
+
+## webpack的理解
+### 特色
+1. 可以自动完成代码分割 (code splitting)
+2. .loader 可以处理各种类型的静态文件，并且支持串联操作
+尤其是在单页面程序中，把所有的代码合并为一个文件这样做是比较低效的，单个文件过大导致应用初始化的时候加载缓慢。尤其是逻辑只是在限定的情况下执行，每次都加载有些浪费
+### 新特性
+1. 对`CommonJS`,`AMD`,`es6`的语法做了兼容
+2. 支持css，js，图片的打包，也支持图片大于一个尺寸的时候转换为`base64` 格式的
+3. 支持模块加载器，比如书`label`能把es6的语法进行转换
+4. 可以将代码切割成不同的chunk，实现按需加载，降低了初始化时间
+    * webpack将多个模块打包之后的代码集合称为chunk
+    * `Entry Chunk`: 包含一系列模块代码，以及webpack的运行时(Runtime)代码，一个页面只能有一个Entry Chunk，并且需要先于Normal Chunk载入
+    * `Normal Chunk`: 只包含一系列模块代码，不包含运行时(Runtime)代码
+    * 能把内容进行hash
+实现：
+```javascript
+$('#okButton').click(function(){
+  require.ensure(['./foo'], function(require) {
+    var foo = require('./foo');
+    //your code here
+  });
+});
+```
+5. webpack 使用异步 IO 并具有多级缓存。这使得 webpack 很快且在增量编译上更加快
+6. 可以随意的使用模块
+
+## webpack的原理
+`webpack`起始是只能处理`js`的，也因此任何模块都是`javascript`文件,如果遇到别的文件比如说`css`文件，`img`就要使用loader
+### 什么是loader
+输入的是文件字符串输出的也是字符串，支持多个`loader`串行的使用，上一个`loader`是下一个`loader`的输入。
+- 参数 ： 入参：string, sourcemap 出参：string, sourcemap
+
+`每个loader会对输入的内容处理后输出，职责单一，譬如less-loader，输入的是less样式，输出的是编译好的css样式`
+foo.less会先通过 less-loader 编译成css，这是less-loader所做的一切，处理完毕后它的工作就结束了，后续要交给其他loader来处理。
+比如： 
+- `css-loader`css中的`url(xxx.png)`这类图片提取出来，转成 `url(require(./xxx.png))`的形式
+- `style-loader` 将这段css插入到文档流中，不然这模块即使被引用了也不会有效果
+- 图片的`loader`就可以使下面的配置
+```javascript
+module.exports = {
+  module: {
+    loaders: [
+      { test: /\.css$/, loader: "style-loader!css-loader" },
+      { test: /\.png$/, loader: "url-loader?limit=100000" },
+      { test: /\.jpg$/, loader: "file-loader" }
+    ]
+  }
+};
+```
+**loader有能力处理文件内容中未被解析的 `require()`**
+也可以将其放到下一个loader中处理，然而css-loader会做这件事，其实并不是它自己处理，只是调用loader的api。
+
+
+
+## webpack 和gulp的区别
+1. gulp是一种工具，能够优化前端的工作流程，比如刷新页面，压缩文件，编译less等
+2. `webpack`就类似于`sea.js`或者`require.js`一样是一个解决方法，提供了模块化的解决方案
+3. `sea`和`require`相当于在页面上加载了一个CMD/AMD的解释器，这样浏览器级能认识`define`,`module`,`exports`
+4. `webpack`是一个预处理的解决方案，他是预编译的不需要在浏览器中运行就能识别`es6/AMD/CMD`等模块化的风格，并且编译成浏览器能够识别的`es5`代码
+
+
+## 对es6的一些认识
+1. let 作用域 const
+2. 箭头函数
+3.  模块化
+4.  class类
+5.  支持promise
+
+## 正则表达式判断url，判断手机号
+[正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
+## flex布局
+## .怎么去除字符串前后的空格
+（正则匹配^\s和\s$并且替代，Jquery的$.trim，string.trim()）
+## jQuery优化的方法
 ## 实现响应式布局的方法
 ## 怎么使一个服务器稳定
+[前端面试-网络篇](http://www.cnblogs.com/haoyijing/p/5898420.html)
 
-
-
+## 面试计算机网络基础
+[点击进入](https://www.nowcoder.com/discuss/1937?type=0&order=0&pos=25&page=3)
 
 
 
