@@ -871,6 +871,7 @@ FALLBACK:
 [angular中的mvvm](http://www.cnblogs.com/whitewolf/p/4581254.html)
 
 ## jQuery和原生js中操作DOM的方法
+<<<<<<< HEAD
 1. `append()`,向选中的元素中添加内容`$(selector),append(content)`
 2. `appendTo()` 把元素添加到选中的元素中`$(html).appendTo(selector)`
 3. `after`和`before` `$(selector).after(content)`向选中的元素后面添加元素，不是内部
@@ -1035,6 +1036,8 @@ module.exports = {
 3.  模块化
 4.  class类
 5.  支持promise
+=======
+>>>>>>> 70f6cb9c59fb3af93dade2e60e58696b504e7f8b
 
 ## 正则表达式判断url，判断手机号
 [正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
