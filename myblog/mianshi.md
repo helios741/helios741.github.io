@@ -116,11 +116,13 @@ fetchDemo();
 使用`html5.js`
 或者条件注释
 ## new一个对象的过程都发生了什么
-当我们进行`new A(“some”)`的时候，发生下面的过程
+当我们进行`new A(“some”)`的时候，发生下面的过程(创建一个空对象，同时还继承了该函数的原型。)
 1. var o = new Object();
 2. o.__proto__ = A.prototype;
 3. A.call(o)
+ 
 ## IE的事件与w3c事件的区别？
+
 *W3C事件流*:从根文档(html)开始遍历所有子节点，如果目标事件的父节点设置为捕获时触发，则执行该事件，直到目标被执行，然后再事件冒泡(设置为捕获时触发的事件不再被执行)。
 *IE事件流*:从目标事件被执行，然后再冒泡父节点的事件，直到根文档。
 ## jQuery自定义事件
@@ -180,9 +182,6 @@ element.style.marginRight = '30px' ;
 4. 优化节点添加，在外部组装好了之后在添加到DOM树中
 [DOM操作的优化](https://cnodejs.org/topic/55e31bd6898f6bdc7e5551ac)
 5. 多使用id选择器，在jQuery中因为它使用的是底层的`getElemntsById`
-
-## new 操作符做了什么
-创建一个空对象，同时还继承了该函数的原型。
 
 ## css的选择器
 1. \* 通用元素选择器，匹配任何元素
@@ -727,70 +726,78 @@ A.run = function(){
 通过`for in`去遍历就可以了
 
 ## angular的双向绑定原理
-- 使用脏检查的机制
-- AngularJS使用`$scope.$watch`（视图到模型）以及`$scope.$apply`（模型到视图）来实现这个功能
-`mg-model`会把事件处理指令`例如click`绑定到我们运用的输入元素上面，这就是`$scope.$apply`被调用的地方！而`$scope.$watch`是在指令的控制器中被调用的。
-* 下面是手动实现一个简单的双向数据绑定
+
+通过脏检查来实现双向数据绑定，因为`angualr`只会对指定的属性($watch)的进行脏检查,当这个过程被触发后`angualr`中的`$digest`就会循环被注册的事件，查看是否发生改变。
+指定的事件包括下面的：
+* DOM事件，如输入的文本，点击按钮等(ng-click)
+* xhr事件 ($http)
+* 浏览器的变更事件($location)
+* time事件($timeout,$setinterval)
+* 执行`$digest` , `$apply` 
+
+[好文章](http://angularjs.cn/A0lr)
+[angular性能优化](https://github.com/atian25/blog/issues/5)
+
+## angualr中的MVVM
+1. `view` 主要是用来渲染和展示页面，`angualr`在页面中定义一些指令
+2. `viewModel` 负责给`view`提供显示的数据，以及提供`view`中的相应到`model`，在angualr中是听过`$scope`实现的
+3. `model` 主要负责业务的封装，大多数通过`model`来向后台获取数据
+在`angualr`通过`ng-model`(双向数据绑定)来实现`view`和`viewmodel`的交互，
+`view`和`model`是不能进行交互的，而是通过`$scope`这个`viewmodel`来实现与`model`的交互的，对应页面上的表单选项，可以通过`ng-model`指令来实现`view`和`viewmodel`的同步，`ngModelController`包含`$parsers`和`$formatters`两个管道选项，他们分别为实现`view`和`model`的数据转化和反转化。对于页面上的不是输入事件`如ngClick、ngChange等`会转发到`viewmodel`对象上，通过`viewmodel`实现对`model`的改变。对于`model`的改变也会反应在`viewmodel`上面，并且通过`脏检查`来跟新`view`。这样也就实现了`view`和`model`的分离。
+[angular中的mvvm](http://www.cnblogs.com/whitewolf/p/4581254.html)
+
+## angualr中的性能优化
+1. 提速 $digest cycle
+    - 尽量少触发$digest
+    - 尽量快得触发$digest
+2. 优化$watch
+    - $scope.$watch(watchExpression, modelChangeCallback), watchExpression可以是String或Function
+    - 避免watchExpression中执行耗时操作，因为它在每次$digest都会执行1~2次。
+    - 避免watchExpression中操作dom，因为它很耗时。
+    - 避免watchExpression中操作dom，因为它很耗时。
+    - ng-if vs ng-show， 前者会移除DOM和对应的watch
+    - 及时移除不必要的$watch。
+3. 能使用$digest的地方不要使用$apply
+4. 延时执行
+    - 及时移除不必要的$watch。
+    - 如果不涉及数据变更，还可以加上第三个参数false，避免调用$apply。
+    - 对时间有要求的，第二个参数可以设置为0。
 ```javascript
-var Scope = function( ) {
-    this.$$watchers = [];   
-};
-
-Scope.prototype.$watch = function( watchExp, listener ) {
-    this.$$watchers.push( {
-        watchExp: watchExp,
-        listener: listener || function() {}
-    } );
-};
-
-Scope.prototype.$digest = function( ) {
-    var dirty;
-
-    do {
-        dirty = false;
-
-        for( var i = 0; i < this.$$watchers.length; i++ ) {
-            var newValue = this.$$watchers[i].watchExp(),
-                oldValue = this.$$watchers[i].last;
-
-            if( oldValue !== newValue ) {
-                this.$$watchers[i].listener(newValue, oldValue);
-
-                dirty = true;
-
-                this.$$watchers[i].last = newValue;
-            }
-        }
-    } while(dirty);
-};
-
-
-var $scope = new Scope();
-
-$scope.name = 'Ryan';
-
-var element = document.querySelectorAll('input');
-
-element[0].value = $scope.name;
-
-element[0].onkeyup = function() {
-    $scope.name = element[0].value;
-
-    $scope.$digest();
-};
-
-$scope.$watch(function(){
-    return $scope.name;
-}, function( newValue, oldValue ) {
-    console.log('Input value updated - it is now ' + newValue);
-
-    element[0].value = $scope.name;
-} );
+$http.get('http://path/to/url').success(function(data){
+  $scope.name = data.name;
+  $timeout(function(){
+    //do sth later, such as log
+  }, 0, false);
+});
 ```
-[好文章](http://www.html-js.com/article/2145)
+5.减少使用filter (在$digest过程中，filter会执行很多次，至少两次。)
+```javascript
+angular.module('filtersPerf', []).filter('double', function(){
+  return function(input) {
+    //至少输出两次
+    console.log('Calling double on: '+input);
+    return input + input;
+  };
+});
+```
+可以在controller中预处理
+```javascript
+//mainCtrl.js
+angular.module('filtersPerf', []).controller('mainCtrl', function($scope, $filter){
+  $scope.dataList = $filter('double')(dataFromServer);
+});
+```
 
-##　MVVM是什么
-![](http://image.beekka.com/blog/2015/bg2015020110.png)
+
+[angualr性能优化]()
+[点击进入](http://shikelong.github.io/2015/10/08/AngularJs%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/)
+[haowen](http://greengerong.com/blog/2015/11/11/angular-remove-unnecessary-watch-to-improve-performance/)
+[+1](http://ourjs.com/detail/54a0b5cd71caa3b40a000001)
+[这个也有用](https://blog.xiaoba.me/2015/02/27/build-high-performance-angularjs-app.html)
+
+## angular 作用域的本质 ： 添加监听器，在digest里面运行它
+
+
 
 ## 浏览器内核的种类
 * Trident : IE类的浏览器
@@ -862,16 +869,8 @@ FALLBACK:
 </form>
 ```
 
-## angualr中的MVVM
-1. `view` 主要是用来渲染和展示页面，`angualr`在页面中定义一些指令
-2. `viewModel` 负责给`view`提供显示的数据，以及提供`view`中的相应到`model`，在angualr中是听过`$scope`实现的
-3. `model` 主要负责业务的封装，大多数通过`model`来向后台获取数据
-在`angualr`通过`ng-model`(双向数据绑定)来实现`view`和`viewmodel`的交互，
-`view`和`model`是不能进行交互的，而是通过`$scope`这个`viewmodel`来实现与`model`的交互的，对应页面上的表单选项，可以通过`ng-model`指令来实现`view`和`viewmodel`的同步，`ngModelController`包含`$parsers`和`$formatters`两个管道选项，他们分别为实现`view`和`model`的数据转化和反转化。对于页面上的不是输入事件`如ngClick、ngChange等`会转发到`viewmodel`对象上，通过`viewmodel`实现对`model`的改变。对于`model`的改变也会反应在`viewmodel`上面，并且通过`脏检查`来跟新`view`。这样也就实现了`view`和`model`的分离。
-[angular中的mvvm](http://www.cnblogs.com/whitewolf/p/4581254.html)
 
 ## jQuery和原生js中操作DOM的方法
-<<<<<<< HEAD
 1. `append()`,向选中的元素中添加内容`$(selector),append(content)`
 2. `appendTo()` 把元素添加到选中的元素中`$(html).appendTo(selector)`
 3. `after`和`before` `$(selector).after(content)`向选中的元素后面添加元素，不是内部
@@ -910,13 +909,6 @@ FALLBACK:
 ## 借用构造函数和原型链继承有哪些缺陷？
 1. 创建子类型的实例的时候，不能向父类的构造函数中传递参数
 2. 来自包含引用类型值的原型，会被所有实例共享。
-
-## angualr中的性能优化
-[angualr性能优化]()
-[点击进入](http://shikelong.github.io/2015/10/08/AngularJs%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/)
-[haowen](http://greengerong.com/blog/2015/11/11/angular-remove-unnecessary-watch-to-improve-performance/)
-[+1](http://ourjs.com/detail/54a0b5cd71caa3b40a000001)
-[这个也有用](https://blog.xiaoba.me/2015/02/27/build-high-performance-angularjs-app.html)
 
 
 ## 文字的垂直居中
@@ -1036,8 +1028,12 @@ module.exports = {
 3.  模块化
 4.  class类
 5.  支持promise
-=======
->>>>>>> 70f6cb9c59fb3af93dade2e60e58696b504e7f8b
+
+## jQuery中选择器的实现
+
+
+
+## sea中define能不能改变参数
 
 ## 正则表达式判断url，判断手机号
 [正则表达式学习](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
