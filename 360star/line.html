@@ -30,17 +30,11 @@
 		cx = e.touches[0].clientX,
 		cy = e.touches[0].clientY;
 		console.log(e);
-		//cobj.beginPath();
-		//cobj.lineWidth = 6;
-		//cobj.moveTo(cx,cx);
-		//cobj.lineTo(100,100);
-		//cobj.stroke();
 		isDone = false;
 	},false);
 	canvas.addEventListener('touchmove',function(e) {
 		if(isDone) return ;
 		e.preventDefault();
-		console.log("move");
 		var touch = e.touches[0];
 		cobj.clearRect(0,0,300,600);
 		console.log(touch.pageX,touch.pageY);
@@ -50,20 +44,13 @@
 		console.log("----" + cx + "---" + cy);
 		cobj.lineTo(touch.pageX,touch.pageY);
 		cobj.stroke();
-		//cobj.closePath();
-		
-		
-		//cobj.moveTo(cx,cy);
 	},false);
 	canvas.addEventListener('touchend',function(e){
 		isDone = true;
 		e.preventDefault();
-		//var touch = e.touches[0];
-		console.log("end");
 		cobj.stroke();
 		cobj.closePath();
 		cobj.clearRect(0,0,300,600);
-		//cobj.lineTo(touch.pageX,touch.pageY);
 	},false);
 </script>
 </body>

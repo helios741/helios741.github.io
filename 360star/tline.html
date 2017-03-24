@@ -12,14 +12,15 @@
 <body>
 	<canvas id="canvas" width="500" height="500"></canvas>
 <script>
-	var canvas = document.getElementById('canvas');
-	var cobj = canvas.getContext('2d');
-	cobj.beginPath();
-	cobj.lineWidth = 10;
-	cobj.moveTo(50,50);
-	cobj.lineTo(100,100);
-	cobj.stroke();//
-	cobj.lineTo(200,100);
+	function doo(s) {
+		this.s = s;
+	}
+	doo.prototype.a = function() {
+		console.log(this.s);
+		debugger;
+	};
+	var a = new doo("s");
+	console.log(a.a());
 </script>
 </body>
 </html>
