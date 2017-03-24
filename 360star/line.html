@@ -13,48 +13,57 @@
 		}
 		#canvas{
 			border:1px solid red;
-			position: relative;
-			margin-top:-600px; 
-			z-index: 1;
 		}
 	</style>
 </head>
 <body>
-	<div id="box"></div>
 	<canvas id="canvas" width="300" height="600"></canvas>
 <script>
 	var canvas = document.getElementById('canvas'),
 		box  = document.getElementById('box'),
 		cobj = canvas.getContext('2d');
 	var cx,cy;
-	box.addEventListener('touchmove',function(){
-		console.log("box");
-	},false);
+	var isDone = false;
 	canvas.addEventListener('touchstart',function(e) {
-		console.log("ddd");
-		cx = e.clientX,
-		cy = e.clientY;
-		cobj.beginPath();
-		cobj.lineWidth = 6;
-		cobj.moveTo(cx,cx);
+		e.preventDefault();
+		console.log("start");
+		cx = e.touches[0].clientX,
+		cy = e.touches[0].clientY;
+		console.log(e);
+		//cobj.beginPath();
+		//cobj.lineWidth = 6;
+		//cobj.moveTo(cx,cx);
 		//cobj.lineTo(100,100);
-		//cobj.stroke();//
+		//cobj.stroke();
+		isDone = false;
 	},false);
 	canvas.addEventListener('touchmove',function(e) {
+		if(isDone) return ;
+		e.preventDefault();
+		console.log("move");
 		var touch = e.touches[0];
 		cobj.clearRect(0,0,300,600);
+		console.log(touch.pageX,touch.pageY);
+		cobj.lineWidth = 6;
+		cobj.beginPath();
+		cobj.moveTo(cx, cy);
+		console.log("----" + cx + "---" + cy);
 		cobj.lineTo(touch.pageX,touch.pageY);
 		cobj.stroke();
-		cobj.closePath();
-		cobj.beginPath();
-		cobj.lineWidth = 6;
-		cobj.moveTo(cx,cy);
+		//cobj.closePath();
+		
+		
+		//cobj.moveTo(cx,cy);
 	},false);
 	canvas.addEventListener('touchend',function(e){
-		var touch = e.touches[0];
+		isDone = true;
+		e.preventDefault();
+		//var touch = e.touches[0];
+		console.log("end");
+		cobj.stroke();
+		cobj.closePath();
 		cobj.clearRect(0,0,300,600);
 		//cobj.lineTo(touch.pageX,touch.pageY);
-		cobj.stroke();
 	},false);
 </script>
 </body>
