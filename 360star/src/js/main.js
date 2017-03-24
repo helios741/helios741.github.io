@@ -29,6 +29,6 @@ function checkOpt(event) {
 
 Event.addEvent(aboutPWD,checkOpt,'touchstart');
 Event.addEvent(aboutPWD,checkOpt,'click');
-Event.addEvent(canvas,line.touchStart,'touchstart');
-Event.addEvent(canvas,line.touchStart,'click');
+Event.addEvent(canvas,line.touchStart.bind(line),'touchstart');
+Event.addEvent(canvas,line.touchStart.bind(line),'click');
 

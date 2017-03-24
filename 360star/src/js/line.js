@@ -22,18 +22,17 @@
 	line.prototype = {
 		constructor: line,
 		touchStart: function(e) {
-			// line.call(this);
 			console.log(this);
 			e.preventDefault();
 			var touch = e.touches[0] || {}, 
 			    x = touch.clientX || e.clientX,
 			    y = touch.clientY || e.clientY;
-			console.log(x,y); console.log("---",this.len);
+			console.log(x,y);
 			for (var i = 0; i < this.len; i++) {
-				console.log(arr.left,arr.top);
-				if( x < arr.left || x > arr.left+this.itemW) {
+				console.log(this.arr[i].left,this.arr[i].top);
+				if( x < this.arr[i].left || x > this.arr[i].left+this.itemW) {
 					continue;
-				} else if(y < arr.top || y > arr.top + this.itemH) {
+				} else if(y < this.arr[i].top || y > this.arr[i].top + this.itemH) {
 					continue;
 				}
 				Class.addClass(item[i],'active');

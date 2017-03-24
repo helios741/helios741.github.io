@@ -4,23 +4,32 @@
 	<meta charset="UTF-8">
 	<title>line</title>
 	<style>
-		canvas {
+		#box {
+			height: 200px;
+			width: 200px;
+	
 			border:1px solid red;
 		}
 	</style>
 </head>
 <body>
-	<canvas id="canvas" width="500" height="500"></canvas>
+	<div id="box"></div>
 <script>
-	function doo(s) {
-		this.s = s;
+	//定义一个可见的盒子用于绑定点击事件
+	var box = document.getElementById('box');
+	box.x = 'box'
+	window.x = "ssss";
+
+	//设置执行函数的对象属性
+	function outFunc() {
+	  this.x = 'outFunc';//给全局对象window.x赋值（相当于赋值全局变量）
+	  box.addEventListener('click', func.bind(this), false);
 	}
-	doo.prototype.a = function() {
-		console.log(this.s);
-		debugger;
-	};
-	var a = new doo("s");
-	console.log(a.a());
+	function func() {
+	  console.log(this.x); //输出outFunc 使用bind设置this的值
+	}
+	outFunc();
+
 </script>
 </body>
 </html>
