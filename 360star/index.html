@@ -5,12 +5,43 @@
 	<meta name="viewport"
         content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
 	<title>index.html</title>
-	<link rel="stylesheet" href="style/css/normalize.css">
+	<link rel="stylesheet" href="src/css/normalize.css">
+	<link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
-<script src="./output/index.js"></script>
-<script>
-	foo();
-</script>
+
+<div class="box">
+	<h1 class="title border-1px">手势密码</h1>
+	<div class="gesture-pwd">
+		<div class="column">
+			<span class="item"></span>
+			<span class="item"></span>
+			<span class="item"></span>
+		</div>
+		<div class="column">
+			<span class="item"></span>
+			<span class="item"></span>
+			<span class="item"></span>
+		</div>
+		<div class="column">
+			<span class="item"></span>
+			<span class="item"></span>
+			<span class="item"></span>
+		</div>
+	</div>
+	<div class="msg">
+		至少多少个字符
+	</div>
+	<div class="about-pwd">
+		<label for="set-pwd" class="set-pwd">
+			<input name="set-pwd" type="checkbox" > 设置密码
+		</label>
+		<label for="check-pwd" class="check-pwd">
+			<input name="check-pwd" type="checkbox"> 验证密码 
+		</label>
+	</div>
+</div>
+
+<script src="./src/js/main.js"></script>
 </body>
 </html>
