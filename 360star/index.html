@@ -9,10 +9,9 @@
 	<link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
-
 <div class="box">
 	<h1 class="title border-1px">手势密码</h1>
-	<div class="gesture-pwd">
+	<div class="gesture-pwd" id="gesPWD">
 		<div class="column">
 			<span class="item"></span>
 			<span class="item"></span>
@@ -29,19 +28,21 @@
 			<span class="item"></span>
 		</div>
 	</div>
-	<div class="msg">
-		至少多少个字符
+	<div class="msg" id="msg">
+		请设置密码
 	</div>
-	<div class="about-pwd">
+	<div class="about-pwd" id="aboutPWD">
 		<label for="set-pwd" class="set-pwd">
-			<input name="set-pwd" type="checkbox" > 设置密码
+			<input name="pwd" id="set-pwd" type="radio" checked> 设置密码
 		</label>
 		<label for="check-pwd" class="check-pwd">
-			<input name="check-pwd" type="checkbox"> 验证密码 
+			<input name="pwd" id="check-pwd" type="radio"> 验证密码 
 		</label>
 	</div>
 </div>
 
+<script src="./src/js/Class.js"></script>
+<script src="./src/js/event.js"></script>
 <script src="./src/js/main.js"></script>
 </body>
 </html>

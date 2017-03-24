@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    canvas{
+      border:1px solid red;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas" width="400px" height="400px"></canvas>
+  <script>
+    window.onload = function() {
+        var canvas = document.getElementById("canvas");
+        var obj = canvas.getContext('2d');
+     
+        obj.moveTo( 300, 500);
+        obj.lineTo( 300, 480);
+        obj.lineWidth = 6;
+        obj.strokeStyle = "#ff0000";
+        obj.stroke();
+         
+        canvas.onmousedown = function( e ){
+            var mx = e.layerX;
+            var my = e.layerY;
+             
+            var sx = 300;
+            var sy = 500;
+             
+            var angle = Math.atan2( ( my - sy), ( mx - sx ) )
+             
+            obj.clearRect(0, 0, 600, 600);
+            obj.beginPath();
+            obj.moveTo( sx, sy );
+            obj.lineTo( sx + 20 * Math.cos( angle ), sy + 20 * Math.sin(angle));
+            obj.stroke();
+        };
+    };
+  </script>
+</body>
+</html>

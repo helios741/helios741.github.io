@@ -32,6 +32,10 @@ body {
 	margin: 0 auto;
 	background: rgb(255,177,38);
 }
+.box .gesture-pwd .column .item.active{
+	background-color: rgba(255,177,38,.5);
+	border: 1px solid rgb(253,141,0);
+}
 .box .msg {
 	text-align: center;
 	margin: 15px 0;
