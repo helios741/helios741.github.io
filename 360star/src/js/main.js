@@ -8,8 +8,8 @@ var gesPWD = document.getElementById('gesPWD'),
 	itemLen = item.length,
 	gesPWDWidth = gesPWD.offsetWidth,
 	gesPWDHeight = gesPWD.offsetHeight,
-	line = new Line(gesPWDWidth, gesPWDHeight, item),
-	cobj = canvas.getContext('2d');
+	cobj = canvas.getContext('2d'),
+	line = new Line(gesPWDWidth, gesPWDHeight, item,cobj);
 
 
 function checkOpt(event) {
@@ -29,6 +29,18 @@ function checkOpt(event) {
 
 Event.addEvent(aboutPWD,checkOpt,'touchstart');
 Event.addEvent(aboutPWD,checkOpt,'click');
+/**
+* addEventListener 中会改变this要进行bind
+**/
 Event.addEvent(canvas,line.touchStart.bind(line),'touchstart');
-Event.addEvent(canvas,line.touchStart.bind(line),'click');
+Event.addEvent(canvas,line.touchStart.bind(line),'mousedown');
+Event.addEvent(canvas,line.touchMove.bind(line),'touchmove');
+Event.addEvent(canvas,line.touchMove.bind(line),'mousemove');
+Event.addEvent(canvas,line.touchEnd.bind(line),'touchend');
+Event.addEvent(canvas,line.touchEnd.bind(line),'mouseup');
 
+
+cobj.beginPath();
+cobj.moveTo(0,0);
+cobj.lineTo(45,126); //133
+cobj.stroke();
