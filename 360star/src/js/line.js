@@ -2,13 +2,19 @@
 
 	var _map = new Array(),
 		_clickOne = false,
-		_tar;
+		_tar,
+		_visMap =new Array();;
 	function _initMap() {
 		for (var i = 0; i < 10; i++) {
 			_map[i] = new Array();
 			for (var j = 0; j < 10; j++) {
 				_map[i][j] = false;
 			}
+		}
+	}
+	function _initVisMap() {
+		for (var i = 0; i < 10; i++) {
+			_visMap[i] = false;
 		}
 	}
 	function line(w,h,item,cbj) {
@@ -36,30 +42,33 @@
 		constructor: line,
 		DFSLine: function(st) {
 			for (var i = 0;i < this.len; i++) {
-				if(!_map[st][i]) {
+				if(!_map[st][i] || _visMap[i]) {
 					continue;
 				}
-				_map[st][i] = false;
-				_map[i][st] = false;
+				console.log(i);
+				_visMap[i] = true;
 				var sx = this.arr[i].left + this.itemW/4 +5,
 					sy = this.arr[i].top + this.itemH/4;
-				this.cobj.lineTo(sx, sy, i);
+				this.cobj.lineTo(sx, sy);
 				this.DFSLine(i);
 			}
 		},
 		renderAllLine: function(sze) {
 			this.cobj.beginPath();
-			this.cobj.lineWidth = 2;
+			this.cobj.lineWidth = sze;
+			_initVisMap();
 			var flag = false;
 			for (var i=0 ;i < this.len; i++) {
 				for (var j = 0; j < this.len; j++) {
 					if (!_map[i][j]) {
 						continue;
-					}
+					}console.log("sss:i:" + i+"j:"+j);
 					var sx = this.arr[i].left + this.itemW/4 +5,
 						sy = this.arr[i].top + this.itemH/4;
 					this.cobj.moveTo(sx,sy);
+					_visMap[i] = true;
 					this.DFSLine(i);
+					this.cobj.stroke();
 					flag = true;
 					break; 
 				}
@@ -120,16 +129,18 @@
 					this.y = ny;
 					_map[_tar][i] = true;
 					_map[i][_tar] = true;
+					_tar = i;
 				}
 			}
-			// this.cobj.clearRect(0,0,this.w,this.h);
-			this.renderAllLine();
+			this.cobj.clearRect(0,0,this.w,this.h);
+			this.renderAllLine(2);
 			this.renderOneLine(this.x, this.y, nx, ny,2);
 		},
 		touchEnd: function(e){
 			this.isDone = true;
 			e.preventDefault();
 			_clickOne = false;
+			_initVisMap();
 			_initMap();
 			cobj.stroke();
 			cobj.closePath();
