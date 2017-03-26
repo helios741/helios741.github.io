@@ -10,12 +10,17 @@ var gesPWD = document.getElementById('gesPWD'),
 	gesPWDHeight = gesPWD.offsetHeight,
 	cobj = canvas.getContext('2d'),
 	line = new Line(gesPWDWidth, gesPWDHeight, item,cobj),
-	touchTot = 0;
+	touchTot = 0,
+	prePWD = '';
 
 
 function checkOpt(event) {
 	// Event.preventDefault();
 	var target = Event.getTarget(event);
+	Class.removeClass(msg,'warning');
+	Class.removeClass(msg,'info');
+	Class.removeClass(msg,'error');
+	Class.removeClass(msg,'success');
 	if(target.nodeName.toLowerCase() !== 'label') {
 		return ;
 	}
@@ -27,37 +32,65 @@ function checkOpt(event) {
 		msg.innerHTML = '请输入您的密码';
 	}
 }
+function errLine(errpwd) {
+	var len = errpwd.length;
+	for (var i=0; i < len; i++) {
+		Class.addClass(item[errpwd[i]],'error');
+	}
+	(function iterator(i){
+		if(i === len) {
+			return ;
+		}
+		setTimeout(function(){
+			Class.removeClass(item[errpwd[i]],'error');
+			iterator(i+1);
+		},500*(!i?1:0));
+	})(0);
+	
+}
 function saveOrCheck() {
 	var PWD = line.getPWD(),
 		tmpPWD = PWD.join(',');
+	Class.removeClass(msg,'warning');
+	Class.removeClass(msg,'info');
+	Class.removeClass(msg,'error');
+	Class.removeClass(msg,'success');
 	if (radio[0]['checked']) {
 		touchTot++;
 		if (touchTot == 1) {
-			tmpPWD = PWD;
 			if (PWD.length < 5) {
 				touchTot = 0;
 				msg.innerHTML ='密码至少五个点';
+				Class.addClass(msg,'warning');
 				return;
 			}
 			msg.innerHTML = '请确认密码';
+			Class.addClass(msg, 'info');
 			if (!Storage.support) {
 				alert('您的浏览器不支持localstorage！');
 				return;
 			}
-			Storage.savePWD(PWD);
+			prePWD = tmpPWD;
 			return;
 		}
-		if (tmpPWD === Storage.getPWD() ){
+
+		if (tmpPWD === prePWD){
 			msg.innerHTML = '密码设置成功';
+			Class.addClass(msg, 'success');
+			Storage.savePWD(PWD);
 		} else {
 			msg.innerHTML = '密码不一样，请重新输入密码';
+			Class.addClass(msg, 'error');
 		}
 		touchTot = 0;
 	} else {
 		if (tmpPWD === Storage.getPWD() ){
 			msg.innerHTML = '验证成功，可重复尝试';
+			Class.addClass(msg, 'success');
 		} else {
 			msg.innerHTML = '验证失败';
+			errLine(tmpPWD.split(','));
+			Class.addClass(msg, 'error');
 		}
 	}
 }

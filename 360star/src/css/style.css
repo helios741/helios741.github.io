@@ -35,15 +35,71 @@ body {
 	height: 30px;
 	border-radius: 50%;
 	margin: 0 auto;
+	border:1px solid rgb(253,141,0);
 	background: rgb(255,177,38);
+}
+
+.box .gesture-pwd .column .item.error{
+	box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
+	background-image: -o-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
+	background-image: -moz-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
+	background-image: gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
+	box-sizing: border-box;
 }
 .box .gesture-pwd .column .item.active{
 	background-color: rgba(255,177,38,.5);
 	border: 1px solid rgb(253,141,0);
 }
 .box .msg {
+	font-size: 18px;
 	text-align: center;
 	margin: 15px 0;
+}
+@keyframes  Error {
+	0% {
+		margin-left: -1px;
+	}
+	12% {
+		margin-left: -3px;
+	}
+	25% {
+		margin-left: -5px: 
+	}
+	37% {
+		margin-left: -3px: 
+	}
+	50% {
+		margin-left: 0px: 
+	}
+	62% {
+		margin-left: 1px;
+	}
+	74% {
+		margin-left: 3px;
+	}
+	75% {
+		margin-left: 5px: 
+	}
+	85% {
+		margin-left: 3px: 
+	}
+	100% {
+		margin-left: 0px: 
+	}
+}
+.box .msg.warning {
+	color: #e38d13;
+}
+.box .msg.info{
+	color: #28a4c9;
+}
+.box .msg.success{
+	color: #3e8f3e;
+}
+.box .msg.error{
+	animation: Error .5s 3;
+	color: #a94442
 }
 .box .about-pwd {
 	margin: 0 30%;

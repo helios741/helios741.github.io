@@ -11,7 +11,7 @@
 		removeClass: function(elem, CN) {
 			if(this.hasClass(elem, CN)) {
 				var reg = new RegExp('(\\s|^)' + CN + '(\\s|$)');
-				elem.className = elem.className.replace(reg,' ');
+				elem.className = elem.className.replace(reg,'');
 			}
 		} 
 	}

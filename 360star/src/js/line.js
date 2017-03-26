@@ -199,6 +199,7 @@
 		renderOneLine: function(sx,sy,ex,ey,sze) {
 			this.cobj.beginPath();
 			this.cobj.lineWidth = sze;
+			this,cobj.strokeStyle ='rgb(240,42,42)';
 			this.cobj.moveTo(sx, sy);
 			this.cobj.lineTo(ex, ey);
 			this.cobj.stroke();
