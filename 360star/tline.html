@@ -15,20 +15,17 @@
 <body>
 	<div id="box"></div>
 <script>
-	//定义一个可见的盒子用于绑定点击事件
-	var box = document.getElementById('box');
-	box.x = 'box'
-	window.x = "ssss";
-
-	//设置执行函数的对象属性
-	function outFunc() {
-	  this.x = 'outFunc';//给全局对象window.x赋值（相当于赋值全局变量）
-	  box.addEventListener('click', func.bind(this), false);
+	var _map = [5][5],
+		_clickOne = false;
+	_map[1][1] = true;
+	function _initMap() {
+		for (var i = 1; i < 4; i++) {
+			for (var j = 1; j < 4; j++) {
+				_map[i][j] = false;
+			}
+		}
 	}
-	function func() {
-	  console.log(this.x); //输出outFunc 使用bind设置this的值
-	}
-	outFunc();
+	//_initMap();
 
 </script>
 </body>

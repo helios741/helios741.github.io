@@ -39,8 +39,3 @@ Event.addEvent(canvas,line.touchMove.bind(line),'mousemove');
 Event.addEvent(canvas,line.touchEnd.bind(line),'touchend');
 Event.addEvent(canvas,line.touchEnd.bind(line),'mouseup');
 
-
-cobj.beginPath();
-cobj.moveTo(0,0);
-cobj.lineTo(45,126); //133
-cobj.stroke();

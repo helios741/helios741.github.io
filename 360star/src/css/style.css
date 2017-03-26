@@ -12,6 +12,11 @@ body {
 }
 .box .gesture-pwd {
 	display: flex;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	margin-top: 84px;
 	width: 100%;
 	height: 300px;
 	justify-content: space-between;
@@ -50,11 +55,4 @@ body {
 }
 #canvas {
 	display: flex;
-    width: 100%;
-    height: 300px;
-    margin-top: 84px;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1;
 }
