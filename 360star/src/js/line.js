@@ -1,14 +1,26 @@
-;(function(){
+;(function(window){
 
 	var _map = new Array(),
 		_clickOne = false,
 		_tar,
-		_visMap =new Array();;
+		_start,
+		_tmpMap = new Array(),
+		_visMap = new Array();
 	function _initMap() {
 		for (var i = 0; i < 10; i++) {
 			_map[i] = new Array();
+			_tmpMap[i] = new Array();
 			for (var j = 0; j < 10; j++) {
 				_map[i][j] = false;
+				_tmpMap[i][j] = false;
+			}
+		}
+	}
+	function _initTmpMap() {
+		for (var i = 0; i < 10; i++) {
+			_tmpMap[i] = new Array();
+			for (var j = 0; j < 10; j++) {
+				_tmpMap[i][j] = false;
 			}
 		}
 	}
@@ -40,42 +52,146 @@
 	};
 	line.prototype = {
 		constructor: line,
-		DFSLine: function(st) {
+		_DFSLine: function(st) {
 			for (var i = 0;i < this.len; i++) {
 				if(!_map[st][i] || _visMap[i]) {
 					continue;
 				}
-				console.log(i);
 				_visMap[i] = true;
 				var sx = this.arr[i].left + this.itemW/4 +5,
 					sy = this.arr[i].top + this.itemH/4;
 				this.cobj.lineTo(sx, sy);
-				this.DFSLine(i);
+				this._DFSLine(i);
+			}
+		},
+		_checkMidLine: function() {
+			if (_tmpMap[0][6]  ) {
+				_map[0][6] = _map[0][6] = false;
+				var flag  =false;
+				for(var i = 0; i < this.len; i++) {
+					if(_map[3][i]) {
+						flag = true;
+						break;
+					}
+				}
+				if(!flag) {
+					Class.addClass(this.item[3],'active');
+					_map[0][3] = _map[3][0] = _map[3][6] = _map[6][3] = true;
+				} else {
+					_map[0][6] = _map[0][6] = true;
+				}
+				
+			}
+			if (_tmpMap[0][2]) {
+				_map[0][2] = _map[2][0] = false;
+				var flag  =false;
+				for(var i = 0; i < this.len; i++) {
+					if(_map[1][i]) {
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					Class.addClass(this.item[1],'active');
+					_map[0][1] = _map[1][0] = _map[2][1] = _map[1][2] = true;
+				} else {
+					_map[0][2] = _map[2][0] = true;
+				}
+				
+			}
+			if (_tmpMap[1][7]) {
+				_map[1][7] = _map[7][1] = false;
+				var flag  =false;
+				for(var i = 0; i < this.len; i++) {
+					if(_map[4][i]) {
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					Class.addClass(this.item[4],'active');	
+					_map[1][4] = _map[4][1] = _map[4][7] = _map[7][4] = true;
+				} else {
+					_map[1][7] = _map[7][1] = true;
+				}
+			}
+			if (_tmpMap[2][6]) {
+				_map[2][6] = _map[6][2] = false;
+				var flag  =false;
+				var t;
+				for(var i = 0; i < this.len; i++) {
+					if(_map[4][i]) {
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					Class.addClass(this.item[4],'active');
+					_map[2][4] = _map[4][2] = _map[4][6] = _map[6][4] = true;
+				} else {
+					_map[2][6] = _map[6][2] = true;
+				}
+			}
+			if (_tmpMap[2][8] ) {
+				_map[2][8] = _map[8][2] = false;
+				var flag  =false;
+				for(var i = 0; i < this.len; i++) {
+					if(_map[5][i]) {
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					Class.addClass(this.item[5],'active');
+					_map[2][5] = _map[5][2] = _map[5][8] = _map[8][5] = true;
+				} else {
+					_map[2][8] = _map[8][2] = true;
+				}
+			}
+			if (_tmpMap[0][8] ) {
+				_map[0][8] = _map[8][0] = false;
+				var flag  =false;
+				for(var i = 0; i < this.len; i++) {
+					if(_map[4][i]) {
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					Class.addClass(this.item[4],'active');
+					_map[0][4] = _map[4][0] = _map[4][8] = _map[8][4] = true;
+				} else {
+					_map[0][8] = _map[8][0] = true;
+				}
+			}
+			if (_tmpMap[6][8] ) {
+				_map[6][8] = _map[8][6] = false;
+				var flag  =false;
+				for(var i = 0; i < this.len; i++) {
+					if(_map[7][i]) {
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					Class.addClass(this.item[7],'active');
+					_map[6][7] = _map[7][6] = _map[7][8] = _map[8][7] = true;
+				} else {
+					_map[6][8] = _map[8][6] = true;
+				}
 			}
 		},
 		renderAllLine: function(sze) {
 			this.cobj.beginPath();
 			this.cobj.lineWidth = sze;
 			_initVisMap();
-			var flag = false;
-			for (var i=0 ;i < this.len; i++) {
-				for (var j = 0; j < this.len; j++) {
-					if (!_map[i][j]) {
-						continue;
-					}console.log("sss:i:" + i+"j:"+j);
-					var sx = this.arr[i].left + this.itemW/4 +5,
-						sy = this.arr[i].top + this.itemH/4;
-					this.cobj.moveTo(sx,sy);
-					_visMap[i] = true;
-					this.DFSLine(i);
-					this.cobj.stroke();
-					flag = true;
-					break; 
-				}
-				if ( flag ) {
-					break;
-				}
-			}
+			// this._checkMidLine();
+			_visMap[_start] = true;
+			var sx = this.arr[_start].left + this.itemW/4 +5,
+				sy = this.arr[_start].top + this.itemH/4;
+			this.cobj.moveTo(sx,sy);
+			this._DFSLine(_start);
+			this.cobj.stroke();
 		},
 		renderOneLine: function(sx,sy,ex,ey,sze) {
 			this.cobj.beginPath();
@@ -103,6 +219,7 @@
 				this.isDone = false;
 				_clickOne = true;
 				_tar = i;
+				_start = i;
 				_initMap();
 			}
 		},
@@ -129,6 +246,12 @@
 					this.y = ny;
 					_map[_tar][i] = true;
 					_map[i][_tar] = true;
+					_tmpMap[_tar][i] = true;
+					_tmpMap[i][_tar] = true;
+					// Class.addClass(this.item[3],'active');
+					// _map[0][6] = _map[6][0] = true;
+					this._checkMidLine();
+					_initTmpMap();
 					_tar = i;
 				}
 			}
@@ -151,4 +274,4 @@
 		}
 	};
 	window.Line = line;
-})()
+})(window)
