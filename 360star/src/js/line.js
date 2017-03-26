@@ -4,6 +4,7 @@
 		_clickOne = false,
 		_tar,
 		_start,
+		PWD = new Array(),
 		_tmpMap = new Array(),
 		_visMap = new Array();
 	function _initMap() {
@@ -58,6 +59,8 @@
 					continue;
 				}
 				_visMap[i] = true;
+				PWD.push(i);
+				// console.log( i );
 				var sx = this.arr[i].left + this.itemW/4 +5,
 					sy = this.arr[i].top + this.itemH/4;
 				this.cobj.lineTo(sx, sy);
@@ -264,6 +267,9 @@
 			e.preventDefault();
 			_clickOne = false;
 			_initVisMap();
+			PWD = [_start];
+			_visMap[_start] = true;
+			this._DFSLine(_start);
 			_initMap();
 			cobj.stroke();
 			cobj.closePath();
@@ -271,6 +277,9 @@
 			for (var i = 0; i < this.len; i++ ) {
 				Class.removeClass(this.item[i],'active');
 			}
+		},
+		getPWD: function() {
+			return PWD;
 		}
 	};
 	window.Line = line;
