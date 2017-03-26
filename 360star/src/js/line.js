@@ -244,7 +244,7 @@
 					}
 					nx = this.arr[i].left + this.itemW/4 +5;
 					ny = this.arr[i].top + this.itemH/4;
-					Class.addClass(this.item[i],'active');
+					Class.addClass(this.item[i],' active');
 					this.renderOneLine(this.x, this.y, nx, ny);
 					this.x = nx;
 					this.y = ny;

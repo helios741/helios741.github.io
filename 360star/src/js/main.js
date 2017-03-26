@@ -13,14 +13,17 @@ var gesPWD = document.getElementById('gesPWD'),
 	touchTot = 0,
 	prePWD = '';
 
-
-function checkOpt(event) {
-	// Event.preventDefault();
-	var target = Event.getTarget(event);
+function clearClass() {
 	Class.removeClass(msg,'warning');
 	Class.removeClass(msg,'info');
 	Class.removeClass(msg,'error');
 	Class.removeClass(msg,'success');
+}
+
+function checkOpt(event) {
+	// Event.preventDefault();
+	var target = Event.getTarget(event);
+	clearClass();
 	if(target.nodeName.toLowerCase() !== 'label') {
 		return ;
 	}
@@ -35,14 +38,14 @@ function checkOpt(event) {
 function errLine(errpwd) {
 	var len = errpwd.length;
 	for (var i=0; i < len; i++) {
-		Class.addClass(item[errpwd[i]],'error');
+		Class.addClass(item[errpwd[i]],' error ');
 	}
 	(function iterator(i){
 		if(i === len) {
 			return ;
 		}
 		setTimeout(function(){
-			Class.removeClass(item[errpwd[i]],'error');
+			Class.removeClass(item[errpwd[i]],' error ');
 			iterator(i+1);
 		},500*(!i?1:0));
 	})(0);
@@ -51,10 +54,7 @@ function errLine(errpwd) {
 function saveOrCheck() {
 	var PWD = line.getPWD(),
 		tmpPWD = PWD.join(',');
-	Class.removeClass(msg,'warning');
-	Class.removeClass(msg,'info');
-	Class.removeClass(msg,'error');
-	Class.removeClass(msg,'success');
+	clearClass();
 	if (radio[0]['checked']) {
 		touchTot++;
 		if (touchTot == 1) {
@@ -90,7 +90,7 @@ function saveOrCheck() {
 		} else {
 			msg.innerHTML = '验证失败';
 			errLine(tmpPWD.split(','));
-			Class.addClass(msg, 'error');
+			Class.addClass(msg, ' error ');
 		}
 	}
 }
