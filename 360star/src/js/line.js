@@ -41,16 +41,18 @@
 		}
 		this.x = 0;
 		this.y = 0;
-		this.w = w;
-		this.h = h;
+		this.lineSize = unloakUI.cfg.lineSize;
+		this.titleTop = unloakUI.cfg.titleTop;
+		this.w = unloakUI.cfg.canvasW ;
+		this.h = unloakUI.cfg.canvasH ;
 		this.cobj = cobj;
 		this.item = item;
-		this.itemW = 30;
-		this.itemH = 30;
+		this.itemW = unloakUI.cfg.itemW;
+		this.itemH = unloakUI.cfg.itemH;
 		this.arr = itemArr;
 		this.len = itemArr.length;
 		this.isDone = true;
-		this.color = 'rgb(224,43,27)';
+		this.color = unloakUI.cfg.lineColor;
 	};
 	line.prototype = {
 		constructor: line,
@@ -61,7 +63,6 @@
 				}
 				_visMap[i] = true;
 				PWD.push(i);
-				// console.log( i );
 				var sx = this.arr[i].left + this.itemW/4 +5,
 					sy = this.arr[i].top + this.itemH/4;
 				this.cobj.lineTo(sx, sy);
@@ -79,7 +80,7 @@
 					}
 				}
 				if(!flag) {
-					Class.addClass(this.item[3],'active');
+					unloakUI.Class.addClass(this.item[3],'active');
 					_map[0][3] = _map[3][0] = _map[3][6] = _map[6][3] = true;
 				} else {
 					_map[0][6] = _map[0][6] = true;
@@ -96,7 +97,7 @@
 					}
 				}
 				if (!flag) {
-					Class.addClass(this.item[1],'active');
+					unloakUI.Class.addClass(this.item[1],'active');
 					_map[0][1] = _map[1][0] = _map[2][1] = _map[1][2] = true;
 				} else {
 					_map[0][2] = _map[2][0] = true;
@@ -113,7 +114,7 @@
 					}
 				}
 				if (!flag) {
-					Class.addClass(this.item[4],'active');	
+					unloakUI.Class.addClass(this.item[4],'active');	
 					_map[1][4] = _map[4][1] = _map[4][7] = _map[7][4] = true;
 				} else {
 					_map[1][7] = _map[7][1] = true;
@@ -130,7 +131,7 @@
 					}
 				}
 				if (!flag) {
-					Class.addClass(this.item[4],'active');
+					unloakUI.Class.addClass(this.item[4],'active');
 					_map[2][4] = _map[4][2] = _map[4][6] = _map[6][4] = true;
 				} else {
 					_map[2][6] = _map[6][2] = true;
@@ -146,7 +147,7 @@
 					}
 				}
 				if (!flag) {
-					Class.addClass(this.item[5],'active');
+					unloakUI.Class.addClass(this.item[5],'active');
 					_map[2][5] = _map[5][2] = _map[5][8] = _map[8][5] = true;
 				} else {
 					_map[2][8] = _map[8][2] = true;
@@ -162,7 +163,7 @@
 					}
 				}
 				if (!flag) {
-					Class.addClass(this.item[4],'active');
+					unloakUI.Class.addClass(this.item[4],'active');
 					_map[0][4] = _map[4][0] = _map[4][8] = _map[8][4] = true;
 				} else {
 					_map[0][8] = _map[8][0] = true;
@@ -178,7 +179,7 @@
 					}
 				}
 				if (!flag) {
-					Class.addClass(this.item[7],'active');
+					unloakUI.Class.addClass(this.item[7],'active');
 					_map[6][7] = _map[7][6] = _map[7][8] = _map[8][7] = true;
 				} else {
 					_map[6][8] = _map[8][6] = true;
@@ -200,7 +201,7 @@
 		renderOneLine: function(sx,sy,ex,ey,sze) {
 			this.cobj.beginPath();
 			this.cobj.lineWidth = sze;
-			this.cobj.strokeStyle ='rgb(240,42,42)';
+			this.cobj.strokeStyle =this.color;
 			this.cobj.moveTo(sx, sy);
 			this.cobj.lineTo(ex, ey);
 			this.cobj.stroke();
@@ -210,7 +211,7 @@
 			var touch = e.touches[0] || {}, 
 			    x = touch.clientX || e.clientX,
 			    y = touch.clientY || e.clientY;
-			y-=84;
+			y-=this.titleTop;
 
 			for (var i = 0; i < this.len; i++) {
 				if( x < this.arr[i].left || x > this.arr[i].left+this.itemW) {
@@ -233,7 +234,7 @@
 			e.preventDefault();
 			var touch = e.touches[0],
 				nx = touch.clientX,
-				ny = touch.clientY - 84;
+				ny = touch.clientY - this.titleTop;
 			if (_clickOne) {
 				for (var i = 0; i < this.len; i++) {
 					if( nx < this.arr[i].left || nx > this.arr[i].left+this.itemW) {
@@ -261,8 +262,8 @@
 				}
 			}
 			this.cobj.clearRect(0,0,this.w,this.h);
-			this.renderAllLine(2);
-			this.renderOneLine(this.x, this.y, nx, ny,2);
+			this.renderAllLine(this.lineSize);
+			this.renderOneLine(this.x, this.y, nx, ny,this.lineSize);
 		},
 		touchEnd: function(e){
 			this.isDone = true;

@@ -8,11 +8,16 @@
 </head>
 <body>
 	<div id="box"></div>
-	<script src='./promise.js'></script>
 <script>
-	var p = new promise(function(resolve,reject) {
-		resolve();
-	});
+	function Base() {
+		this.a = 'some';
+		console.log(666);
+	}
+	Base.prototype.init= function() {
+		console.log('init');
+	}
+	var a = new Base();
+	debugger;
 </script>
 </body>
 </html>

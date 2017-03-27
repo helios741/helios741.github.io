@@ -1,5 +1,6 @@
 ;(function(){
-	var gesPWD = document.getElementById('gesPWD'),
+	var box = document.getElementsByClassName('box')[0],
+		gesPWD = document.getElementById('gesPWD'),
 		item = gesPWD.getElementsByTagName('span'),
 		msg = document.getElementById('msg'),
 		aboutPWD = document.getElementById('aboutPWD'),
@@ -16,8 +17,12 @@
 		prePWD = '',
 		eventArr = ['Class','event','line','storage'];
 
-
-	
+var defaultItemWidth = 30,
+	defaultItemHeight= 30,
+	defaultLineSize = 2,
+	defaultCanvasW = window.innerWidth,
+	defaultCanvasH = 300,
+	defaultLineColor = 'rgb(224,43,27)';
 	function createScript(name) {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
@@ -26,17 +31,37 @@
 		return script;
 	}
 
+	function renderItem(w,h) {
+		for (var i = 0; i < itemLen; i++) {
+			item[i].style.width = w+'px';
+			item[i].style.height = h+'px';
+		}
+	}
 
-
-	function unloakUI() {
-		unloakUI.prototype.init(pwdBtn[0]);
+	function unloakUI(cfg) {
+		this.line = {};
+		cfg = cfg || {};
+		cfg.canvasW = canvas.width = cfg.canvasW ? cfg.canvasW : defaultCanvasW;
+		cfg.canvasH = canvas.height = cfg.canvasH ? cfg.canvasH : defaultCanvasH;
+		cfg.itemW = cfg.itemW ? cfg.itemW : defaultItemWidth;
+		cfg.itemH = cfg.itemH ? cfg.itemH : defaultItemHeight;
+		cfg.lineSize = cfg.lineSize ? cfg.lineSize : defaultLineSize;
+		cfg.lineColor = cfg.lineColor ? cfg.lineColor : defaultLineColor;
+		cfg.titleTop = canvas.offsetTop;
+		unloakUI.prototype.cfg = cfg;
+		renderItem(cfg.itemW, cfg.itemH);
+		return new unloakUI.prototype.init(pwdBtn[0]);
 		
 	}
+	// unloakUI.prototype.cfg = this.cfg;
 	unloakUI.fn = unloakUI.prototype;
 	unloakUI.prototype.addUIEvent = function() {
-		var line = new this.Line(380,320,item,cobj);
-		this.Event.addEvent(aboutPWD,this.checkOpt,'touchstart');
-		this.Event.addEvent(aboutPWD,this.checkOpt,'click');
+		var line = new this.Line(380,320,item,cobj),
+			me  = this;
+		this.line = line;
+		// console.log(this.line);
+		this.Event.addEvent(aboutPWD,this.checkOpt.bind(me),'touchstart');
+		this.Event.addEvent(aboutPWD,this.checkOpt.bind(me),'click');
 		/**
 		* addEventListener 中会改变this要进行bind
 		**/
@@ -47,7 +72,7 @@
 		this.Event.addEvent(canvas,line.touchEnd.bind(line),'touchend');
 		this.Event.addEvent(canvas,line.touchEnd.bind(line),'mouseup');
 
-		this.Event.addEvent(canvas,this.saveOrCheck,'touchend');
+		this.Event.addEvent(canvas,this.saveOrCheck.bind(me),'touchend');
 	}
 	unloakUI.prototype.init = function(item) {
 		var me = this;
@@ -72,7 +97,7 @@
 	}
 	unloakUI.prototype.checkOpt = function(event) {
 		// Event.preventDefault();
-		var target = Event.getTarget(event);
+		var target = this.Event.getTarget(event);
 		this.clearClass();
 		if(target.nodeName.toLowerCase() !== 'label') {
 			return ;
@@ -107,7 +132,7 @@
 	}
 	unloakUI.prototype.saveOrCheck = function() {
 		var me = this,
-			PWD = me.line.getPWD(),
+			PWD = this.line.getPWD(),
 			tmpPWD = PWD.join(',');
 		me.clearClass();
 		if (radio[0]['checked']) {
@@ -149,8 +174,17 @@
 			}
 		}
 	}
-	//unloakUI.prototype.init.prototype = unloakUI.prototype;
+	unloakUI.prototype.init.prototype = unloakUI.prototype;
 	window.unloakUI = unloakUI;
-	var UIMain = new unloakUI();	
-	
+	/*var UIMain = new unloakUI({
+		canvasW:"",
+		canvasH:300,
+		itemH:30,
+		itemW:30,
+		lineColor:'blue',
+		lineSize: 5
+	});	*/
+	if (box.getAttribute('data-unloack') !== null ) {
+		new unloakUI();
+	}
 })(window);
