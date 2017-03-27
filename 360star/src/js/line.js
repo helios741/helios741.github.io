@@ -1,5 +1,4 @@
 ;(function(unloakUI){
-
 	var _map = new Array(),
 		_clickOne = false,
 		_tar,
@@ -31,8 +30,9 @@
 		}
 	}
 	_initMap();
-	function line(w,h,item,cbj) {
+	function line(w,h,item,cobj) {
 		var itemArr = [];
+		item = item || [];
 		for (var i = 0; i < item.length; i++) {
 			itemArr.push({
 				left: item[i].offsetLeft,
@@ -200,7 +200,7 @@
 		renderOneLine: function(sx,sy,ex,ey,sze) {
 			this.cobj.beginPath();
 			this.cobj.lineWidth = sze;
-			this,cobj.strokeStyle ='rgb(240,42,42)';
+			this.cobj.strokeStyle ='rgb(240,42,42)';
 			this.cobj.moveTo(sx, sy);
 			this.cobj.lineTo(ex, ey);
 			this.cobj.stroke();
@@ -218,7 +218,7 @@
 				} else if(y < this.arr[i].top || y > this.arr[i].top + this.itemH) {
 					continue;
 				}
-				Class.addClass(this.item[i],'active');
+				unloakUI.Class.addClass(this.item[i],'active');
 				this.x = this.arr[i].left + this.itemW/4 +5;
 				this.y = this.arr[i].top + this.itemH/4;
 				this.isDone = false;
@@ -240,12 +240,12 @@
 						continue;
 					} else if(ny < this.arr[i].top || ny > this.arr[i].top + this.itemH) {
 						continue;
-					} else if(Class.hasClass(this.item[i],'active') ) {
+					} else if(unloakUI.Class.hasClass(this.item[i],'active') ) {
 						continue;
 					}
 					nx = this.arr[i].left + this.itemW/4 +5;
 					ny = this.arr[i].top + this.itemH/4;
-					Class.addClass(this.item[i],' active');
+					unloakUI.Class.addClass(this.item[i],' active');
 					this.renderOneLine(this.x, this.y, nx, ny);
 					this.x = nx;
 					this.y = ny;
@@ -273,11 +273,11 @@
 			_visMap[_start] = true;
 			this._DFSLine(_start);
 			_initMap();
-			cobj.stroke();
-			cobj.closePath();
-			cobj.clearRect(0,0,this.w,this.h);
+			this.cobj.stroke();
+			this.cobj.closePath();
+			this.cobj.clearRect(0,0,this.w,this.h);
 			for (var i = 0; i < this.len; i++ ) {
-				Class.removeClass(this.item[i],'active');
+				unloakUI.Class.removeClass(this.item[i],'active');
 			}
 		},
 		getPWD: function() {
