@@ -1,6 +1,6 @@
-;(function(window){
+;(function(unloakUI,window){
 
-	window.Storage = {
+	unloakUI.Storage = {
 		_prefix: '360_',
 		support: !!window.localStorage,
 		savePWD: function(pwd) {
@@ -15,4 +15,4 @@
 			return storage.removeItem('pwd');
 		}
 	};
-})(window);
+})(unloakUI.fn,window);

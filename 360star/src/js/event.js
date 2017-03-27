@@ -1,4 +1,4 @@
-;(function(window){
+;(function(unloakUI){
 	var event = {
 		addEvent: function(elem, handler, type) {
 			if(elem.addEventListener) {
@@ -20,5 +20,5 @@
 			return ev.target || ev.srcElement;
 		}
 	};
-	window.Event = event;
-})(window);
+	unloakUI.Event = event;
+})(unloakUI.fn);

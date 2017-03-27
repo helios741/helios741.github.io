@@ -1,4 +1,4 @@
-;(function(){
+;(function(unloakUI){
 	var Class = {
 		hasClass: function(elem,CN) {
 			return !!elem.className.match(new RegExp('(\\s|^)' + CN.trim() + '(\\s|$)'));
@@ -15,5 +15,5 @@
 			}
 		} 
 	}
-	window.Class = Class;
-})();
+	unloakUI.Class = Class;
+})(unloakUI.fn);

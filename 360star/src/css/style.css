@@ -109,6 +109,26 @@ body {
 	display: block;
 	line-height: 30px;
 }
+.box .about-pwd label input[type='radio'] {
+	opacity: 0;
+	margin-right: -15px;
+}
+.box .about-pwd label span{
+	display: inline-block;
+	vertical-align: middle;
+	height: 15px;
+	width: 15px;
+	border:1px solid #ccc;
+	border-radius: 50%;
+	box-sizing: border-box;
+	padding: 3px;
+}
+.box .about-pwd label span.active{
+	background: radial-gradient(rgb(104, 104, 104) 39%,transparent 55%);
+	background: -webkit-radial-gradient(rgb(104, 104, 104) 39%,transparent 55%);
+	background: -o-radial-gradient(rgb(104, 104, 104) 39%,transparent 55%);
+	background: -ms-radial-gradient(rgb(104, 104, 104) 39%,transparent 55%);
+}
 #canvas {
 	display: flex;
 }

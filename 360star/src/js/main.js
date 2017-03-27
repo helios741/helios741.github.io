@@ -2,7 +2,8 @@ var gesPWD = document.getElementById('gesPWD'),
 	item = gesPWD.getElementsByTagName('span'),
 	msg = document.getElementById('msg'),
 	aboutPWD = document.getElementById('aboutPWD'),
-	canvas  = document.getElementById('canvas'),
+	canvas = document.getElementById('canvas'),
+	pwdBtn = aboutPWD.getElementsByTagName('span'),
 	radio = aboutPWD.getElementsByTagName('input'),
 	radioLen = radio.length,
 	itemLen = item.length,
@@ -19,6 +20,10 @@ function clearClass() {
 	Class.removeClass(msg,'error');
 	Class.removeClass(msg,'success');
 }
+function init() {
+	Class.addClass(pwdBtn[0],'active');
+}
+init();
 
 function checkOpt(event) {
 	// Event.preventDefault();
@@ -30,8 +35,12 @@ function checkOpt(event) {
 	var input = target.getElementsByTagName('input')[0];
 	
 	if (input['id'] === 'set-pwd') {
+		Class.addClass(pwdBtn[0],'active');
+		Class.removeClass(pwdBtn[1],'active');
 		msg.innerHTML = '请设置密码';
 	} else {
+		Class.addClass(pwdBtn[1],'active');
+		Class.removeClass(pwdBtn[0],'active');
 		msg.innerHTML = '请输入您的密码';
 	}
 }

@@ -4,29 +4,15 @@
 	<meta charset="UTF-8">
 	<title>line</title>
 	<style>
-		#box {
-			height: 200px;
-			width: 200px;
-	
-			border:1px solid red;
-		}
 	</style>
 </head>
 <body>
 	<div id="box"></div>
+	<script src='./promise.js'></script>
 <script>
-	var _map = [5][5],
-		_clickOne = false;
-	_map[1][1] = true;
-	function _initMap() {
-		for (var i = 1; i < 4; i++) {
-			for (var j = 1; j < 4; j++) {
-				_map[i][j] = false;
-			}
-		}
-	}
-	//_initMap();
-
+	var p = new promise(function(resolve,reject) {
+		resolve();
+	});
 </script>
 </body>
 </html>

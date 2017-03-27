@@ -1,4 +1,4 @@
-;(function(window){
+;(function(unloakUI){
 
 	var _map = new Array(),
 		_clickOne = false,
@@ -30,6 +30,7 @@
 			_visMap[i] = false;
 		}
 	}
+	_initMap();
 	function line(w,h,item,cbj) {
 		var itemArr = [];
 		for (var i = 0; i < item.length; i++) {
@@ -283,5 +284,5 @@
 			return PWD;
 		}
 	};
-	window.Line = line;
-})(window)
+	unloakUI.Line = line;
+})(unloakUI.fn)
