@@ -1,11 +1,13 @@
 ;(function(unloakUI){
-	var _map = new Array(),
-		_clickOne = false,
-		_tar,
-		_start,
-		PWD = new Array(),
-		_tmpMap = new Array(),
-		_visMap = new Array();
+	var _map = new Array(),  //二维数组，_map[i][j]=true表示第i个和第j个相连
+		_tar,                // Number 记录当前选中的这个所在的位置
+		_start,              // Number 记录第一个所在的位置
+		PWD = new Array(),   
+		_tmpMap = new Array(), // 二维数组 _tmpMap[i][j]表示第i和第j个是否被使用过
+		// _tmpMap 和_map的区别是：比如第1个没有被访问过，当手指(鼠标)从0到2的时候
+		// 那么_tmpMap[0][2] = true _tmpMap[0][1] = fasle,_tmpMap[1][2] = fasle
+		// 但是 _map[0][2] = fasle _map[0][1] = true,_map[1][2] = true,
+		_visMap = new Array();  // 一维数组 _visMap[i]表示i已经被访问过
 	function _initMap() {
 		for (var i = 0; i < 10; i++) {
 			_map[i] = new Array();
@@ -30,7 +32,7 @@
 		}
 	}
 	_initMap();
-	function line(w,h,item,cobj) {
+	function line(item,cobj) {
 		var itemArr = [];
 		item = item || [];
 		for (var i = 0; i < item.length; i++) {
@@ -223,7 +225,6 @@
 				this.x = this.arr[i].left + this.itemW/4 +5;
 				this.y = this.arr[i].top + this.itemH/4;
 				this.isDone = false;
-				_clickOne = true;
 				_tar = i;
 				_start = i;
 				_initMap();
@@ -235,7 +236,7 @@
 			var touch = touch = e.touches ? e.touches[0] : {},
 				nx = touch.clientX || e.clientX,
 				ny = (touch.clientY || e.clientY) - this.titleTop;
-			if (_clickOne) {
+			if (!this.isDone) {
 				for (var i = 0; i < this.len; i++) {
 					if( nx < this.arr[i].left || nx > this.arr[i].left+this.itemW) {
 						continue;

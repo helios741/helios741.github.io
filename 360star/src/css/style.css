@@ -6,9 +6,9 @@ body {
 	width: 100%;
 }
 .box .title {
-	text-align: center;
 	padding-bottom: 10px;
 	border-bottom: 1px solid rgb(188,188,188);
+	text-align: center;
 }
 .box .gesture-pwd {
 	display: flex;
@@ -16,16 +16,15 @@ body {
 	top: 0;
 	left: 0;
 	z-index: -1;
-	margin-top: 84px;
+	justify-content: space-between;
 	width: 100%;
 	height: 300px;
-	justify-content: space-between;
+	margin-top: 84px;
 }
 .box .gesture-pwd .column {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
-
 	width: 33%;
 	height: 100%;
 }
@@ -33,28 +32,29 @@ body {
 	display: block;
 	width: 30px;
 	height: 30px;
-	border-radius: 50%;
 	margin: 0 auto;
 	border:1px solid rgb(253,141,0);
+	border-radius: 50%;
 	background: rgb(255,177,38);
 }
 
 .box .gesture-pwd .column .item.error{
-	box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+	box-sizing: border-box;
+	box-shadow: inset 0 3px 6px rgba(0,0,0,.5);
 	background-image: -webkit-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
 	background-image: -o-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
 	background-image: -moz-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
 	background-image: gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
-	box-sizing: border-box;
+	
 }
 .box .gesture-pwd .column .item.active{
-	background-color: rgba(255,177,38,.5);
 	border: 1px solid rgb(253,141,0);
+	background-color: rgba(255,177,38,.5);
 }
 .box .msg {
-	font-size: 18px;
-	text-align: center;
 	margin: 15px 0;
+	text-align: center;
+	font-size: 18px;
 }
 @keyframes  Error {
 	0% {
@@ -98,8 +98,8 @@ body {
 	color: #3e8f3e;
 }
 .box .msg.error{
-	animation: Error .5s 3;
 	color: #a94442
+	animation: Error .5s 3;
 }
 .box .about-pwd {
 	margin: 0 30%;
@@ -110,17 +110,17 @@ body {
 	line-height: 30px;
 }
 .box .about-pwd label input[type='radio'] {
-	opacity: 0;
 	margin-right: -15px;
+	opacity: 0;
 }
 .box .about-pwd label span{
 	display: inline-block;
+	box-sizing: border-box;
 	vertical-align: middle;
 	height: 15px;
 	width: 15px;
 	border:1px solid #ccc;
 	border-radius: 50%;
-	box-sizing: border-box;
 	padding: 3px;
 }
 .box .about-pwd label span.active{

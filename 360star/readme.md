@@ -26,7 +26,7 @@
 4. 当在验证的情况下的时候，对每一次输入的答案和`localstorage`中的答案进行比对，如果不一样的在下方表现出对应的信息，如果是匹配上了，也显示匹配成功的信息
 
 ### 使用方法
-在页面中底部加载`mian.js`文件，然后把其他的四个文件放入和`main.js`同级的目录里面
+在页面中底部加载`mian.js`文件，然后把其他的四个文件放入和`main.js`同级的目录里面(如果使用压缩版本直接在引入`all.min.js`即可)
 1. 在`box`中增加`data-unloack` 这个字段即可，使用的是默认的样式
 2. 在一个新的js文件中 `new unloakUI(cfg)`,可用的参数有下面几个
 ```javascript
@@ -38,6 +38,6 @@ var UIMain = new unloakUI({
 	lineColor:'blue',  // 连线的颜色
 	lineSize: 5 ,   //连线的尺寸
 	minPointSum : 4, //画的最小点的数量
-	compress: false // 是否进行压缩，默认是不进行压缩的
+	compress: false // 使用的是不是压缩版本
 });
 ```

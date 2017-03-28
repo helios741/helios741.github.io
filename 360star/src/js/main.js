@@ -1,120 +1,218 @@
-var gesPWD = document.getElementById('gesPWD'),
-	item = gesPWD.getElementsByTagName('span'),
-	msg = document.getElementById('msg'),
-	aboutPWD = document.getElementById('aboutPWD'),
-	canvas = document.getElementById('canvas'),
-	pwdBtn = aboutPWD.getElementsByTagName('span'),
-	radio = aboutPWD.getElementsByTagName('input'),
-	radioLen = radio.length,
-	itemLen = item.length,
-	gesPWDWidth = gesPWD.offsetWidth,
-	gesPWDHeight = gesPWD.offsetHeight,
-	cobj = canvas.getContext('2d'),
-	line = new Line(gesPWDWidth, gesPWDHeight, item,cobj),
-	touchTot = 0,
-	prePWD = '';
+;(function(window){
+	/**
+	* 项目的主要组件
+	**/
+	var box = document.getElementsByClassName('box')[0],
+		gesPWD = document.getElementById('gesPWD'),
+		item = gesPWD.getElementsByTagName('span'),
+		msg = document.getElementById('msg'),
+		aboutPWD = document.getElementById('aboutPWD'),
+		canvas = document.getElementById('canvas'),
+		pwdBtn = aboutPWD.getElementsByTagName('span'),
+		radio = aboutPWD.getElementsByTagName('input'),
+		radioLen = radio.length,
+		itemLen = item.length,
+		gesPWDWidth = gesPWD.offsetWidth,
+		gesPWDHeight = gesPWD.offsetHeight,
+		cobj = canvas.getContext('2d'),
+		touchTot = 0,
+		prePWD = '',
+		eventArr = ['Class','event','line','storage'];
 
-function clearClass() {
-	Class.removeClass(msg,'warning');
-	Class.removeClass(msg,'info');
-	Class.removeClass(msg,'error');
-	Class.removeClass(msg,'success');
-}
-function init() {
-	Class.addClass(pwdBtn[0],'active');
-}
-init();
+	var defaultItemWidth = 30,
+		defaultItemHeight= 30,
+		defaultLineSize = 2,
+		defaultPointSum = 5,
+		defaultCanvasW = window.innerWidth,
+		defaultCanvasH = 300,
+		defaultLineColor = 'rgb(224,43,27)';
 
-function checkOpt(event) {
-	// Event.preventDefault();
-	var target = Event.getTarget(event);
-	clearClass();
-	if(target.nodeName.toLowerCase() !== 'label') {
-		return ;
+	function createScript(name) {
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = './src/js/'+name+'.js';
+		document.body.appendChild(script);
+		return script;
 	}
-	var input = target.getElementsByTagName('input')[0];
-	
-	if (input['id'] === 'set-pwd') {
-		Class.addClass(pwdBtn[0],'active');
-		Class.removeClass(pwdBtn[1],'active');
-		msg.innerHTML = '请设置密码';
-	} else {
-		Class.addClass(pwdBtn[1],'active');
-		Class.removeClass(pwdBtn[0],'active');
-		msg.innerHTML = '请输入您的密码';
-	}
-}
-function errLine(errpwd) {
-	var len = errpwd.length;
-	for (var i=0; i < len; i++) {
-		Class.addClass(item[errpwd[i]],' error ');
-	}
-	(function iterator(i){
-		if(i === len) {
-			return ;
+	/* 如果在配置中设置了每个点的大小，就对每个点进行重新设置宽高 */
+	function renderItem(w,h) {
+		for (var i = 0; i < itemLen; i++) {
+			item[i].style.width = w+'px';
+			item[i].style.height = h+'px';
 		}
-		setTimeout(function(){
-			Class.removeClass(item[errpwd[i]],' error ');
-			iterator(i+1);
-		},500*(!i?1:0));
-	})(0);
-	
-}
-function saveOrCheck() {
-	var PWD = line.getPWD(),
-		tmpPWD = PWD.join(',');
-	clearClass();
-	if (radio[0]['checked']) {
-		touchTot++;
-		if (touchTot == 1) {
-			if (PWD.length < 5) {
-				touchTot = 0;
-				msg.innerHTML ='密码至少五个点';
-				Class.addClass(msg,'warning');
-				return;
-			}
-			msg.innerHTML = '请确认密码';
-			Class.addClass(msg, 'info');
-			if (!Storage.support) {
-				alert('您的浏览器不支持localstorage！');
-				return;
-			}
-			prePWD = tmpPWD;
+	}
+	/* 通过传入的配置对象，进行标准化 */
+	function setCfg(cfg) {
+		cfg = cfg || {};
+		cfg.canvasW = canvas.width = cfg.canvasW ? cfg.canvasW : defaultCanvasW;
+		cfg.canvasH = canvas.height = cfg.canvasH ? cfg.canvasH : defaultCanvasH;
+		cfg.itemW = cfg.itemW ? cfg.itemW : defaultItemWidth;
+		cfg.itemH = cfg.itemH ? cfg.itemH : defaultItemHeight;
+		cfg.lineSize = cfg.lineSize ? cfg.lineSize : defaultLineSize;
+		cfg.lineColor = cfg.lineColor ? cfg.lineColor : defaultLineColor;
+		cfg.minPointSum = cfg.minPointSum ? cfg.minPointSum : defaultPointSum;
+		cfg.titleTop = canvas.offsetTop;
+		return cfg;
+	}
+	function unloakUI(cfg) {
+		this.line = {};
+		cfg = setCfg(cfg)
+		unloakUI.prototype.cfg = cfg;
+		renderItem(cfg.itemW, cfg.itemH);
+		unloakUI.prototype.init(pwdBtn[0]);
+		// return new unloakUI.prototype.init(pwdBtn[0]);
+		
+	}
+	unloakUI.fn = unloakUI.prototype;
+	/* 适配手机和PC添加事件 */
+	unloakUI.prototype.addUIEvent = function() {
+		var line = new this.Line(item,cobj),
+			me  = this;
+		this.line = line;
+		this.Event.addEvent(aboutPWD,this.checkOpt.bind(me),'touchstart');
+		this.Event.addEvent(aboutPWD,this.checkOpt.bind(me),'click');
+		this.Event.addEvent(canvas,line.touchStart.bind(line),'touchstart');
+		this.Event.addEvent(canvas,line.touchStart.bind(line),'mousedown');
+		this.Event.addEvent(canvas,line.touchMove.bind(line),'touchmove');
+		this.Event.addEvent(canvas,line.touchMove.bind(line),'mousemove');
+		this.Event.addEvent(canvas,line.touchEnd.bind(line),'touchend');
+		this.Event.addEvent(canvas,line.touchEnd.bind(line),'mouseup');
+
+		this.Event.addEvent(canvas,this.saveOrCheck.bind(me),'touchend');
+		this.Event.addEvent(canvas,this.saveOrCheck.bind(me),'mouseup');
+	}
+	/* 初始化组件 */
+	unloakUI.prototype.init = function(item) {
+		// 判断是否进行过压缩
+		if (this.cfg.compress || (this.line && this.storage && this.event && this.Class) ) {
+			me.Class.addClass(item,'active');
 			return;
 		}
+		var me = this;
+		/*
+		* 因为动态加载script是异步的过程，使用迭代器的方式转换为同步
+		*/
+		(function iterator(i){
+			if (i >= eventArr.length ) {
+				me.Class.addClass(item,'active');
+				me.addUIEvent();
+				return;
+			}
+			var script  = createScript(eventArr[i]);
+			script.onload = function() {
+				iterator(i+1);
+				
+			}
+		})(0);
+	}
 
-		if (tmpPWD === prePWD){
-			msg.innerHTML = '密码设置成功';
-			Class.addClass(msg, 'success');
-			Storage.savePWD(PWD);
-		} else {
-			msg.innerHTML = '密码不一样，请重新输入密码';
-			Class.addClass(msg, 'error');
+	unloakUI.prototype.clearClass = function() {
+		this.Class.removeClass(msg,'warning');
+		this.Class.removeClass(msg,'info');
+		this.Class.removeClass(msg,'error');
+		this.Class.removeClass(msg,'success');
+	}
+	/* 进行设置或者验证密码的切换 */
+	unloakUI.prototype.checkOpt = function(event) {
+		// Event.preventDefault();
+		var target = this.Event.getTarget(event);
+		this.clearClass();
+		if(target.nodeName.toLowerCase() !== 'label') {
+			return ;
 		}
-		touchTot = 0;
-	} else {
-		if (tmpPWD === Storage.getPWD() ){
-			msg.innerHTML = '验证成功，可重复尝试';
-			Class.addClass(msg, 'success');
+		var input = target.getElementsByTagName('input')[0];
+		
+		if (input['id'] === 'set-pwd') {
+			this.Class.addClass(pwdBtn[0],'active');
+			this.Class.removeClass(pwdBtn[1],'active');
+			msg.innerHTML = '请设置密码';
 		} else {
-			msg.innerHTML = '验证失败';
-			errLine(tmpPWD.split(','));
-			Class.addClass(msg, ' error ');
+			this.Class.addClass(pwdBtn[1],'active');
+			this.Class.removeClass(pwdBtn[0],'active');
+			msg.innerHTML = '请输入您的密码';
 		}
 	}
-}
+	unloakUI.prototype.errLine = function(errpwd) {
+		var len = errpwd.length;
+		var me = this;
+		for (var i=0; i < len; i++) {
+			me.Class.addClass(item[errpwd[i]],' error ');
+		}
+		
+		(function iterator(i){
+			if(i === len) {
+				return ;
+			}
+			setTimeout(function(){
+				me.Class.removeClass(item[errpwd[i]],' error ');
+				iterator(i+1);
+			},500*(!i?1:0));
+		})(0);
+	}
 
+	/**
+	* 描述：手指(鼠标)抬起事件
+	* 在设置密码的情况下，如果是第一次，就把当前密码存到tmpPWB中
+	* 	如果是第二次，判断是否和上一次(tmpPWD)中的密码相同，相同进行保存
+	* 在验证密码的情况下，每一次取出密码和输入的密码进行比对
+	**/
+	unloakUI.prototype.saveOrCheck = function() {
+		var me = this,
+			PWD = this.line.getPWD(),
+			tmpPWD = PWD.join(',');
+		me.clearClass();
+		if (radio[0]['checked']) {
+			touchTot++;
+			if (touchTot == 1) {
+				if (PWD.length < this.cfg.minPointSum) {
+					touchTot = 0;
+					msg.innerHTML ='密码至少' + this.cfg.minPointSum+'个点';
+					me.Class.addClass(msg,'warning');
+					return;
+				}
+				msg.innerHTML = '请确认密码';
+				me.Class.addClass(msg, 'info');
+				if (!me.Storage.support) {
+					alert('您的浏览器不支持localstorage！');
+					return;
+				}
+				prePWD = tmpPWD;
+				return;
+			}
 
-Event.addEvent(aboutPWD,checkOpt,'touchstart');
-Event.addEvent(aboutPWD,checkOpt,'click');
-/**
-* addEventListener 中会改变this要进行bind
-**/
-Event.addEvent(canvas,line.touchStart.bind(line),'touchstart');
-Event.addEvent(canvas,line.touchStart.bind(line),'mousedown');
-Event.addEvent(canvas,line.touchMove.bind(line),'touchmove');
-Event.addEvent(canvas,line.touchMove.bind(line),'mousemove');
-Event.addEvent(canvas,line.touchEnd.bind(line),'touchend');
-Event.addEvent(canvas,line.touchEnd.bind(line),'mouseup');
-
-Event.addEvent(canvas,saveOrCheck,'touchend');
+			if (tmpPWD === prePWD){
+				msg.innerHTML = '密码设置成功';
+				me.Class.addClass(msg, 'success');
+				me.Storage.savePWD(PWD);
+			} else {
+				msg.innerHTML = '密码不一样，请重新输入密码';
+				me.Class.addClass(msg, 'error');
+			}
+			touchTot = 0;
+		} else {
+			if (tmpPWD === me.Storage.getPWD() ){
+				msg.innerHTML = '验证成功，可重复尝试';
+				me.Class.addClass(msg, 'success');
+			} else {
+				msg.innerHTML = '验证失败';
+				me.errLine(tmpPWD.split(','));
+				me.Class.addClass(msg, ' error ');
+			}
+		}
+	}
+	// unloakUI.prototype.init.prototype = unloakUI.prototype;
+	window.unloakUI = unloakUI; // 把组件挂载到全局作用域
+	/*var UIMain = new unloakUI({
+		canvasW:"",  //设置组件(canvas)的宽度
+		canvasH:300, //设置组件(canvas)的高度
+		itemH:30,    // 设置一个圆点的高度
+		itemW:30,    // 设置一个圆点的宽度
+		lineColor:'blue', // 设置线的颜色
+		lineSize: 5,    // 设置线的宽度
+		minPointSum : 4, // 设置密码最少几个点
+		compress: false  // 使用压缩版本还是非压缩版本
+	});	*/
+	if (box.getAttribute('data-unloack') !== null ) {
+		new unloakUI();
+	}
+})(window);
