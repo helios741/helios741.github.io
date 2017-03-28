@@ -208,7 +208,7 @@
 		},
 		touchStart: function(e) {
 			e.preventDefault();
-			var touch = e.touches[0] || {}, 
+			var touch = e.touches ? e.touches[0] : {}, 
 			    x = touch.clientX || e.clientX,
 			    y = touch.clientY || e.clientY;
 			y-=this.titleTop;
@@ -232,9 +232,9 @@
 		touchMove: function(e) {
 			if (this.isDone) return ;
 			e.preventDefault();
-			var touch = e.touches[0],
-				nx = touch.clientX,
-				ny = touch.clientY - this.titleTop;
+			var touch = touch = e.touches ? e.touches[0] : {},
+				nx = touch.clientX || e.clientX,
+				ny = (touch.clientY || e.clientY) - this.titleTop;
 			if (_clickOne) {
 				for (var i = 0; i < this.len; i++) {
 					if( nx < this.arr[i].left || nx > this.arr[i].left+this.itemW) {

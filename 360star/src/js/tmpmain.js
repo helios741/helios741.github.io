@@ -12,7 +12,6 @@
 		gesPWDWidth = gesPWD.offsetWidth,
 		gesPWDHeight = gesPWD.offsetHeight,
 		cobj = canvas.getContext('2d'),
-		// line = new Line(gesPWDWidth, gesPWDHeight, item,cobj),
 		touchTot = 0,
 		prePWD = '',
 		eventArr = ['Class','event','line','storage'];
@@ -20,9 +19,11 @@
 var defaultItemWidth = 30,
 	defaultItemHeight= 30,
 	defaultLineSize = 2,
+	defaultPointSum = 5,
 	defaultCanvasW = window.innerWidth,
 	defaultCanvasH = 300,
 	defaultLineColor = 'rgb(224,43,27)';
+	
 	function createScript(name) {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
@@ -47,13 +48,13 @@ var defaultItemWidth = 30,
 		cfg.itemH = cfg.itemH ? cfg.itemH : defaultItemHeight;
 		cfg.lineSize = cfg.lineSize ? cfg.lineSize : defaultLineSize;
 		cfg.lineColor = cfg.lineColor ? cfg.lineColor : defaultLineColor;
+		cfg.minPointSum = cfg.minPointSum ? cfg.minPointSum : defaultPointSum;
 		cfg.titleTop = canvas.offsetTop;
 		unloakUI.prototype.cfg = cfg;
 		renderItem(cfg.itemW, cfg.itemH);
 		return new unloakUI.prototype.init(pwdBtn[0]);
 		
 	}
-	// unloakUI.prototype.cfg = this.cfg;
 	unloakUI.fn = unloakUI.prototype;
 	unloakUI.prototype.addUIEvent = function() {
 		var line = new this.Line(380,320,item,cobj),
@@ -73,8 +74,13 @@ var defaultItemWidth = 30,
 		this.Event.addEvent(canvas,line.touchEnd.bind(line),'mouseup');
 
 		this.Event.addEvent(canvas,this.saveOrCheck.bind(me),'touchend');
+		this.Event.addEvent(canvas,this.saveOrCheck.bind(me),'mouseup');
 	}
 	unloakUI.prototype.init = function(item) {
+		if (this.cfg.compress || (this.line && this.storage && this.event && this.Class) ) {
+			me.Class.addClass(item,'active');
+			return;
+		}
 		var me = this;
 		(function iterator(i){
 			if (i >= eventArr.length ) {
@@ -138,9 +144,9 @@ var defaultItemWidth = 30,
 		if (radio[0]['checked']) {
 			touchTot++;
 			if (touchTot == 1) {
-				if (PWD.length < 5) {
+				if (PWD.length < this.cfg.minPointSum) {
 					touchTot = 0;
-					msg.innerHTML ='密码至少五个点';
+					msg.innerHTML ='密码至少' + this.cfg.minPointSum+'个点';
 					me.Class.addClass(msg,'warning');
 					return;
 				}
@@ -176,15 +182,17 @@ var defaultItemWidth = 30,
 	}
 	unloakUI.prototype.init.prototype = unloakUI.prototype;
 	window.unloakUI = unloakUI;
-	/*var UIMain = new unloakUI({
+	var UIMain = new unloakUI({
 		canvasW:"",
 		canvasH:300,
 		itemH:30,
 		itemW:30,
 		lineColor:'blue',
-		lineSize: 5
-	});	*/
-	if (box.getAttribute('data-unloack') !== null ) {
+		lineSize: 5,
+		minPointSum : 4,
+		compress: false
+	});	
+	/*if (box.getAttribute('data-unloack') !== null ) {
 		new unloakUI();
-	}
+	}*/
 })(window);
