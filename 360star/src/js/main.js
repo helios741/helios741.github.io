@@ -15,7 +15,7 @@
 		gesPWDWidth = gesPWD.offsetWidth,
 		gesPWDHeight = gesPWD.offsetHeight,
 		cobj = canvas.getContext('2d'),
-		touchTot = 0,
+		touchTot = 0,  // 1表示设置密码，2表示确认密码
 		prePWD = '',
 		eventArr = ['Class','event','line','storage'];
 
@@ -69,8 +69,8 @@
 		var line = new this.Line(item,cobj),
 			me  = this;
 		this.line = line;
-		this.Event.addEvent(aboutPWD,this.checkOpt.bind(me),'touchstart');
-		this.Event.addEvent(aboutPWD,this.checkOpt.bind(me),'click');
+		this.Event.addEvent(aboutPWD,me.checkOpt.bind(me),'touchstart');
+		this.Event.addEvent(aboutPWD,me.checkOpt.bind(me),'click');
 		this.Event.addEvent(canvas,line.touchStart.bind(line),'touchstart');
 		this.Event.addEvent(canvas,line.touchStart.bind(line),'mousedown');
 		this.Event.addEvent(canvas,line.touchMove.bind(line),'touchmove');
@@ -78,8 +78,8 @@
 		this.Event.addEvent(canvas,line.touchEnd.bind(line),'touchend');
 		this.Event.addEvent(canvas,line.touchEnd.bind(line),'mouseup');
 
-		this.Event.addEvent(canvas,this.saveOrCheck.bind(me),'touchend');
-		this.Event.addEvent(canvas,this.saveOrCheck.bind(me),'mouseup');
+		this.Event.addEvent(canvas,me.saveOrCheck.bind(me),'touchend');
+		this.Event.addEvent(canvas,me.saveOrCheck.bind(me),'mouseup');
 	}
 	/* 初始化组件 */
 	unloakUI.prototype.init = function(item) {
@@ -117,7 +117,10 @@
 		// Event.preventDefault();
 		var target = this.Event.getTarget(event);
 		this.clearClass();
-		if(target.nodeName.toLowerCase() !== 'label') {
+		if (target.parentNode.nodeName.toLowerCase() === 'label') {
+			target = target.parentNode;
+		}
+		if (target.nodeName.toLowerCase() !== 'label' ) {
 			return ;
 		}
 		var input = target.getElementsByTagName('input')[0];

@@ -1,4 +1,7 @@
 ## 360前端星计划任务
+[在线阅读readme](https://github.com/helios741/helios741.github.io/tree/master/360star)
+### 项目二维码
+![](http://shangyilong.cn/360star/360star.png)
 
 ### 文件结构
 
