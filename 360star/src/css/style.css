@@ -98,7 +98,7 @@ body {
 	color: #3e8f3e;
 }
 .box .msg.error{
-	color: #a94442
+	color: #a94442;
 	animation: Error .5s 3;
 }
 .box .about-pwd {

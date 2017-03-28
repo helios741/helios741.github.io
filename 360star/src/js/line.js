@@ -58,7 +58,9 @@
 	};
 	line.prototype = {
 		constructor: line,
+		/* 通过深度优先搜索的方式，找到滑过的点标记为数组 */
 		_DFSLine: function(st) {
+			if (st === undefined) return;
 			for (var i = 0;i < this.len; i++) {
 				if(!_map[st][i] || _visMap[i]) {
 					continue;
@@ -71,6 +73,7 @@
 				this._DFSLine(i);
 			}
 		},
+		/* 判断连接的两个点之间是否有没有访问过的点 */
 		_checkMidLine: function() {
 			if (_tmpMap[0][6]  ) {
 				_map[0][6] = _map[0][6] = false;
@@ -188,6 +191,7 @@
 				}
 			}
 		},
+		/* 把已经访问过的点描绘出来 */
 		renderAllLine: function(sze) {
 			this.cobj.beginPath();
 			this.cobj.lineWidth = sze;
@@ -214,7 +218,7 @@
 			    x = touch.clientX || e.clientX,
 			    y = touch.clientY || e.clientY;
 			y-=this.titleTop;
-
+			_start = undefined;
 			for (var i = 0; i < this.len; i++) {
 				if( x < this.arr[i].left || x > this.arr[i].left+this.itemW) {
 					continue;
@@ -227,8 +231,8 @@
 				this.isDone = false;
 				_tar = i;
 				_start = i;
-				_initMap();
 			}
+			_initMap();
 		},
 		touchMove: function(e) {
 			if (this.isDone) return ;
@@ -236,6 +240,7 @@
 			var touch = touch = e.touches ? e.touches[0] : {},
 				nx = touch.clientX || e.clientX,
 				ny = (touch.clientY || e.clientY) - this.titleTop;
+			/* 如果这个点，不是第一个被访问的点,那么久标记出来进行折现操作 */
 			if (!this.isDone) {
 				for (var i = 0; i < this.len; i++) {
 					if( nx < this.arr[i].left || nx > this.arr[i].left+this.itemW) {
@@ -255,8 +260,6 @@
 					_map[i][_tar] = true;
 					_tmpMap[_tar][i] = true;
 					_tmpMap[i][_tar] = true;
-					// Class.addClass(this.item[3],'active');
-					// _map[0][6] = _map[6][0] = true;
 					this._checkMidLine();
 					_initTmpMap();
 					_tar = i;
@@ -287,4 +290,4 @@
 		}
 	};
 	unloakUI.Line = line;
-})(unloakUI.fn)
+})(unloakUI.fn);

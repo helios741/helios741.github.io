@@ -161,6 +161,7 @@
 			PWD = this.line.getPWD(),
 			tmpPWD = PWD.join(',');
 		me.clearClass();
+		if (undefined === PWD[0]) return ;
 		if (radio[0]['checked']) {
 			touchTot++;
 			if (touchTot == 1) {
@@ -196,7 +197,7 @@
 			} else {
 				msg.innerHTML = '验证失败';
 				me.errLine(tmpPWD.split(','));
-				me.Class.addClass(msg, ' error ');
+				me.Class.addClass(msg, 'error');
 			}
 		}
 	}
