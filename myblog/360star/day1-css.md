@@ -136,3 +136,276 @@ html{
 - z-index为0的子元素或者子堆叠上下文
 - z-index>0的子堆叠上下文
 
+### 导航栏布局方式
+
+#### diaplay:table+table-cell
+
+```html
+<nav>
+  <a href="#">Home</a>
+  <a href="#">JavaScript</a>
+  <a href="#">HTML</a>
+  <a href="#">CSS</a>
+  <a href="#">HTTP</a>
+</nav>
+
+```
+```css
+  body {
+    margin: 0;
+  }
+  nav {
+    display: table;
+    width: 100%;
+    background: #00BCD4;
+  }
+  nav a {
+    display: table-cell;
+    text-decoration: none;
+    color: #fff;
+    padding: 0 1em;
+    font: normal 14px/2 Helvetica, sans-serif;
+  }
+  nav a:not(:first-child) {
+    border-left: 1px solid rgba(255,255,255,0.7)
+  }
+```
+
+#### 网格布局自动换行
+```html
+<ul>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+  <li>4</li>
+  <li>5</li>
+  <li>6</li>
+  <li>7</li>
+</ul>
+
+```
+```css
+ul {
+margin: 0;
+padding: 0;
+text-align: justify;
+}
+li {
+display: inline-block;
+width: 30%;
+height: 0;
+padding-top: 20%;
+background: lightblue;
+text-align: center;
+margin-bottom: 1em;
+}
+```
+#### flex布局
+
+```html
+<ul>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+  <li>4</li>
+  <li>5</li>
+  <li>6</li>
+  <li>7</li>
+</ul>
+
+
+```
+```css
+<style>
+  ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  li {
+    display: block;
+    width: 4em;
+    height: 3em;
+    background: lightblue;
+    text-align: center;
+    margin: 1em;
+  }
+</style>
+```
+
+## 浏览器的兼容性
+
+### 了解浏览器的支持情况
+
+- [caniuse.com](http://caniuse.com/)
+- [MDN CSS Reference](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference)
+- [QuirksMode.org CSS](http://www.quirksmode.org/css/index.html)
+- [Codrops CSS Reference](https://tympanus.net/codrops/css_reference/)
+
+## GPU加速( translate3d,translatez
+
+浏览器接收到页面文档后，会将文档中的标记语言解析为DOM树。DOM树和CSS结合后形成浏览器构建页面的渲染树。渲染树中包含了大量的渲染元素，每一个渲染元素会被分到一个图层中，每个图层又会被加载到GPU形成渲染纹理，而图层在GPU中transform 是不会触发 repaint 的，最终这些使用 transform 的图层都会由独立的合成器进程进行处理。
+　3D 和 2D transform 的区别就在于，浏览器在页面渲染前为3D动画创建独立的复合图层，而在运行期间为2D动画创建。动画开始时，生成新的复合图层并加载为GPU的纹理用于初始化 repaint。然后由GPU的复合器操纵整个动画的执行。最后当动画结束时，再次执行 repaint 操作删除复合图层
+
+## CSS的工程化
+
+### 文件结构
+
+css
+|
+|-- base
+|   |-- normalize.css
+|   |-- mixins.css
+|   |-- layout.css
+|   `-- variables.css
+|
+|-- modules
+|   |-- button.css
+|   |-- checkbox.css
+|   |-- dialog.css
+|   |-- form.css
+|   |-- input.css
+|   |-- modal.css
+|   |-- pagination.css
+|   |-- radio.css
+|   |-- select.css
+|   |-- tab.css
+|   |-- table.css
+|   |-- textarea.css
+|   `-- tip.css
+|
+ -- pages
+    |-- index.css
+    |-- page-a.css
+    |-- page-b.css
+    |-- page-c.css
+
+### CSS模块
+
+- 可复用的 CSS 代码段
+- 与模块在 HTML 中的位置无关
+- (一般)与使用的 HTML 标签无关
+
+### CSS 模块原则
+
+#### 面向对象 (OOCSS)
+
+原则：
+- 结构和皮肤分离 ( `.btn` `.btn--primary` `.btn--info` `.btn--danger`
+- 容器和内容分离 
+```html
+/* 不推荐这样写！ */
+.header .btn {
+  background: #f66;
+  color: #fff;
+}
+```
+- 结构
+```html
+<div class="media media--left">
+  <a class="media__image">
+    <img class="media__object"
+      src="//placehold.it/100x100" alt=""
+    >
+  </a>
+  <div class="media__body">
+    <h3 class="media__title">Title</h3>
+    <p class="media__description">
+      A paragraph about the media
+    </p>
+  </div>
+</div>
+```
+```css
+.media
+    .media__image
+        .media__object
+    .media__body
+        .media__title
+        .media__description
+
+.media,
+.media__body {
+  overflow:hidden;
+}
+.media__body :first-child {
+  margin-top: 0;
+}
+
+.media--left .media__image {
+  float:left;
+  margin-right: 1em;
+}
+
+.media--right .media__image {
+  float:right;
+  margin-left: 1em;
+}
+```
+
+#### 例子
+
+```css
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.36em 0.8em;
+    margin-right: 0.5em;
+    border: none;
+    border-radius: 0.3em;
+    cursor: pointer;
+  }
+  .btn--primary {
+    background-color: #09c;
+    color: #fff;
+  }
+
+```
+```html
+
+<form>
+  <button class="btn btn--primary">提交</button>
+  <button class="btn">重置</button>
+</form>
+```
+
+#### 单一职责原则（SRP）
+
+- 尽可能细地拆分成可独立复用的组件 ( `.error-message`,`.success-message`
+- 通过组合方式使用多个组件
+- 比如将布局和其它样式拆分
+
+#### 开闭原则
+
+- 对扩展开放
+- 对修改关闭
+
+#### 多使用能简化的属性
+
+border使用
+
+### 功能 vs 视觉 vs 具体样式
+
+- .warning vs .orange
+- .btn-primary vs .btn-blue
+- .size-large vs .width-200
+
+### CSS命名规范 （ .block__element--modifier
+BEM
+- Block （Module / Component）
+- Element（Block 内的元素）
+- Modifier （修饰）
+```html
+<nav class="tabs tabs--stacked">
+  <a class="tabs__item" href="#">Home</a>
+  <a class="tabs__item" href="#">JavaScript</a>
+  <a class="tabs__item" href="#">CSS</a>
+</nav>
+```
+
+
+
