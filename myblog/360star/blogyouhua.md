@@ -123,6 +123,67 @@ RFC2616：同域名同时只能有 2 个连接（RFC7230 中无限制）；
 
 ### HTTP/1 内联优化方案
 
+![](https://raw.githubusercontent.com/helios741/helios741.github.io/master/myblog/360star/http1.png)
 
+## 缓存
+
+缓存一般有下面几种：
+- 服务器缓存
+- HTTP缓存
+- 自己实现缓存(localStorage)
+- Service Worker
+
+### HTTP缓存机制
+- Last-Modified
+- ETag
+- Expires
+- Cache-Control
+
+#### Last-Modified
+
+![](https://p4.ssl.qhimg.com/t01950c0bd84370e345.png)
+
+#### ETag
+
+![](https://p5.ssl.qhimg.com/t01655b435da1b936de.png)
+
+#### Expires
+
+![](https://p5.ssl.qhimg.com/t015a7b93580aeb2800.png)
+
+#### Cache-Control
+
+![](https://p1.ssl.qhimg.com/t01b69cfbcb3b5f3e0c.png)
+
+### Service Worker
+
+![](https://p0.ssl.qhimg.com/t018e45d5b0717d280e.png)
+
+两种最常见的策略
+
+- *networkFirst*：在无网络时才返回 Cache，确保离线可用（缺点是不能提高响应速度，甚至变慢）
+- *cacheFirst* ： 优先返回 Cacahe 同时异步更新 Cache，确保响应速度（缺点是页面可能不是最新）
+
+
+## WEB网路的技术选型
+
+![](https://p1.ssl.qhimg.com/t01493a3c2e859401eb.png)
+
+||特点|适合场景|
+|:--:|:--:|:--:|
+|XHR|异步、浏览器支持良好|异步文件上传、获取/提交数据|
+|SSE（Server-Sent Events）|长连接、浏览器支持良好、服务端 => 浏览器|消息推送、实时报表|
+|WebSocket|双向通讯、事件驱动|即时聊天，实时调试|
+|WebRTC （RTCDataChannel）|点对点传输任意数据、低延时|实时音视频传输、屏幕共享、文件 P2P 传输|
+
+
+## 总结
+
+- 了解影响首字节时间（TTFB）的几个主要因素
+- 了解常见的减小传输体积方案
+- 了解常见的减少请求数方案
+- 了解合并请求数的弊端及 HTTP/2 所做的优化
+- 了解几种缓存机制
+- 了解常见的 WEB 网络技术选型
 
 
