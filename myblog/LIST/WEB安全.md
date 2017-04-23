@@ -85,3 +85,4 @@ hello astaxie
 目前防御XSS主要有如下几种方式：
 1. 过滤特殊字符 使用文本传输(`text/template`)
 2. 使用HTTP头指定类型 `w.Header().Set("Content-Type","text/javascript")`(这样就可以让浏览器解析javascript代码，而不会是html输出。)
+
