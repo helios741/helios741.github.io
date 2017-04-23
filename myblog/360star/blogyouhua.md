@@ -155,6 +155,19 @@ RFC2616：同域名同时只能有 2 个连接（RFC7230 中无限制）；
 
 ![](https://p1.ssl.qhimg.com/t01b69cfbcb3b5f3e0c.png)
 
+#### meta
+
+```<META HTTP-EQUIV="Pragma" CONTENT="no-cache">```
+
+**注**
+- `Cache-control` 和`Expires`同时设置的话，`Cache-control`优先级高
+
+#### Last-Modified和Etag的区别
+
+-   Last-Modified标注的最后修改只能精确到秒级，如果某些文件在1秒钟以内，被修改多次的话，它将不能准确标注文件的修改时间
+-   如果某些文件会被定期生成，当有时内容并没有任何变化，但Last-Modified却改变了，导致文件没法使用缓存
+-   有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形
+
 ### Service Worker
 
 ![](https://p0.ssl.qhimg.com/t018e45d5b0717d280e.png)
