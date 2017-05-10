@@ -1,7 +1,48 @@
-二叉树镜像翻转
+## 算法
+
+### 判断一棵树是不是平衡二叉树
+
+```c++
+int dep(Tree *rt)
+{
+    if(!rt) return 0;
+    return 1 + max( dep(rt->left) , dep(rt->right) );
+}
+
+bool isbal(Tree *rt)
+{
+    if(!rt ) return true;
+    if( !isbal(rt->left) ) return false;
+    if( !isbal(rt->right) ) return false;
+    int ans = abs( dep(rt->left) - dep(rt->right) );
+    if(ans>1) return false;
+    return true;
+}
+```
+
+
+###二叉树镜像翻转
+
+```c++
+void Mirror(Tree* rt)
+{
+    if(!rt) return ;
+    if(!rt->left && !rt->right) return ;
+    Tree* tmp =  rt->left;
+    rt->left = rt->right;
+    rt->right = tmp;
+    Mirror(rt->left);
+    Mirror(rt->right);
+}
+
+```
 
 ## javascript翻转字符串
+
+```javascript
+
 s.split('').reverse().join('');
+```
 
 ## 手写原生的ajax
 
@@ -152,3 +193,84 @@ window.frames[0].postMessage('a data','http://www.a.com/a.html');
 阻止默认行为：
 - preventDefault
 - returnValue = false
+
+## http中gzip的实现
+
+### 关于压缩传输的规定
+1. 客户端传输到服务器的请求字段中带有：`Accept-Encoding:gzip`,表示客户端支持`gzip压缩`
+2. 服务器接收到请求之后，发现请求头中含有`Accept-Encoding`字段，并且支持该类型的压缩，就对相应报文进行压缩返回给客户端，并带有`Content-Encoding:gzip`消息头，表示报文是经过该格式压缩的
+3. 客户端接收到请求之后，先判断是否有`Content-Encoding`消息头，如果有按照该格式解压报文
+
+### 服务端实现报文压缩
+
+在`nginx`或者`apache`能进行配置
+
+## HTTPS
+
+`https`中的s是指`SSL`或者`TLS`,就是在原`HTTP`的基础上加上一层用于`数据加密`、`解密`、`身份认证`的安全层。
+
+### 认证原理
+
+1. 服务器向权威机构(CA)申请证书
+2. 将证书部署到服务器上
+3. 客户端向服务器发送https请求，也就是请求证书
+4. 服务器把证书发送给客户端，证书中包含加密消息的公钥
+5. 用本地权威机构的的公钥从证书中解密得到加密消息公钥
+6. 生成随机密钥K，用A公钥进行加密，发送给服务器
+7. 服务器用自己的私钥解密K
+8. 进行通信
+
+### 工作流程
+
+![](http://images.cnblogs.com/cnblogs_com/ttltry-air/201208/201208201734398000.png)
+
+## 阅读jQuery源码了解的东西
+
+1. sizzle 特别大
+2. 链式调用
+3. 事件冒泡的处理：
+	+ jQuery中明确禁止一种不断冒泡的事件，即加载事件。
+	+ 在内部jQuery通过任何加载事件传递了一个特别的`noBubble:true`,
+	+ 所以图片的加载事件不会冒泡到窗口,（ 可能被误匹配为window的加载事件
+4. 对ajax进行的封装
+
+## VUE中的双向数据绑定
+
+通过使用观察者模式和ES5中的`defineProperty`来劫持各个属性的`setter`和`getter`在数据变动的时候发布消息给订阅者，触发相应的监听回调。
+
+### 大致描述
+
+1. 通过数据监听器`Observer`能够对数据对象的所有属性进行监听，如果有变动把最新值通知订阅者
+2. 指令解析器`Complile`对每个元素上的指令进行解析和扫描，根据指令模板替换数据，以及绑定相应的监听函数
+3. 通过`Watcher`作为连接`	Observer`和`Complile`的桥梁，能够订阅每个属性变动的通知，执行指令绑定的相应回调函数
+
+![](https://sfault-image.b0.upaiyun.com/132/184/132184689-57b310ea1804f_articlex)
+
+### 各个部分的作用
+
+#### Observer
+
+通过`Obeject.defineProperty()`来监听属性变动。
+需要将`Observer`的数据对象进行递归遍历，包括子属性对象的属性，都要加上`getter`和`setter`。
+这样对每个属性赋值就会出发`setter`,那么就能监听到数据的变化。
+
+#### Complie
+
+- 解析模板指令，将模板中的变量替换成数据，
+- 然后初始化渲染试图页面，
+- 将每个指令对应的节点绑定更新函数
+- 添加订阅者，一旦数据变动，收到通知，更新视图
+
+![](https://sfault-image.b0.upaiyun.com/111/738/1117380429-57b3110440af0_articlex)
+
+#### Watcher
+
+作为桥梁：
+
+1. 在自身实例化时往属性订阅器(dep)里面添加自己
+2. 自身必须有一个uodate方法
+3. 待属性变动dep.notice()通知时，能调用自身的update()方法，并触发Compile中绑定的回调
+
+## VUE中的MVVM
+
+通过`Observer`来监听自己`model`数据变化，通过`compile`来解析编译模板指令，最后利用`Watcher`搭建起`Observer`和`Compile`之间的桥梁，达到数据变化 -> 视图更新，视图监护变化(input)->数据model变更的双向数据绑定的效果
