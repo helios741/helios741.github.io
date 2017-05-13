@@ -1,10 +1,24 @@
+/**
+* please use `npm instal` install devDependencies
+* make sure the global installation of mocha
+* idea
+* 	+ apply list,The head of the list represents the most recently used one
+*   + once there is operation(get/insert),move node to the head  of list
+*	+ Once exceeded the capacity,invalidate tail of list
+*	+ using object as data structures,format:{string:Object}
+*	+ in this way,the  time complexity of the operation is O(1)
+*	+ removes the property of an object through the object's key
+*/
+
 function Node(key, val) {
 	this.key = key;
 	this.val = val;
 	this.nxt = null;
 	this.pre = null;
 }
-
+/**
+ * @constructor
+ */
 function Cache(capacity) {
 	this.list = {};
 	this.head = null;
@@ -12,23 +26,31 @@ function Cache(capacity) {
 	this.capacity = capacity;
 	this.sze = 0;
 }
-
+/**
+ * @param {string} key
+ * @desc get value by key 
+ * @returns {string}
+ */
 Cache.prototype.get = function(key) {
 	var node = this.list[key];
 	if ( !node ) {
-		return undefined;
+		return;
 	}
-
 	this.touch(node);
 
 	return node.val;
 }
 
+/**
+ * @param {object} node
+ * @desc move the node of the current opertion(get/insert) to the head
+ * @returns {void}
+ */
 Cache.prototype.touch = function( node ){
+	
 	if ( node === this.head ) {
-		return;
+			return;
 	}
-	debugger;
 	if ( node === this.tail ) {
 		this.tail.pre.nxt = null;
 		this.tail = this.tail.pre;
@@ -42,11 +64,30 @@ Cache.prototype.touch = function( node ){
 	this.head = node;
 }
 
+/**
+ * @param {string} key
+ * @param {string} value
+ * @desc insert new node
+ * @returns {void}
+ */
 Cache.prototype.insert = function(key, val) {
-	var newNode = new Node(key, val);
+	if (val === undefined) {
+		return ;
+	}
+	var newNode = new Node(key, val),
+		oldNode = this.list[key];
 
+	// update old node value  if it exist
+	if (oldNode) {
+		oldNode.val = val;
+		this.touch(oldNode);
+		return;
+	}
+
+	// insert head if list === null
+	// else insert tail
 	if ( !this.sze ) {
-		this.tail  =newNode;
+		this.tail  = newNode;
 	} else {
 		newNode.nxt = this.head;
 		this.head.pre  = newNode;
@@ -54,23 +95,10 @@ Cache.prototype.insert = function(key, val) {
 
 	this.head = newNode;
 
-	var oldNode = this.list[key];
-
-	if ( oldNode ) {
-		// remove node
-        if (oldNode === this.tail) {
-            this.tail = this.tail.pre;
-            this.tail.nxt = null;
-        } else {
-            oldNode.pre.nxt = oldNode.nxt;
-            oldNode.nxt.pre = oldNode.pre;
-        }
-        this.list[key] = newNode;
-        return;
-	}
 	this.sze ++;
 	if ( this.sze > this.capacity ) {
-		delete this.list[key];
+		// remove the least frequently used
+		delete this.list[this.tail.key];
 		this.tail = this.tail.pre;
 		this.tail.nxt = null;
 		this.sze--;
@@ -78,16 +106,4 @@ Cache.prototype.insert = function(key, val) {
 	this.list[key] = newNode;
 }
 
-var cache = new Cache(2);
-
-console.log ( cache.get('name') );
-cache.insert('name','helios');
-cache.insert('age','20');	
-
-console.log ( cache.get('name') );
-console.log( cache.get('age') );
-cache.insert('sex','man');
-console.log( cache.get('name') );
-
-
-// module.exports = Cache;
+module.exports = Cache;
