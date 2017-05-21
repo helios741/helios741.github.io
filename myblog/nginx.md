@@ -17,7 +17,7 @@
 ### 安装gcc
 
 可以通过`rpm -qa | grep gcc`查看是否安装的gcc，如果安装了就会显示下图这个样子。
-![](图片)
+![这里写图片描述](http://img.blog.csdn.net/20170521103148285?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvd29zaGluYW5uYW43NDE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 如果没有通过`yum -y install gcc-c++`进行安装
 
@@ -75,7 +75,7 @@
 ### 关闭Nginx服务
 
 - 先查询`nginx`的进程号`ps -ef | grep nginx`,如下图
-![查询Nginx进程]()
+![这里写图片描述](http://img.blog.csdn.net/20170521103254001?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvd29zaGluYW5uYW43NDE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 - `kill -QUIT 主进程号`
 
 
