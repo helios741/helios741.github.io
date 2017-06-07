@@ -161,6 +161,7 @@ class BigIntBase {
 		let l = 0,
 			r = UPPERBOUND;
 			debugger;
+		// TODO 大数的简单折半
 		while(l <= r) {
 			let mid = (l + r) >>1;
 			// debugger;
