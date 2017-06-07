@@ -4,4 +4,4 @@ let big = new BigInt(0,2);
 let prim = new Prim(800);
 
 
-console.log( big.mod(55555555555,5) );
+console.log( big.Miller_Rabin(23) );
