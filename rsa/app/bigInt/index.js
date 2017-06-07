@@ -19,7 +19,7 @@ export default class BigInt extends BigIntBase {
 	}
 
 	witness(a,n) {
-		// debugger;
+		debugger;
 		let saveN = this.subtract(n,1);
 		let tmp = saveN;
 		let count = 0;
@@ -42,8 +42,7 @@ export default class BigInt extends BigIntBase {
 		if (n < 2) return false;
 		if (n === 2) return true;
 		for (let i = 0;i < TIMES; i++) {
-			let a =  this.rand(n - 2) + 1;
-
+			let a =  this.randBigInt(n - 2) + 1;
 			if(!this.witness(a,n)) return false;
 		}
 		return true;

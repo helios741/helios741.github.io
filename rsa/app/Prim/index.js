@@ -1,6 +1,6 @@
 import primBase from './primBase';
 import BigInt from '../bigInt';
-const PRIMBYTESUM = 1e20;
+
 export default class Prim extends primBase{
 	constructor(mx) {
 		super(mx);
@@ -8,36 +8,30 @@ export default class Prim extends primBase{
 		this.bigInt = new BigInt();
 	}
 	createBigOddPrim() {
-		let oddNum = Math.random() * PRIMBYTESUM;
-		while(oddNum%2) oddNum = Math.random() * PRIMBYTESUM;
-		return oddNum;
+		
 	}
 	preTestAnGetPrim() {
-		let oddPrim = this.createBigOddPrim();
+		let oddPrim = this.bigInt.createRandBigOdd();
 		const prim = this.prim,
 			bigInt = this.bigInt,
 			num = this.num;
-		for (let i = 0; i < num; i++) {
+		for (let i = 1; i < num; i++) {
 			if( bigInt.mod(oddPrim,prim[i]) ) continue;
-			return this.preTestPrim();
+			return this.preTestAnGetPrim();
 		}
 		return oddPrim;
 	}
-	__Miller_Rabin(n) {
-		const TIMES = 8;
-		if(n == 2) return true;
-		if(n<2) return false;
-		for (let i = 0 ;i < TIMES; i++) {
-			
-		}
-	}
+
 	getBigPrim() {
 		let pseudoPrime = this.preTestAnGetPrim();
-		let isPrime = this.__Miller_Rabin(pseudoPrime);
+		console.log(pseudoPrime,455);
+		let isPrime = this.bigInt.Miller_Rabin(pseudoPrime);
+		/*console.log(pseudoPrime,isPrime)
 		while(!isPrime) {
 			pseudoPrime = this.preTestAnGetPrim();
-			isPrime = this.__Miller_Rabin(pseudoPrime);
+			isPrime = this.bigInt.Miller_Rabin(pseudoPrime);
+			console.log(pseudoPrime,isPrime);
 		}
-		return pseudoPrime;
+		return pseudoPrime;*/
 	}
 }

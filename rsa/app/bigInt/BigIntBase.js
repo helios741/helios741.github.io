@@ -5,7 +5,13 @@ function _replaceCharFromStr(str,index,replaceChar) {
 	if(!str[index]) return str+replaceChar;
 	return str.slice(0,index) + replaceChar +str.slice(index+1);
 }
-const UPPERBOUND = 2000000000;
+// 二分的上边界
+const UPPERBOUND = 1000000000;
+// 乘以随机小数的值
+const RANDUPPR = 1e8;
+// 生成多少位的素数
+const PRIMBYTESUM = 1e20;
+
 class BigIntBase {
 
 	add(num1,num2) {
@@ -149,11 +155,12 @@ class BigIntBase {
 	}
 	/**
 	* 二分找到q = m - n * t 中的q是小于n的，中的t
-	* 也就是找打余数
+	* 也就是找余数
 	*/
 	binarySearchOver(m,n) {
 		let l = 0,
 			r = UPPERBOUND;
+			debugger;
 		while(l <= r) {
 			let mid = (l + r) >>1;
 			// debugger;
@@ -180,8 +187,26 @@ class BigIntBase {
 		*/
 		return this.binarySearchOver(dividend,divisor);
 	}
-	rand(num) {
-		return 4;
+	randBigInt(num) {
+		num = num.toString();
+		let numLen = num.length;
+		num = num.slice(0,numLen - 8);
+		let rand = (Math.random() * RANDUPPR)>>1;
+		return this.multiply(num, rand);
+	}
+	createRandBigOdd() {
+		let oddNum1 = Math.random() * PRIMBYTESUM;
+		let oddNum2 = Math.random() * PRIMBYTESUM;
+		oddNum2 = oddNum2.toString();
+		oddNum2 = _reverseStr(oddNum2);
+		let oddNum = this.add(oddNum2,oddNum1);
+		const oddNumLength = oddNum.length;
+		let num = parseInt(oddNum[oddNumLength - 1], 10);
+		if(num%2 === 0) {
+			
+			return this.createRandBigOdd();
+		}
+		return oddNum;
 	}
 }
 
