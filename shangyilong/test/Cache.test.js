@@ -1,64 +1,71 @@
 var Cache = require('../Cache'),
 	expect = require('chai').expect;
 
-// test 1: 
+// sample test:
 
 describe('capacity =2 sample:', function() {
 	var cache = new Cache(2);
 	it ("get('name')",function() {
 		expect(cache.get('name')).to.be.equal(undefined);
 	});
-	it ("insert('name','helios'),insert('age','20'),get('name'),get('age') ",function() {
-		cache.insert('name','helios');
-		cache.insert('age','20');
+	it ("put('name','helios'),put('age','20'),get('name'),get('age') ",function() {
+		cache.put('name','helios');
+		cache.put('age','20');
 		expect(cache.get('name')).to.be.equal('helios');
 		expect(cache.get('age')).to.be.equal('20');
 	});
-	it ("insert('sex','man'),cache.get('name')",function() {
-		cache.insert('sex','man');
+	it ("put('sex','man'),cache.get('name')",function() {
+		cache.put('age','20');cache.put('sex','man');
 		expect(cache.get('name')).to.be.equal(undefined);
 	});
 });
-
-// test 2
-
-describe('capacity =5 sample:', function() {
-	var cache = new Cache(5);
+// test when you reach the capacity, delete the one that uses the least frequency
+describe('capacity =3 sample:', function() {
+	var cache = new Cache(3);
 	it ("get('name')",function() {
 		expect(cache.get('name')).to.be.equal(undefined);
 	});
-	it ("insert('name','helios'),insert('age','20'),get('name'),get('age') ",function() {
-		cache.insert('name','helios');
-		cache.insert('age','20');
+	it ("put('name','helios'),put('age','20'),get('name'),get('age') ",function() {
+		cache.put('name','helios');
+		cache.put('age','20');
 		expect(cache.get('name')).to.be.equal('helios');
 		expect(cache.get('age')).to.be.equal('20');
 	});
-	it ("insert('name','helios'),insert('age','20'),get('name'),get('age') ",function() {
-		cache.insert('name','helios1');
-		cache.insert('age','201');
+	it ("put('name','helios1'),put('age','201'),get('name'),get('age') ",function() {
+		cache.put('name','helios1');
+		cache.put('age','201');cache.put('age','201');
 		expect(cache.get('name')).to.be.equal('helios1');
 		expect(cache.get('age')).to.be.equal('201');
 	});
-	it ("insert('addr','helios'),insert('fa','20'),get('addr'),get('fa') ",function() {
-		cache.insert('addr','helios');
-		cache.insert('fa','20');
-		expect(cache.get('addr')).to.be.equal('helios');
+	it ("put('addr','helios'),put('fa','20'),get('addr'),get('fa'),get('name') ",function() {
+		cache.put('addr','helios');
+		cache.put('fa','20');
+		expect(cache.get('addr')).to.be.equal(undefined);
 		expect(cache.get('fa')).to.be.equal('20');
 	});
+
 });
 
-// test 3
+// test random deletion of least frequency 
 
-describe('capacity = random sample:',function() {
-	var capacity = (Math.random()*50)>>0;
-		cache = new Cache( capacity );	
-	for (var i=0;i<capacity*2;i++) {
-		it ("random test"+i,function() {
-			var key = 'test_'+(i%capacity),
-				val = 'test_'+(Math.random()*200)>>0;
-			
-			cache.insert(key,val );
-			expect( cache.get(key) ).to.be.equal(val);
-		})
-	}
+describe('capacity = 3 sample',function(){
+	var cache = new Cache(3);
+	it ("put name three times,put age and sex , then get it",function(){
+		cache.put('name','helios');cache.put('name','helios1');cache.put('name','helios2');
+		cache.put('age','22');
+		cache.put('sex','man');
+		expect( cache.get('name') ).to.be.equal('helios2');
+		expect( cache.get('age') ).to.be.equal('22');
+		expect( cache.get('sex') ).to.be.equal('man');
+	});
+	it ('put aa random remove age or sex',function(){
+		cache.put('aa','aaa');
+		var arr = [];
+		arr[0] = cache.get('sex');
+		arr[1] = cache.get('age');
+		expect( cache.get('name') ).to.be.equal('helios2');
+		expect( arr ).to.include(undefined);
+		expect( cache.get('aa') ).to.be.equal('aaa');
+		expect( cache.get('aa') ).to.be.equal('aaa');
+	});
 });

@@ -54,6 +54,7 @@ Cache.prototype.touch = function(node) {
 		curItem = this.set[oldSum+1]?this.set[oldSum+1]:{};
 	// If the node does exist
 	if(oldSum) { 
+		// debugger;
 		delete preItem[node.key];
 		preItem.length--;
 		if (!preItem.length) {
@@ -76,9 +77,17 @@ Cache.prototype.touch = function(node) {
 Cache.prototype.delItem = function() {
 	var item = this.set[this.Min],
 		o = Object.keys(item),
-		key = o[0] === 'length' ? o[1] : o[0];
-	// debugger;
+		sze = o.length,
+		randonNum = (sze * Math.random())>>0,
+		key = o[randonNum];
+	if (o[randonNum] === 'length' && randonNum>0) {
+		key = o[randonNum - 1];
+	} else if (o[randonNum] === 'length' && randonNum< (sze-1) ) {
+		key = o[randonNum + 1];
+	}
+	
 	delete item[key];
+
 	item.length--;
 	delete this.list[key];
 	if(!item.length) {
@@ -111,21 +120,72 @@ Cache.prototype.put = function(key,val) {
 	if (oldNode) {
 		oldNode.sum++;
 		oldNode.val = val;
+		// console.log(oldNode);
 		this.touch(oldNode);
 		return;
+	}
+	this.sze++;
+	if (this.sze > this.capacity) {
+		this.delItem();
+		this.sze--;
 	}
 	this.set[1] = this.set[1] || {};
 
 	this.set[1][key] = val;
-	this.sze++;
-	if (this.sze > this.capacity) {
-
-		this.delItem();
-		this.sze--;
-	}
 	newNode.sum = 1;
+	this.Min = 1;
 	this.touch(newNode);
 	this.list[key] = newNode;
 }
 
-module.exports = Cache;
+var cache = new Cache( 3 );
+/*
+cache.put('name','helios');
+cache.put('age','20');
+console.log(cache.get('name'));
+console.log(cache.get('age'));
+cache.put('name','helios1');
+cache.put('age','201');cache.put('age','201');
+console.log(cache.get('name'));
+console.log(cache.get('age'));
+cache.put('addr','helios');
+cache.put('fa','20');
+
+console.group('sample test');
+console.log(cache.get('fa'));
+console.log(cache.get('addr'));
+console.log(cache.get('name'));
+console.log(cache.get('age'));
+console.groupEnd();*/
+/*
+console.log ( cache.get('any') );
+cache.put('name','helios');cache.put('name','helios1');cache.put('name','helios2');
+cache.put('age','22');
+cache.put('sex','man');
+
+console.group('test1');
+console.log( cache.get('name') );
+console.log( cache.get('age') );
+console.log( cache.get('sex') );
+console.groupEnd();
+
+
+cache.put('aa','aaa');
+console.group('test2');
+console.log( cache.get('name') );
+console.log( cache.get('age') );
+console.log( cache.get('sex') );
+console.log( cache.get('aa') );
+console.log( cache.get('aa') );
+console.groupEnd();
+cache.put('bb','bbb');
+
+console.group('test3');
+console.log( cache.get('name') );
+console.log( cache.get('age') );
+console.log( cache.get('sex') );
+console.log( cache.get('aa') );
+console.log( cache.get('bb') );
+console.groupEnd();
+*/
+ module.exports = Cache;
