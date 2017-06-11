@@ -23,10 +23,11 @@ export default class Prim extends primBase{
 	}
 
 	getBigPrim() {
-		let pseudoPrime = this.preTestAnGetPrim();
+		return this.prim[(this.num * Math.random())>>0];	
+		/*let pseudoPrime = this.preTestAnGetPrim();
 		console.log(pseudoPrime,455);
 		let isPrime = this.bigInt.Miller_Rabin(pseudoPrime);
-		/*console.log(pseudoPrime,isPrime)
+		console.log(pseudoPrime,isPrime)
 		while(!isPrime) {
 			pseudoPrime = this.preTestAnGetPrim();
 			isPrime = this.bigInt.Miller_Rabin(pseudoPrime);

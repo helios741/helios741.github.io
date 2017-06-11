@@ -19,10 +19,10 @@ export default class BigInt extends BigIntBase {
 	}
 
 	witness(a,n) {
-		debugger;
 		let saveN = this.subtract(n,1);
 		let tmp = saveN;
 		let count = 0;
+		debugger;	
 		while (!this.mod(tmp,2)) {
 			tmp = this.div(tmp,2);
 			count++;

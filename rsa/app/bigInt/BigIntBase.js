@@ -6,7 +6,7 @@ function _replaceCharFromStr(str,index,replaceChar) {
 	return str.slice(0,index) + replaceChar +str.slice(index+1);
 }
 // 二分的上边界
-const UPPERBOUND = 1000000000;
+const UPPERBOUND = 1000000000000;
 // 乘以随机小数的值
 const RANDUPPR = 1e8;
 // 生成多少位的素数
@@ -14,6 +14,15 @@ const PRIMBYTESUM = 1e20;
 
 class BigIntBase {
 
+	gcd(a,b) {
+		let c;
+		while(b) {
+			c = a % b;
+			a = b;
+			b = c;
+		}
+		return a;
+	}
 	add(num1,num2) {
 		const a = num1.toString(),
 			b = num2.toString();
@@ -87,7 +96,7 @@ class BigIntBase {
 			ans = (ans*10 + parseInt(num[i], 10)) % mod;
 		}
 		return ans;
-	}
+	} 
 	/**
 	* 比较两个大整数的带下
 	* @return true表示num1 > num2
@@ -153,6 +162,35 @@ class BigIntBase {
 		if(n == remainder) return 0;
 		return this._cmpBigInt(n,remainder) ? 2 : 0;
 	}
+	bigIntBinary(l,r) {
+		let sum = this.add(l,r),
+			ans = '',
+			sumSze = sum.length,
+			isCarry = 0;
+		if (parseInt(sum[sumSze-1], 10)%2) sum = this.subtract(sum,1);
+		
+		sum = _reverseStr(sum);
+		for (let i = 0;i < sumSze - 1; i++) {
+			let cur = parseInt(sum[i], 10),
+				pre = parseInt(sum[i+1], 10);
+			if (!cur && !pre) {
+				ans+='0';
+			}
+			else if ( !(pre %2) && cur ) {
+				ans+=(cur>>1);
+				isCarry = 0;
+			} else {
+				ans+=( (10+cur)>>1);
+				isCarry = 1;
+			}
+
+		// console.log(ans,'ans');
+		}
+		ans += (parseInt(sum[sumSze-1], 10) - isCarry)>>1;
+		ans = _reverseStr(ans);
+		ans = ans[0]==='0' ? ans.slice(1) : ans;
+		return ans;
+	}
 	/**
 	* 二分找到q = m - n * t 中的q是小于n的，中的t
 	* 也就是找余数
@@ -160,16 +198,14 @@ class BigIntBase {
 	binarySearchOver(m,n) {
 		let l = 0,
 			r = UPPERBOUND;
-			debugger;
 		// TODO 大数的简单折半
-		while(l <= r) {
-			let mid = (l + r) >>1;
-			// debugger;
+		while(l == r || this._cmpBigInt(r,l)) {
+			let mid = this.bigIntBinary(l,r);
 			let endNo = this.check(mid,m,n);
 			if(endNo === 1) {
-				r = mid - 1;
+				r = this.subtract(mid,1);
 			} else if (endNo === 0) {
-				l = mid + 1;
+				l = this.add(mid,1);
 			}else {
 				return mid;
 			}
@@ -186,7 +222,9 @@ class BigIntBase {
 		* 经过变形 q = m - n * t
 		* 所以我们要二分t的值，来计算q<n的情况，就能够算出答案
 		*/
-		return this.binarySearchOver(dividend,divisor);
+		let ret = this.binarySearchOver(dividend,divisor);
+		debugger;
+		return ret;
 	}
 	randBigInt(num) {
 		num = num.toString();
