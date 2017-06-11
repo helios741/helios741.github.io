@@ -3,7 +3,7 @@ export default class HandleInput {
 		let sze = str.length;
 		// 用户记录字符首次出现的位置
 		let firstPos = [];
-		let cnt = 0;
+		let cnt = 1;
 		for (let i = 0;i<sze;i++ ){
 			if(firstPos[str[i]] != undefined) continue;
 			firstPos[str[i]] = cnt++;
@@ -54,7 +54,6 @@ export default class HandleInput {
 	}
 	getHidePwd(showPwdArr,d,n) {
 		showPwdArr = window.atob(showPwdArr).split(',');
-		console.log(showPwdArr);
 		let hidePwdArr = [];
 		showPwdArr.forEach( (item)=>{
 			hidePwdArr.push( this.quick_pow(parseInt(item, 10),d,n) );
@@ -81,6 +80,7 @@ export default class HandleInput {
 	getDecodePwd(hidePwdArr,text) {
 		let posArr = this.inputToNum(text),
 			decodeArr = this.swapKeyValue(posArr);
+		decodeArr[0] = '';
 		let decodePwd = '';
 		//console.log(posArr);
 		//console.log(hidePwdArr)
@@ -92,7 +92,6 @@ export default class HandleInput {
 			decodePwd+= ( decodeArr[num1] +''+decodeArr[num2]);
 			// console.log(item,index)
 		});
-		console.log(decodePwd)
 		return decodePwd;
 	}
 }
