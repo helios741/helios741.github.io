@@ -37,6 +37,7 @@
     "webpack-dev-server": "^1.15.0"
   },
   "dependencies": {
+    "antd": "^2.11.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   }

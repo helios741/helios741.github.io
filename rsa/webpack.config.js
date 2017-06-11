@@ -8,6 +8,7 @@ var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 // console.log(process.env.NODE_ENV)
 
 module.exports = {
+    context: path.join(__dirname),
     entry: path.resolve(__dirname, 'app/index.js'),
     output: {
         path: __dirname + "/build",
