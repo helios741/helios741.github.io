@@ -18,7 +18,7 @@ DES加密算法流程：
 		+ 查表，查出对应的整数，将该整数转换为4位2进制数
 		+ 将8个这样的二进制数连接在一起，形成32位
 		+ 将该32位进行p置换，然后返回
-[流程图](http://img.blog.csdn.net/20141206183524406?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGlzb25nbGlzb25nbGlzb25n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+![流程图](http://img.blog.csdn.net/20141206183524406?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGlzb25nbGlzb25nbGlzb25n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
 5. 尾置换
 	1. 合并上一步的32的L和32位的R得到一个64位的明文
 
