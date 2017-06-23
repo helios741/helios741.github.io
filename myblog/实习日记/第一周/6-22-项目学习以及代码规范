@@ -1,0 +1,285 @@
+# 项目学习和代码规范  -- DAY2
+
+## 一、项目的学习
+## 二、esNext的代码规范
+
+### 1. 箭头函数
+
+#### ① 箭头函数的参数之后一个的时候，不用加括号。
+
+```javascript
+// good
+list.map(item => item * 2);
+
+// good
+let fetchName = async id => {
+    let user = await request(`users/${id}`);
+    return user.fullName;
+};
+
+// bad
+list.map((item) => item * 2);
+
+// bad
+let fetchName = async (id) => {
+    let user = await request(`users/${id}`);
+    return user.fullName;
+};
+```
+
+
+*箭头函数的函数只有一个单行语句作为表达式且作为返回值的时候，省略{}和return*
+
+#### ②如果单个表达式过长可以使用`()`进行包裹。
+
+```javascript
+// good
+list.map(item => item * 2);
+
+let foo = () => (
+    condition
+        ? returnValueA()
+        : returnValueB()
+);
+
+// bad
+list.map(item => {
+    return item * 2;
+});
+```
+#### ③箭头函数的函数体只有一个`object Literal`,且作为返回值的时候，使用`()`进行包装
+
+```javascript
+// good
+list.map(item => ({name: item[0], email: item[1]}));
+```
+
+### 2. 解构
+
+#### ①解构多个变量
+
+当解构多变量的时候，让这一行的代码会非常长，那么就控制单行的代码长度，使代码的阅读性提高
+```javascript
+// good
+let {
+    name: personName,
+    email: personEmail,
+    sex: personSex,
+    age: personAge
+} = person;
+
+// bad
+let {name: personName, email: personEmail,
+    sex: personSex, age: personAge
+} = person;
+```
+
+#### ②不要使用三层以上的解构
+
+过多的层数会让代码变得十分难以阅读。
+
+```javascript
+// bad
+let {documentElement: {firstElementChild: {nextSibling}}} = window;
+```
+
+#### ③使用解构减少中间变量
+
+常见场景如变量值交换，可能产生中间场景。这种情况下建议使用解构。
+
+```javascript
+// good
+[x, y] = [y, x];
+
+// bad
+let temp = x;
+x = y;
+y = temp;
+```
+
+#### ④仅定义一个变量的时不允许使用解构
+
+这种情况下使用解构可能会降低代码的可读性。
+
+```javascript
+// good
+let len = myString.length;
+
+// bad
+let {length: len} = myString;
+```
+
+#### ⑤如果不节省编写时产生的中间变量，解构表达式` = `右边不允许时`objectLiteral`和`arrayLiteral`
+
+这种情况下，使用解构降低代码的可读性，通常也没有什么收益
+
+```javascript
+// good
+let {first: firstName, last: lastName} = person;
+let one = 1;
+let two = 2;
+
+// bad
+let [one, two] = [1, 2];
+```
+
+#### ⑥使用剩余运算符的时候，剩余运算符之前的所有元素必须有名字
+
+省略运算符之前如果是省略可能会造成阅读上的障碍。如果想单纯的取后面的几个元素可以使用`slice`
+
+```javascript
+// good
+let [one, two, ...anyOther] = myArray;
+let other = myArray.slice(3);
+
+// bad
+let [,,, ...other] = myArray;
+```
+
+### 3. 模板字符串
+
+*字符串内变量替换的时候，不要使用两次及以上的函数调用*
+
+在变量替换符内有太多的函数调用等复杂的语法会导致可读性下降。
+
+```javascript
+// good
+let fullName = getFullName(getFirstName(), getLastName());
+let s = `Hello ${fullName}`;
+
+// bad
+let s = `Hello ${getFullName(getFirstName(), getLastName())}`;
+```
+
+### 4. 对象
+
+#### ①定义对象的时，如果所有的键都指向同名变量，则所有的键都进行缩写，如果有一个不指向同名变量则都不缩写
+
+目的在于保证所有键值对声明的一致性
+
+```javascript
+// good
+let foo = {x, y, z};
+
+let foo2 = {
+    x: 1,
+    y: 2,
+    z: z
+};
+
+
+// bad
+let foo = {
+    x: x,
+    y: y,
+    z: z
+};
+
+let foo2 = {
+    x: 1,
+    y: 2,
+    z
+};
+```
+
+#### ②使用`Object.keys()`和`Object.entries()`进行对象遍历
+
+不建议使用`for  in`进行遍历，以避免`hasOwnProperty`进行对象属性遍历
+
+```javascript
+// good
+for (let key of Object.keys(foo)) {
+    let value = foo[key];
+}
+
+// good
+for (let [key, value] of Object.entries(foo)) {
+    // ...
+}
+```
+
+#### ③定义对象方法时不应使用箭头函数
+
+箭头函数会将`this`绑定到当前的环境，在`obj.method()`调用时导致不期待的`this`。
+
+```javascript
+// good
+let foo = {
+    bar(x, y) {
+        return x + y;
+    }
+};
+
+// bad
+let foo = {
+    bar: (x, y) => x + y
+};
+```
+#### ④定义一个对象的时候使用对象字面量完整定义，避免以后增加属性
+
+在一个完整的字面量中声明所有的键值，而不需要将代码分散开，有助于代码的可读性
+
+```javascript
+// good
+const MY_KEY = 'bar';
+let foo = {
+    [MY_KEY + 'Hash']: 123
+};
+
+// bad
+const MY_KEY = 'bar';
+let foo = {};
+foo[MY_KEY + 'Hash'] = 123;
+```
+
+### 5. 模块
+
+#### ① export与内容定义在一起
+
+何处要导出东西就在何处使用`export`关键字，不必再以后统一导出
+
+```javascript
+// good
+export function foo() {
+}
+
+export const bar = 3;
+
+
+// bad
+function foo() {
+}
+
+const bar = 3;
+
+export {foo};
+export {bar};
+```
+
+### 6. 集合
+
+#### ①对数组进行连接操作的时候，使用数组展开语法
+
+用数组展开代替`concat`方法，数组展开对`Interable`有更好的兼容性。
+
+```javascript
+// good
+let foo = [...foo, newValue];
+let bar = [...bar, ...newValues];
+
+// bad
+let foo = foo.concat(newValue);
+let bar = bar.concat(newValues);
+```
+
+#### ②不要使用数组展开对数组进行复制操作
+
+使用数组展开复制的代码可读性比较差，使用`Array.from()`比较好
+
+```javascript
+// good
+let otherArr = Array.from(arr);
+
+// bad
+let otherArr = [...arr];
+```
