@@ -6,6 +6,7 @@
 
 CSS的优先级我们是知道的，然是这些优先级是怎么来的呢？
 在规范中是根据**选择器的特异度(Specificity)**
+
 |选择器|内联?|	id个数|(伪)类个数|标签个数|特异度|
 |:----:|:----:|:----:|:----:|:----:|:----:|
 |#nav .list li a:link|0|1|2|2|0122|
@@ -252,6 +253,7 @@ margin-bottom: 1em;
 
 ### 文件结构
 
+```
 css
 |
 |-- base
@@ -280,6 +282,7 @@ css
     |-- page-a.css
     |-- page-b.css
     |-- page-c.css
+```
 
 ### CSS模块
 
@@ -293,7 +296,7 @@ css
 
 原则：
 - 结构和皮肤分离 ( `.btn` `.btn--primary` `.btn--info` `.btn--danger`
-- 容器和内容分离 
+- 容器和内容分离
 ```html
 /* 不推荐这样写！ */
 .header .btn {
@@ -406,6 +409,3 @@ BEM
   <a class="tabs__item" href="#">CSS</a>
 </nav>
 ```
-
-
-
